@@ -2,6 +2,8 @@ using MyAvaloniaManagement.PluginSdk.UI;
 using ClassicGamePlugin.Constants;
 using ClassicGamePlugin.Features.Minesweeper;
 using ClassicGamePlugin.Features.Minesweeper.Views;
+using ClassicGamePlugin.Features.SpiderSolitaire;
+using ClassicGamePlugin.Features.SpiderSolitaire.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -17,6 +19,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.MinesweeperDocument,
                 "扫雷",
                 "经典扫雷游戏：翻开安全格、标记地雷并完成整张棋盘",
+                "经典游戏"));
+        registration.AddDocument<SpiderSolitaireDocument, SpiderSolitaireDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.SpiderSolitaireDocument,
+                "蜘蛛纸牌",
+                "经典蜘蛛纸牌：整理同花色连续牌组并完成八组 K 到 A",
                 "经典游戏"));
     }
 }

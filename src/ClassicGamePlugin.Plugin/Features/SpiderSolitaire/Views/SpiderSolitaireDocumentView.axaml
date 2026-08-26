@@ -1,0 +1,18 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.SpiderSolitaire.Views.SpiderSolitaireDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.SpiderSolitaire"
+    xmlns:vm="using:ClassicGamePlugin.Features.SpiderSolitaire.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.SpiderSolitaire.Views"
+    x:DataType="feature:SpiderSolitaireDocument">
+  <ContentControl
+      x:Name="ViewModelHost"
+      Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:SpiderSolitaireViewModel">
+        <views:SpiderSolitaireView />
+      </DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

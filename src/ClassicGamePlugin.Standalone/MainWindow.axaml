@@ -2,9 +2,17 @@
     x:Class="ClassicGamePlugin.Standalone.MainWindow"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:views="using:ClassicGamePlugin.Features.Minesweeper.Views"
-    Width="900"
-    Height="600"
+    xmlns:mines="using:ClassicGamePlugin.Features.Minesweeper.Views"
+    xmlns:spider="using:ClassicGamePlugin.Features.SpiderSolitaire.Views"
+    Width="1080"
+    Height="760"
     Title="ClassicGamePlugin Standalone">
-  <views:MinesweeperDocumentView />
+  <TabControl>
+    <TabItem Header="扫雷">
+      <mines:MinesweeperDocumentView x:Name="MinesweeperHost" />
+    </TabItem>
+    <TabItem Header="蜘蛛纸牌">
+      <spider:SpiderSolitaireDocumentView x:Name="SpiderSolitaireHost" />
+    </TabItem>
+  </TabControl>
 </Window>

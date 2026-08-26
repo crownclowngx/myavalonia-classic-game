@@ -4,6 +4,8 @@ using ClassicGamePlugin.Features.Minesweeper;
 using ClassicGamePlugin.Features.Minesweeper.Domain;
 using ClassicGamePlugin.Features.Minesweeper.ViewModels;
 using ClassicGamePlugin.Features.Minesweeper.Views;
+using ClassicGamePlugin.Features.SpiderSolitaire;
+using ClassicGamePlugin.Features.SpiderSolitaire.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -15,28 +17,43 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module只注册一个普通扫雷Document()
+    public void Module注册扫雷与蜘蛛纸牌两个普通Document()
     {
         var registration = new CapturingRegistration();
 
         new ClassicGamePluginModule().Configure(registration);
 
-        Assert.NotNull(registration.DocumentDescriptor);
-        Assert.Equal(PluginIds.MinesweeperDocument, registration.DocumentDescriptor.DocumentTypeId);
-        Assert.Equal("扫雷", registration.DocumentDescriptor.DisplayName);
-        Assert.Equal("经典游戏", registration.DocumentDescriptor.MenuCategory);
-        Assert.Equal(typeof(MinesweeperDocument), registration.DocumentModel);
-        Assert.Equal(typeof(MinesweeperDocumentView), registration.DocumentView);
-        Assert.Null(registration.PersistableDocumentDescriptor);
+        Assert.Collection(
+            registration.Documents,
+            minesweeper =>
+            {
+                Assert.Equal(PluginIds.MinesweeperDocument, minesweeper.Descriptor.DocumentTypeId);
+                Assert.Equal("扫雷", minesweeper.Descriptor.DisplayName);
+                Assert.Equal("经典游戏", minesweeper.Descriptor.MenuCategory);
+                Assert.Equal(typeof(MinesweeperDocument), minesweeper.Model);
+                Assert.Equal(typeof(MinesweeperDocumentView), minesweeper.View);
+            },
+            spider =>
+            {
+                Assert.Equal(PluginIds.SpiderSolitaireDocument, spider.Descriptor.DocumentTypeId);
+                Assert.Equal("蜘蛛纸牌", spider.Descriptor.DisplayName);
+                Assert.Equal("经典游戏", spider.Descriptor.MenuCategory);
+                Assert.Equal(typeof(SpiderSolitaireDocument), spider.Model);
+                Assert.Equal(typeof(SpiderSolitaireDocumentView), spider.View);
+            });
+        Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与扫雷Document身份保持冻结值()
+    public void 稳定Plugin与两个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.minesweeper",
             PluginIds.MinesweeperDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.spider-solitaire",
+            PluginIds.SpiderSolitaireDocument.Value);
     }
 
     [Fact]
@@ -62,6 +79,17 @@ public sealed class PluginCompositionTests
         };
 
         Assert.Same(document.ViewModel, view.DataContext);
+    }
+
+    [Fact]
+    public void 蜘蛛纸牌包装View通过单向绑定把ViewModel交给游戏View()
+    {
+        using var document = new SpiderSolitaireDocument();
+        var wrapper = new SpiderSolitaireDocumentView { DataContext = document };
+        var gameView = new SpiderSolitaireView { DataContext = document.ViewModel };
+
+        Assert.Same(document.ViewModel, wrapper.HostedViewModel);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
     }
 
     [Fact]
@@ -155,10 +183,8 @@ public sealed class PluginCompositionTests
     {
         public PluginId PluginId { get; } = PluginIds.Plugin;
         public IServiceCollection Services { get; } = new ServiceCollection();
-        internal DocumentDescriptor? DocumentDescriptor { get; private set; }
-        internal DocumentDescriptor? PersistableDocumentDescriptor { get; private set; }
-        internal Type? DocumentModel { get; private set; }
-        internal Type? DocumentView { get; private set; }
+        internal List<(DocumentDescriptor Descriptor, Type Model, Type View)> Documents { get; } = [];
+        internal List<(DocumentDescriptor Descriptor, Type Model, Type View)> PersistableDocuments { get; } = [];
 
         public void UseLifecycle<TLifecycle>() where TLifecycle : class, IPluginLifecycle =>
             throw new NotSupportedException();
@@ -166,15 +192,12 @@ public sealed class PluginCompositionTests
         public void AddDocument<TDocument, TView>(DocumentDescriptor descriptor)
             where TDocument : class, IPluginDocument
             where TView : Control, new()
-        {
-            DocumentDescriptor = descriptor;
-            DocumentModel = typeof(TDocument);
-            DocumentView = typeof(TView);
-        }
+            => Documents.Add((descriptor, typeof(TDocument), typeof(TView)));
 
         public void AddPersistableDocument<TDocument, TView>(DocumentDescriptor descriptor)
             where TDocument : class, IPersistablePluginDocument
-            where TView : Control, new() => PersistableDocumentDescriptor = descriptor;
+            where TView : Control, new() =>
+            PersistableDocuments.Add((descriptor, typeof(TDocument), typeof(TView)));
 
         public void AddTool<TTool, TView>(ToolDescriptor descriptor)
             where TTool : class

@@ -1,0 +1,141 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.SpiderSolitaire.Views.SpiderSolitaireView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.SpiderSolitaire.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.SpiderSolitaire.Views"
+    x:DataType="vm:SpiderSolitaireViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="SpiderPanelBrush" Color="#FFF4F6F8" />
+          <SolidColorBrush x:Key="SpiderPanelBorderBrush" Color="#FFA8B1BD" />
+          <SolidColorBrush x:Key="SpiderPanelTextBrush" Color="#FF253142" />
+          <SolidColorBrush x:Key="SpiderMutedTextBrush" Color="#FF667085" />
+          <SolidColorBrush x:Key="SpiderTableFrameBrush" Color="#FF7D8998" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="SpiderPanelBrush" Color="#FF252B33" />
+          <SolidColorBrush x:Key="SpiderPanelBorderBrush" Color="#FF596574" />
+          <SolidColorBrush x:Key="SpiderPanelTextBrush" Color="#FFF4F7FB" />
+          <SolidColorBrush x:Key="SpiderMutedTextBrush" Color="#FFB7C0CC" />
+          <SolidColorBrush x:Key="SpiderTableFrameBrush" Color="#FF667383" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="Border.spider-toolbar TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource SpiderPanelTextBrush}" />
+    </Style>
+    <Style Selector="Border.spider-toolbar ComboBox">
+      <Setter Property="Foreground" Value="{DynamicResource SpiderPanelTextBrush}" />
+    </Style>
+  </UserControl.Styles>
+
+  <Grid Margin="20" RowDefinitions="Auto,*" RowSpacing="14">
+    <Border
+        Classes="spider-toolbar"
+        Padding="12"
+        Background="{DynamicResource SpiderPanelBrush}"
+        BorderBrush="{DynamicResource SpiderPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <StackPanel Margin="0,0,14,6" Orientation="Horizontal" Spacing="8">
+          <TextBlock Text="难度" VerticalAlignment="Center" />
+          <ComboBox
+              MinWidth="138"
+              IsEnabled="{Binding CanInteract}"
+              ItemsSource="{Binding DifficultyOptions}"
+              SelectedItem="{Binding SelectedDifficulty}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:SpiderSolitaireDifficultyOption">
+                <TextBlock Text="{Binding DisplayName}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+
+        <Button Margin="0,0,8,6" Command="{Binding ReplaySameDealCommand}" Content="同局重开" ToolTip.Tip="使用相同牌序重新开始" />
+        <Button Margin="0,0,8,6" Command="{Binding NewGameCommand}" Content="新游戏" ToolTip.Tip="重新洗牌" />
+        <Button Margin="0,0,8,6" Command="{Binding UndoCommand}" Content="撤销" ToolTip.Tip="Ctrl+Z" />
+        <Button Margin="0,0,14,6" Command="{Binding HintCommand}" Content="提示" ToolTip.Tip="H" />
+
+        <TextBlock Margin="0,0,14,6" Text="{Binding StatusText}" FontWeight="SemiBold" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" Text="库存" VerticalAlignment="Center" />
+        <TextBlock Margin="-7,0,14,6" Text="{Binding StockDealCount}" FontWeight="Bold" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" Text="完成" VerticalAlignment="Center" />
+        <TextBlock Margin="-7,0,14,6" Text="{Binding CompletedRunCount}" FontWeight="Bold" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" Text="步数" VerticalAlignment="Center" />
+        <TextBlock Margin="-7,0,14,6" Text="{Binding MoveCount}" FontWeight="Bold" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" Text="得分" VerticalAlignment="Center" />
+        <TextBlock Margin="-7,0,14,6" Text="{Binding Score}" FontWeight="Bold" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,8,6" Text="用时" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,4,6" Text="{Binding ElapsedSeconds}" FontWeight="Bold" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,0,6" Text="秒" VerticalAlignment="Center" />
+      </WrapPanel>
+    </Border>
+
+    <Grid Grid.Row="1">
+      <ScrollViewer
+          HorizontalScrollBarVisibility="Auto"
+          VerticalScrollBarVisibility="Auto">
+        <Border
+            HorizontalAlignment="Center"
+            Background="{DynamicResource SpiderTableFrameBrush}"
+            BorderBrush="{DynamicResource SpiderTableFrameBrush}"
+            BorderThickness="2"
+            CornerRadius="8"
+            MinWidth="840">
+          <views:SpiderBoardControl
+              Game="{Binding}"
+              Width="{Binding BoardWidth}"
+              Height="{Binding BoardHeight}" />
+        </Border>
+      </ScrollViewer>
+
+      <Border
+          IsVisible="{Binding IsWinOverlayVisible}"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Padding="28,20"
+          Background="{DynamicResource SpiderPanelBrush}"
+          BorderBrush="{DynamicResource SpiderPanelBorderBrush}"
+          BorderThickness="2"
+          CornerRadius="12">
+        <StackPanel Spacing="8">
+          <TextBlock
+              HorizontalAlignment="Center"
+              FontSize="26"
+              FontWeight="Bold"
+              Foreground="{DynamicResource SpiderPanelTextBrush}"
+              Text="恭喜获胜" />
+          <TextBlock
+              HorizontalAlignment="Center"
+              Foreground="{DynamicResource SpiderMutedTextBrush}"
+              Text="八组同花色 K 到 A 已全部完成" />
+        </StackPanel>
+      </Border>
+    </Grid>
+
+    <Border
+        Grid.Row="1"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Bottom"
+        Margin="12"
+        Padding="10,5"
+        Background="{DynamicResource SpiderPanelBrush}"
+        BorderBrush="{DynamicResource SpiderPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="5"
+        IsHitTestVisible="False">
+      <TextBlock
+          Foreground="{DynamicResource SpiderMutedTextBrush}"
+          Text="{Binding MessageText}"
+          TextWrapping="Wrap" />
+    </Border>
+  </Grid>
+</UserControl>
