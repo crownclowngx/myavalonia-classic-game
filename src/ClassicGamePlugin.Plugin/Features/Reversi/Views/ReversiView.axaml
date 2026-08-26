@@ -1,0 +1,204 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Reversi.Views.ReversiView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:primitives="using:Avalonia.Controls.Primitives"
+    xmlns:vm="using:ClassicGamePlugin.Features.Reversi.ViewModels"
+    x:DataType="vm:ReversiViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <!-- 黑白棋作为 Host Document 不能依赖外围窗口颜色，工具栏和记录区使用自己的主题资源。 -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="ReversiPanelBrush" Color="#FFF4F6F8" />
+          <SolidColorBrush x:Key="ReversiPanelBorderBrush" Color="#FFA8B1BD" />
+          <SolidColorBrush x:Key="ReversiTextBrush" Color="#FF253142" />
+          <SolidColorBrush x:Key="ReversiMutedBrush" Color="#FF667085" />
+          <SolidColorBrush x:Key="ReversiHistoryBrush" Color="#FFFFFFFF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="ReversiPanelBrush" Color="#FF252B33" />
+          <SolidColorBrush x:Key="ReversiPanelBorderBrush" Color="#FF596574" />
+          <SolidColorBrush x:Key="ReversiTextBrush" Color="#FFF4F7FB" />
+          <SolidColorBrush x:Key="ReversiMutedBrush" Color="#FFB7C0CC" />
+          <SolidColorBrush x:Key="ReversiHistoryBrush" Color="#FF1D2229" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="Border.reversi-panel TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource ReversiTextBrush}" />
+    </Style>
+    <Style Selector="Border.reversi-panel ComboBox">
+      <Setter Property="Foreground" Value="{DynamicResource ReversiTextBrush}" />
+    </Style>
+    <Style Selector="Button.reversi-cell:pointerover">
+      <Setter Property="Opacity" Value="0.88" />
+    </Style>
+    <Style Selector="Button.reversi-cell:pressed">
+      <Setter Property="Opacity" Value="0.72" />
+    </Style>
+  </UserControl.Styles>
+
+  <Grid Margin="20" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+    <Border
+        Classes="reversi-panel"
+        Padding="12"
+        Background="{DynamicResource ReversiPanelBrush}"
+        BorderBrush="{DynamicResource ReversiPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <StackPanel Margin="0,0,14,6" Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="模式" VerticalAlignment="Center" />
+          <ComboBox Width="108" ItemsSource="{Binding ModeOptions}" SelectedItem="{Binding SelectedMode}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:ReversiGameModeOption">
+                <TextBlock Text="{Binding DisplayName}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+
+        <StackPanel
+            Margin="0,0,14,6"
+            IsVisible="{Binding IsHumanVsComputer}"
+            Orientation="Horizontal"
+            Spacing="6">
+          <TextBlock Text="难度" VerticalAlignment="Center" />
+          <ComboBox Width="84" ItemsSource="{Binding DifficultyOptions}" SelectedItem="{Binding SelectedDifficulty}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:ReversiDifficultyOption">
+                <TextBlock Text="{Binding DisplayName}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+
+        <ComboBox
+            Margin="0,0,14,6"
+            Width="110"
+            IsVisible="{Binding IsHumanVsComputer}"
+            ItemsSource="{Binding HumanColorOptions}"
+            SelectedItem="{Binding SelectedHumanColor}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:ReversiColorOption">
+              <TextBlock Text="{Binding DisplayName}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <Button Margin="0,0,8,6" Command="{Binding RestartCommand}" Content="重新开始" />
+        <Button Margin="0,0,8,6" Command="{Binding UndoCommand}" Content="撤销" />
+        <Button Margin="0,0,14,6" Command="{Binding HintCommand}" Content="提示" />
+        <TextBlock Margin="0,0,12,6" FontWeight="SemiBold" Text="{Binding StatusText}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" Text="{Binding CurrentTurnText}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,4,6" Text="用时" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,3,6" FontWeight="Bold" Text="{Binding ElapsedSeconds}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,0,6" Text="秒" VerticalAlignment="Center" />
+      </WrapPanel>
+    </Border>
+
+    <Border
+        Grid.Row="1"
+        Classes="reversi-panel"
+        Padding="10,7"
+        Background="{DynamicResource ReversiPanelBrush}"
+        BorderBrush="{DynamicResource ReversiPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="18">
+        <TextBlock FontWeight="Bold" Text="{Binding BlackCountText}" />
+        <TextBlock Grid.Column="1" FontWeight="Bold" Text="{Binding WhiteCountText}" />
+        <TextBlock Grid.Column="2" Text="{Binding MessageText}" TextWrapping="Wrap" />
+        <TextBlock Grid.Column="3" Foreground="{DynamicResource ReversiMutedBrush}" Text="{Binding ResultText}" />
+      </Grid>
+    </Border>
+
+    <ScrollViewer
+        Grid.Row="2"
+        HorizontalScrollBarVisibility="Auto"
+        VerticalScrollBarVisibility="Auto">
+      <Grid ColumnDefinitions="Auto,260" ColumnSpacing="18" HorizontalAlignment="Center">
+        <StackPanel>
+          <TextBlock
+              Margin="0,0,0,6"
+              Foreground="{DynamicResource ReversiMutedBrush}"
+              Text="列坐标 A-H · 行坐标 1-8 · 小圆点表示合法位置"
+              TextAlignment="Center" />
+          <Border Background="#FF176B3A" BorderBrush="#FF0E4325" BorderThickness="3">
+            <ItemsControl ItemsSource="{Binding BoardCells}">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <primitives:UniformGrid Rows="8" Columns="8" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:ReversiCellViewModel">
+                  <Button
+                      Classes="reversi-cell"
+                      Width="54"
+                      Height="54"
+                      Padding="0"
+                      Background="#FF238B4B"
+                      BorderBrush="{Binding CellBorderBrush}"
+                      BorderThickness="{Binding CellBorderThickness}"
+                      CornerRadius="0"
+                      Click="OnCellClick"
+                      ToolTip.Tip="{Binding AccessibleText}">
+                    <Grid>
+                      <Ellipse
+                          Width="42"
+                          Height="42"
+                          Fill="{Binding DiscBrush}"
+                          IsVisible="{Binding HasDisc}"
+                          Stroke="#66000000"
+                          StrokeThickness="1" />
+                      <Ellipse
+                          Width="11"
+                          Height="11"
+                          Fill="#770B2F1A"
+                          IsVisible="{Binding IsLegalMove}" />
+                      <Ellipse
+                          Width="19"
+                          Height="19"
+                          Fill="Transparent"
+                          IsVisible="{Binding IsHint}"
+                          Stroke="#FFFFD166"
+                          StrokeThickness="3" />
+                    </Grid>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </Border>
+        </StackPanel>
+
+        <Border
+            Grid.Column="1"
+            Classes="reversi-panel"
+            MinHeight="450"
+            Padding="12"
+            Background="{DynamicResource ReversiHistoryBrush}"
+            BorderBrush="{DynamicResource ReversiPanelBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="6">
+          <Grid RowDefinitions="Auto,*" RowSpacing="8">
+            <TextBlock FontSize="15" FontWeight="SemiBold" Text="本局操作记录" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+              <ItemsControl ItemsSource="{Binding HistoryItems}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:ReversiHistoryItem">
+                    <TextBlock Margin="0,0,0,7" Text="{Binding Text}" TextWrapping="Wrap" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+          </Grid>
+        </Border>
+      </Grid>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

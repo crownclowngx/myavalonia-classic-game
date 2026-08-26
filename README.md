@@ -1,6 +1,6 @@
 # ClassicGamePlugin
 
-这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷和蜘蛛纸牌 Document。真实交付物是
+这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌和黑白棋 Document。真实交付物是
 `src/ClassicGamePlugin.Plugin`；`Standalone` 只负责快速预览 Plugin 中同一份 View、ViewModel、Document 与领域代码。
 
 > 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了三个子项目和
@@ -11,6 +11,9 @@
 
 蜘蛛纸牌的三档规则、撤销与提示语义、零图片绘制、交互动画和测试矩阵见
 [蜘蛛纸牌 Document 设计与开发说明](docs/spider-solitaire.md)。
+
+黑白棋的现代奥赛罗规则、双人/人机模式、三级电脑、撤销、提示和测试矩阵见
+[黑白棋 Document 设计与开发说明](docs/reversi.md)。
 
 ```powershell
 dotnet restore
@@ -27,5 +30,5 @@ dotnet msbuild src/ClassicGamePlugin.Plugin/ClassicGamePlugin.Plugin.csproj `
   -p:ManagedPluginDeployRoot=C:\Path\To\Host\Controls
 ```
 
-Standalone 只能验证两个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
+Standalone 只能验证三个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
 生命周期必须使用真实 Host 做最终验收。

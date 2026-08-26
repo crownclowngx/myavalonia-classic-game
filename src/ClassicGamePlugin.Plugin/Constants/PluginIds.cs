@@ -13,4 +13,8 @@ public static class PluginIds
     /// <summary>蜘蛛纸牌普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId SpiderSolitaireDocument =
         new("myavalonia.plugin.classic.game.document.spider-solitaire");
+
+    /// <summary>黑白棋普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId ReversiDocument =
+        new("myavalonia.plugin.classic.game.document.reversi");
 }

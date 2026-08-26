@@ -4,6 +4,8 @@ using ClassicGamePlugin.Features.Minesweeper;
 using ClassicGamePlugin.Features.Minesweeper.Views;
 using ClassicGamePlugin.Features.SpiderSolitaire;
 using ClassicGamePlugin.Features.SpiderSolitaire.Views;
+using ClassicGamePlugin.Features.Reversi;
+using ClassicGamePlugin.Features.Reversi.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -25,6 +27,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.SpiderSolitaireDocument,
                 "蜘蛛纸牌",
                 "经典蜘蛛纸牌：整理同花色连续牌组并完成八组 K 到 A",
+                "经典游戏"));
+        registration.AddDocument<ReversiDocument, ReversiDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.ReversiDocument,
+                "黑白棋",
+                "经典黑白棋：夹住并翻转对方棋子，占据更多棋盘位置",
                 "经典游戏"));
     }
 }

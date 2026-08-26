@@ -1,0 +1,16 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Reversi.Views.ReversiDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.Reversi"
+    xmlns:vm="using:ClassicGamePlugin.Features.Reversi.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Reversi.Views"
+    x:DataType="feature:ReversiDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:ReversiViewModel">
+        <views:ReversiView />
+      </DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

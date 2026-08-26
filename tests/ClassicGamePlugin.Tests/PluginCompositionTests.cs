@@ -6,6 +6,9 @@ using ClassicGamePlugin.Features.Minesweeper.ViewModels;
 using ClassicGamePlugin.Features.Minesweeper.Views;
 using ClassicGamePlugin.Features.SpiderSolitaire;
 using ClassicGamePlugin.Features.SpiderSolitaire.Views;
+using ClassicGamePlugin.Features.Reversi;
+using ClassicGamePlugin.Features.Reversi.ViewModels;
+using ClassicGamePlugin.Features.Reversi.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -17,7 +20,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册扫雷与蜘蛛纸牌两个普通Document()
+    public void Module注册三个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -40,12 +43,20 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", spider.Descriptor.MenuCategory);
                 Assert.Equal(typeof(SpiderSolitaireDocument), spider.Model);
                 Assert.Equal(typeof(SpiderSolitaireDocumentView), spider.View);
+            },
+            reversi =>
+            {
+                Assert.Equal(PluginIds.ReversiDocument, reversi.Descriptor.DocumentTypeId);
+                Assert.Equal("黑白棋", reversi.Descriptor.DisplayName);
+                Assert.Equal("经典游戏", reversi.Descriptor.MenuCategory);
+                Assert.Equal(typeof(ReversiDocument), reversi.Model);
+                Assert.Equal(typeof(ReversiDocumentView), reversi.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与两个Document身份保持冻结值()
+    public void 稳定Plugin与三个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -54,6 +65,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.spider-solitaire",
             PluginIds.SpiderSolitaireDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.reversi",
+            PluginIds.ReversiDocument.Value);
     }
 
     [Fact]
@@ -90,6 +104,21 @@ public sealed class PluginCompositionTests
 
         Assert.Same(document.ViewModel, wrapper.HostedViewModel);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
+    }
+
+    [Fact]
+    public void 黑白棋包装View通过单向绑定且游戏View只转发点击()
+    {
+        using var document = new ReversiDocument();
+        var wrapper = new ReversiDocumentView { DataContext = document };
+        var gameView = new ReversiView { DataContext = document.ViewModel };
+        var move = Assert.Single(document.ViewModel.BoardCells, cell => cell.Row == 2 && cell.Column == 3);
+
+        gameView.HandleCellClick(move);
+
+        Assert.Same(document.ViewModel, wrapper.HostedViewModel);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
+        Assert.Equal(1, document.ViewModel.MoveCount);
     }
 
     [Fact]

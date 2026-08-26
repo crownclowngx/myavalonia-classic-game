@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mines="using:ClassicGamePlugin.Features.Minesweeper.Views"
     xmlns:spider="using:ClassicGamePlugin.Features.SpiderSolitaire.Views"
+    xmlns:reversi="using:ClassicGamePlugin.Features.Reversi.Views"
     Width="1080"
     Height="760"
     Title="ClassicGamePlugin Standalone">
@@ -13,6 +14,9 @@
     </TabItem>
     <TabItem Header="蜘蛛纸牌">
       <spider:SpiderSolitaireDocumentView x:Name="SpiderSolitaireHost" />
+    </TabItem>
+    <TabItem Header="黑白棋">
+      <reversi:ReversiDocumentView x:Name="ReversiHost" />
     </TabItem>
   </TabControl>
 </Window>
