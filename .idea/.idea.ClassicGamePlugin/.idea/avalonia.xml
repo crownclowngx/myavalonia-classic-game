@@ -5,6 +5,9 @@
       <map>
         <entry key="src/ClassicGamePlugin.Plugin/Features/Minesweeper/Views/MinesweeperDocumentView.axaml" value="src/ClassicGamePlugin.Standalone/ClassicGamePlugin.Standalone.csproj" />
         <entry key="src/ClassicGamePlugin.Plugin/Features/Minesweeper/Views/MinesweeperView.axaml" value="src/ClassicGamePlugin.Standalone/ClassicGamePlugin.Standalone.csproj" />
+        <entry key="src/ClassicGamePlugin.Plugin/Features/SpiderSolitaire/Views/SpiderSolitaireDocumentView.axaml" value="src/ClassicGamePlugin.Standalone/ClassicGamePlugin.Standalone.csproj" />
+        <entry key="src/ClassicGamePlugin.Plugin/Features/SpiderSolitaire/Views/SpiderSolitaireView.axaml" value="src/ClassicGamePlugin.Standalone/ClassicGamePlugin.Standalone.csproj" />
+        <entry key="src/ClassicGamePlugin.Standalone/MainWindow.axaml" value="src/ClassicGamePlugin.Standalone/ClassicGamePlugin.Standalone.csproj" />
       </map>
     </option>
   </component>
