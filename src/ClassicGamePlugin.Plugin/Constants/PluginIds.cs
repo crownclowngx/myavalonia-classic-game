@@ -6,6 +6,7 @@ public static class PluginIds
 {
     public static readonly PluginId Plugin = new("myavalonia.plugin.classic.game");
 
-    public static readonly DocumentTypeId MainDocument =
-        new("myavalonia.plugin.classic.game.document.main");
+    /// <summary>扫雷普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId MinesweeperDocument =
+        new("myavalonia.plugin.classic.game.document.minesweeper");
 }

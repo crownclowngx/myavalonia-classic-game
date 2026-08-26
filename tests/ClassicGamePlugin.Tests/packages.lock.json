@@ -185,13 +185,13 @@
         "type": "CentralTransitive",
         "requested": "[3.2.0, 3.2.0]",
         "resolved": "3.2.0",
-        "contentHash": "sN9Muc0jsl0xxBnbcr+rlVl/VMsNzpsuKoEiCpDfdfawjLkf2SOKjTcjCQvpq6ORl1wkPDDnljj0qGSR+gxsDA=="
+        "contentHash": "nW1ANVu0KZutbU/gZovlnKx4/NNbjrXCvUzD4yjwlApYup/3kfuw319GUCyPPUt1kznX/8qwSbYKGOJcA++WbQ=="
       },
       "MyAvaloniaManagement.PluginSdk.UI": {
         "type": "CentralTransitive",
         "requested": "[3.2.0, 3.2.0]",
         "resolved": "3.2.0",
-        "contentHash": "V1mPjlXD/2B7D9UE7VMS+RYUCshvC4KjNWD2xFPpeIRrC9QV8sTr+eW2BfcnG4TX3ZeAdKkkHCRDrm6/MHgXEQ==",
+        "contentHash": "kG26BFvihBglIbZPNSRkpUXl5r5jBN94N6Dqh5f7jQlqXiS658a3+v5gd58cFMrawduYsLajTpmVjlecg1nVrQ==",
         "dependencies": {
           "Avalonia": "[12.1.0]",
           "Avalonia.Themes.Fluent": "[12.1.0]",

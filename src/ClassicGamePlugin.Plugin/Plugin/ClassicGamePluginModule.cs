@@ -1,6 +1,7 @@
 using MyAvaloniaManagement.PluginSdk.UI;
 using ClassicGamePlugin.Constants;
-using ClassicGamePlugin.Features.Main;
+using ClassicGamePlugin.Features.Minesweeper;
+using ClassicGamePlugin.Features.Minesweeper.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -11,11 +12,11 @@ public sealed class ClassicGamePluginModule : IPluginModule
         ArgumentNullException.ThrowIfNull(registration);
 
         registration.Services.AddClassicGamePluginServices();
-        registration.AddDocument<MainDocument, MainView>(
+        registration.AddDocument<MinesweeperDocument, MinesweeperDocumentView>(
             new DocumentDescriptor(
-                PluginIds.MainDocument,
-                "示例文档",
-                "由独立预览程序和真实 Host 共用的示例功能",
-                "ClassicGamePlugin"));
+                PluginIds.MinesweeperDocument,
+                "扫雷",
+                "经典扫雷游戏：翻开安全格、标记地雷并完成整张棋盘",
+                "经典游戏"));
     }
 }

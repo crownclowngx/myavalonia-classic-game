@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using ClassicGamePlugin.Features.Main;
+using ClassicGamePlugin.Features.Minesweeper;
 using MyAvaloniaManagement.PluginSdk;
 
 namespace ClassicGamePlugin.Standalone;
@@ -10,9 +10,9 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
 
-        var document = new MainDocument();
+        var document = new MinesweeperDocument();
         document.InitializeAsync(
-            new NewDocumentActivation("ClassicGamePlugin Standalone"),
+            new NewDocumentActivation("扫雷（Standalone）"),
             CancellationToken.None).GetAwaiter().GetResult();
         DataContext = document;
     }

@@ -31,6 +31,10 @@ Standalone 的 `MainWindow` 是开发工作台，不是插件对 Host 暴露的�
 - 为插件确实需要的 Host Port 提供显式、可识别的开发 Stub；
 - 在插件贡献增多时，扩展成简单的 Document/Tool 浏览工作台，但继续复用 Module 的登记事实。
 
+当前 `MainWindow` 直接创建 `MinesweeperDocument` 并承载 SDK 边界用的 `MinesweeperDocumentView`；包装 View
+通过单向绑定把独立 `MinesweeperViewModel` 交给真正的 `MinesweeperView`。该结构用于快速检查扫雷布局和交互；
+棋盘规则、计时和状态转换仍全部来自 Plugin 项目，Standalone 不维护第二份实现。
+
 它不负责证明以下行为：
 
 - manifest 发现、Plugin SDK 兼容检查和程序集加载上下文；

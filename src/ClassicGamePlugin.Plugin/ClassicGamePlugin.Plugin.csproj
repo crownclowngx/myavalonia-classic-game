@@ -18,4 +18,8 @@
     <PackageReference Include="MyAvaloniaManagement.PluginSdk.UI" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="ClassicGamePlugin.Tests" />
+  </ItemGroup>
+
 </Project>

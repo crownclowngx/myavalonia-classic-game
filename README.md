@@ -1,10 +1,13 @@
 # ClassicGamePlugin
 
-这是由 `myavalonia-plugin` 创建的 Managed Plugin 解决方案。真实交付物是
-`src/ClassicGamePlugin.Plugin`；`Standalone` 只负责快速预览同一份 View、ViewModel 与业务代码。
+这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含独立的扫雷 Document。真实交付物是
+`src/ClassicGamePlugin.Plugin`；`Standalone` 只负责快速预览同一份扫雷 View、ViewModel、Document 与领域代码。
 
 > 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了三个子项目和
 > Standalone 窗口的职责、接入真实 Host 的边界，以及临时部署和正式 ZIP 发布流程。
+
+扫雷的规则、SOLID 职责划分、设计选择与测试矩阵见
+[扫雷 Document 设计与开发说明](docs/minesweeper.md)。
 
 ```powershell
 dotnet restore

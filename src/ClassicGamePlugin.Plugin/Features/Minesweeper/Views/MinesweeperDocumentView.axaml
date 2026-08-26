@@ -1,0 +1,18 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Minesweeper.Views.MinesweeperDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.Minesweeper"
+    xmlns:vm="using:ClassicGamePlugin.Features.Minesweeper.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Minesweeper.Views"
+    x:DataType="feature:MinesweeperDocument">
+  <ContentControl
+      x:Name="ViewModelHost"
+      Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:MinesweeperViewModel">
+        <views:MinesweeperView />
+      </DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

@@ -1,0 +1,165 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Minesweeper.Views.MinesweeperView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.Minesweeper.ViewModels"
+    xmlns:primitives="using:Avalonia.Controls.Primitives"
+    x:DataType="vm:MinesweeperViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <!--
+      扫雷是由 Host 承载的 Document，不能假设外围页面一定是浅色。
+      这里定义插件自己的语义颜色，避免依赖 Host 私有资源键；动态资源会随系统/Host 主题切换。
+      -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="MinesweeperPanelBrush" Color="#FFF4F6F8" />
+          <SolidColorBrush x:Key="MinesweeperPanelBorderBrush" Color="#FFA8B1BD" />
+          <SolidColorBrush x:Key="MinesweeperPanelTextBrush" Color="#FF253142" />
+          <SolidColorBrush x:Key="MinesweeperMutedTextBrush" Color="#FF667085" />
+          <SolidColorBrush x:Key="MinesweeperBoardFrameBrush" Color="#FF7D8998" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="MinesweeperPanelBrush" Color="#FF252B33" />
+          <SolidColorBrush x:Key="MinesweeperPanelBorderBrush" Color="#FF596574" />
+          <SolidColorBrush x:Key="MinesweeperPanelTextBrush" Color="#FFF4F7FB" />
+          <SolidColorBrush x:Key="MinesweeperMutedTextBrush" Color="#FFB7C0CC" />
+          <SolidColorBrush x:Key="MinesweeperBoardFrameBrush" Color="#FF667383" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="Border.status-panel TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource MinesweeperPanelTextBrush}" />
+    </Style>
+    <Style Selector="Border.status-panel ComboBox">
+      <Setter Property="Foreground" Value="{DynamicResource MinesweeperPanelTextBrush}" />
+    </Style>
+    <Style Selector="Button.mine-cell:pointerover">
+      <Setter Property="Opacity" Value="0.86" />
+    </Style>
+    <Style Selector="Button.mine-cell:pressed">
+      <Setter Property="Opacity" Value="0.7" />
+    </Style>
+    <Style Selector="Button.mine-cell.chord-preview">
+      <!-- 缩放与降低不透明度共同模拟经典扫雷的“邻格被按下”，且不覆盖格子自身的状态颜色。 -->
+      <Setter Property="Opacity" Value="0.58" />
+      <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+      <Setter Property="RenderTransform">
+        <ScaleTransform ScaleX="0.88" ScaleY="0.88" />
+      </Setter>
+    </Style>
+  </UserControl.Styles>
+
+  <Grid Margin="20" RowDefinitions="Auto,*" RowSpacing="14">
+    <Border
+        Classes="status-panel"
+        Padding="14"
+        Background="{DynamicResource MinesweeperPanelBrush}"
+        BorderBrush="{DynamicResource MinesweeperPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto" ColumnSpacing="16">
+        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <TextBlock Text="难度" VerticalAlignment="Center" />
+          <ComboBox
+              MinWidth="96"
+              ItemsSource="{Binding DifficultyOptions}"
+              SelectedItem="{Binding SelectedDifficulty}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:MinesweeperDifficultyOption">
+                <TextBlock Text="{Binding DisplayName}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <TextBlock Text="剩余雷数" />
+          <TextBlock FontWeight="Bold" Text="{Binding RemainingMineCount}" />
+        </StackPanel>
+
+        <TextBlock
+            Grid.Column="2"
+            HorizontalAlignment="Center"
+            FontSize="16"
+            FontWeight="SemiBold"
+            Text="{Binding StatusText}"
+            VerticalAlignment="Center" />
+
+        <Button
+            Grid.Column="3"
+            MinWidth="52"
+            Command="{Binding RestartCommand}"
+            Content="{Binding RestartSymbol}"
+            FontSize="20"
+            ToolTip.Tip="重新开始" />
+
+        <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <TextBlock Text="用时" />
+          <TextBlock FontWeight="Bold" Text="{Binding ElapsedSeconds}" />
+          <TextBlock Text="秒" />
+        </StackPanel>
+
+        <TextBlock
+            Grid.Column="5"
+            Foreground="{DynamicResource MinesweeperMutedTextBrush}"
+            Text="左键翻开 · 右键插旗 · 数字格左右键组合展开"
+            TextWrapping="Wrap"
+            VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+
+    <ScrollViewer
+        Grid.Row="1"
+        HorizontalScrollBarVisibility="Auto"
+        VerticalScrollBarVisibility="Auto">
+      <Border
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Background="{DynamicResource MinesweeperBoardFrameBrush}"
+          BorderBrush="{DynamicResource MinesweeperBoardFrameBrush}"
+          BorderThickness="2"
+          Width="{Binding BoardWidth}"
+          Height="{Binding BoardHeight}">
+        <ItemsControl ItemsSource="{Binding BoardCells}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <primitives:UniformGrid
+                  Rows="{Binding RowCount}"
+                  Columns="{Binding ColumnCount}" />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:MinesweeperCellViewModel">
+              <Button
+                  Classes="mine-cell"
+                  Classes.chord-preview="{Binding IsChordPreviewed}"
+                  Width="30"
+                  Height="30"
+                  Padding="0"
+                  Background="{Binding Background}"
+                  BorderBrush="{Binding BorderBrush}"
+                  BorderThickness="1"
+                  CornerRadius="0"
+                  FontSize="17"
+                  FontWeight="Bold"
+                  Foreground="{Binding Foreground}"
+                  Click="OnCellClick"
+                  PointerCaptureLost="OnCellPointerCaptureLost"
+                  PointerPressed="OnCellPointerPressed"
+                  PointerReleased="OnCellPointerReleased">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Text="{Binding DisplayText}"
+                    VerticalAlignment="Center" />
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Border>
+    </ScrollViewer>
+  </Grid>
+</UserControl>
