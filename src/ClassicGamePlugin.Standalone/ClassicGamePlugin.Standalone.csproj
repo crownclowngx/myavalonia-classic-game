@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClassicGamePlugin.Plugin\ClassicGamePlugin.Plugin.csproj" />
+    <PackageReference Include="Avalonia.Desktop" />
+  </ItemGroup>
+
+</Project>

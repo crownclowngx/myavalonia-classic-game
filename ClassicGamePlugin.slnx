@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ClassicGamePlugin.Plugin/ClassicGamePlugin.Plugin.csproj" />
+    <Project Path="src/ClassicGamePlugin.Standalone/ClassicGamePlugin.Standalone.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ClassicGamePlugin.Tests/ClassicGamePlugin.Tests.csproj" />
+  </Folder>
+</Solution>

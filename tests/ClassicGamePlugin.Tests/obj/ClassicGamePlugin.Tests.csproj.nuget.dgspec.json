@@ -1,0 +1,203 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\tests\\ClassicGamePlugin.Tests\\ClassicGamePlugin.Tests.csproj": {}
+  },
+  "projects": {
+    "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj",
+        "projectName": "ClassicGamePlugin.Plugin",
+        "projectPath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj",
+        "packagesPath": "C:\\Users\\crown\\.nuget\\packages\\",
+        "outputPath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\obj\\",
+        "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "configFilePaths": [
+          "C:\\Users\\crown\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net10.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net10.0": {
+            "framework": "net10.0",
+            "targetAlias": "net10.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreLockProperties": {
+          "restorePackagesWithLockFile": "true"
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "10.0.300"
+      },
+      "frameworks": {
+        "net10.0": {
+          "framework": "net10.0",
+          "targetAlias": "net10.0",
+          "dependencies": {
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.4.2, 8.4.2]",
+              "versionCentrallyManaged": true
+            },
+            "MyAvaloniaManagement.Plugin.Build": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.1.2, 1.1.2]",
+              "versionCentrallyManaged": true
+            },
+            "MyAvaloniaManagement.PluginSdk": {
+              "target": "Package",
+              "version": "[3.2.0, 3.2.0]",
+              "versionCentrallyManaged": true
+            },
+            "MyAvaloniaManagement.PluginSdk.UI": {
+              "target": "Package",
+              "version": "[3.2.0, 3.2.0]",
+              "versionCentrallyManaged": true
+            }
+          },
+          "centralPackageVersions": {
+            "Avalonia.Desktop": "[12.1.0]",
+            "CommunityToolkit.Mvvm": "[8.4.2]",
+            "Microsoft.NET.Test.Sdk": "[18.8.1]",
+            "MyAvaloniaManagement.Plugin.Build": "[1.1.2]",
+            "MyAvaloniaManagement.PluginSdk": "[3.2.0]",
+            "MyAvaloniaManagement.PluginSdk.UI": "[3.2.0]",
+            "xunit": "[2.9.3]",
+            "xunit.runner.visualstudio": "[3.1.5]"
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\tests\\ClassicGamePlugin.Tests\\ClassicGamePlugin.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\tests\\ClassicGamePlugin.Tests\\ClassicGamePlugin.Tests.csproj",
+        "projectName": "ClassicGamePlugin.Tests",
+        "projectPath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\tests\\ClassicGamePlugin.Tests\\ClassicGamePlugin.Tests.csproj",
+        "packagesPath": "C:\\Users\\crown\\.nuget\\packages\\",
+        "outputPath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\tests\\ClassicGamePlugin.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "configFilePaths": [
+          "C:\\Users\\crown\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net10.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net10.0": {
+            "framework": "net10.0",
+            "targetAlias": "net10.0",
+            "projectReferences": {
+              "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj": {
+                "projectPath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreLockProperties": {
+          "restorePackagesWithLockFile": "true"
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "10.0.300"
+      },
+      "frameworks": {
+        "net10.0": {
+          "framework": "net10.0",
+          "targetAlias": "net10.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[18.8.1, 18.8.1]",
+              "versionCentrallyManaged": true
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.9.3, 2.9.3]",
+              "versionCentrallyManaged": true
+            },
+            "xunit.runner.visualstudio": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.5, 3.1.5]",
+              "versionCentrallyManaged": true
+            }
+          },
+          "centralPackageVersions": {
+            "Avalonia.Desktop": "[12.1.0]",
+            "CommunityToolkit.Mvvm": "[8.4.2]",
+            "Microsoft.NET.Test.Sdk": "[18.8.1]",
+            "MyAvaloniaManagement.Plugin.Build": "[1.1.2]",
+            "MyAvaloniaManagement.PluginSdk": "[3.2.0]",
+            "MyAvaloniaManagement.PluginSdk.UI": "[3.2.0]",
+            "xunit": "[2.9.3]",
+            "xunit.runner.visualstudio": "[3.1.5]"
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

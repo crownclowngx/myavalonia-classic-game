@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "dgSpecHash": "f942rTWHwH0=",
+  "success": false,
+  "projectFilePath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\crown\\.nuget\\packages\\avalonia\\12.1.0\\avalonia.12.1.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\avalonia.buildservices\\11.3.2\\avalonia.buildservices.11.3.2.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\avalonia.remote.protocol\\12.1.0\\avalonia.remote.protocol.12.1.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\avalonia.themes.fluent\\12.1.0\\avalonia.themes.fluent.12.1.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.2\\communitytoolkit.mvvm.8.4.2.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\irihi.avalonia.shared\\0.4.0\\irihi.avalonia.shared.0.4.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\irihi.avalonia.shared.contracts\\0.4.0\\irihi.avalonia.shared.contracts.0.4.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\irihi.ursa\\2.1.0\\irihi.ursa.2.1.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\irihi.ursa.themes.semi\\2.1.0\\irihi.ursa.themes.semi.2.1.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\microcom.runtime\\0.11.6\\microcom.runtime.0.11.6.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.10\\microsoft.extensions.dependencyinjection.abstractions.10.0.10.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\myavaloniamanagement.plugin.build\\1.1.2\\myavaloniamanagement.plugin.build.1.1.2.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\myavaloniamanagement.pluginsdk\\3.2.0\\myavaloniamanagement.pluginsdk.3.2.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\myavaloniamanagement.pluginsdk.ui\\3.2.0\\myavaloniamanagement.pluginsdk.ui.3.2.0.nupkg.sha512",
+    "C:\\Users\\crown\\.nuget\\packages\\semi.avalonia\\12.1.0\\semi.avalonia.12.1.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1403",
+      "level": "Error",
+      "message": "Package content hash validation failed for MyAvaloniaManagement.PluginSdk.3.2.0. The package is different than the last restore.\r\nPackage content hash validation failed for MyAvaloniaManagement.PluginSdk.UI.3.2.0. The package is different than the last restore.\r\n",
+      "projectPath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj",
+      "filePath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj",
+      "targetGraphs": []
+    }
+  ]
+}

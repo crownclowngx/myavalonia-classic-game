@@ -1,0 +1,772 @@
+{
+  "version": 4,
+  "targets": {
+    "net10.0": {
+      "Avalonia/12.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia.BuildServices": "11.3.2",
+          "Avalonia.Remote.Protocol": "12.1.0",
+          "MicroCom.Runtime": "0.11.6"
+        },
+        "compile": {
+          "ref/net10.0/Avalonia.Base.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.Controls.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.DesignerSupport.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.Dialogs.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.Markup.Xaml.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.Markup.dll": {
+            "related": ".Xaml.xml;.xml"
+          },
+          "ref/net10.0/Avalonia.Metal.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.MicroCom.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.OpenGL.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.Vulkan.dll": {
+            "related": ".xml"
+          },
+          "ref/net10.0/Avalonia.dll": {
+            "related": ".Base.xml;.Controls.xml;.DesignerSupport.xml;.Dialogs.xml;.Markup.Xaml.xml;.Markup.xml;.Metal.xml;.MicroCom.xml;.OpenGL.xml;.Vulkan.xml;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Avalonia.Base.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.Controls.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.DesignerSupport.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.Dialogs.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.Markup.Xaml.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.Markup.dll": {
+            "related": ".Xaml.xml;.xml"
+          },
+          "lib/net10.0/Avalonia.Metal.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.MicroCom.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.OpenGL.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.Vulkan.dll": {
+            "related": ".xml"
+          },
+          "lib/net10.0/Avalonia.dll": {
+            "related": ".Base.xml;.Controls.xml;.DesignerSupport.xml;.Dialogs.xml;.Markup.Xaml.xml;.Markup.xml;.Metal.xml;.MicroCom.xml;.OpenGL.xml;.Vulkan.xml;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Avalonia.props": {},
+          "buildTransitive/Avalonia.targets": {}
+        }
+      },
+      "Avalonia.BuildServices/11.3.2": {
+        "type": "package",
+        "build": {
+          "buildTransitive/Avalonia.BuildServices.targets": {}
+        }
+      },
+      "Avalonia.Remote.Protocol/12.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net10.0/Avalonia.Remote.Protocol.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Avalonia.Remote.Protocol.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Avalonia.Themes.Fluent/12.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "12.1.0"
+        },
+        "compile": {
+          "lib/net10.0/Avalonia.Themes.Fluent.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Avalonia.Themes.Fluent.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "CommunityToolkit.Mvvm/8.4.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
+      "Irihi.Avalonia.Shared/0.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "12.0.0"
+        },
+        "compile": {
+          "lib/net10.0/Irihi.Avalonia.Shared.dll": {}
+        },
+        "runtime": {
+          "lib/net10.0/Irihi.Avalonia.Shared.dll": {}
+        }
+      },
+      "Irihi.Avalonia.Shared.Contracts/0.4.0": {
+        "type": "package",
+        "compile": {
+          "lib/net10.0/Irihi.Avalonia.Shared.Contracts.dll": {}
+        },
+        "runtime": {
+          "lib/net10.0/Irihi.Avalonia.Shared.Contracts.dll": {}
+        }
+      },
+      "Irihi.Ursa/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "12.0.2",
+          "Irihi.Avalonia.Shared": "0.4.0",
+          "Irihi.Avalonia.Shared.Contracts": "0.4.0"
+        },
+        "compile": {
+          "lib/net10.0/Ursa.dll": {}
+        },
+        "runtime": {
+          "lib/net10.0/Ursa.dll": {}
+        }
+      },
+      "Irihi.Ursa.Themes.Semi/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "12.0.2",
+          "Irihi.Ursa": "2.1.0",
+          "Semi.Avalonia": "12.0.1"
+        },
+        "compile": {
+          "lib/net10.0/Ursa.Themes.Semi.dll": {}
+        },
+        "runtime": {
+          "lib/net10.0/Ursa.Themes.Semi.dll": {}
+        }
+      },
+      "MicroCom.Runtime/0.11.6": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/MicroCom.Runtime.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/MicroCom.Runtime.dll": {}
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.10": {
+        "type": "package",
+        "compile": {
+          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
+        }
+      },
+      "MyAvaloniaManagement.Plugin.Build/1.1.2": {
+        "type": "package",
+        "build": {
+          "build/MyAvaloniaManagement.Plugin.Build.props": {},
+          "build/MyAvaloniaManagement.Plugin.Build.targets": {}
+        }
+      },
+      "MyAvaloniaManagement.PluginSdk/3.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net10.0/MyAvaloniaManagement.PluginSdk.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/MyAvaloniaManagement.PluginSdk.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MyAvaloniaManagement.PluginSdk.UI/3.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "[12.1.0]",
+          "Avalonia.Themes.Fluent": "[12.1.0]",
+          "Irihi.Ursa": "[2.1.0]",
+          "Irihi.Ursa.Themes.Semi": "[2.1.0]",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.10]",
+          "MyAvaloniaManagement.PluginSdk": "3.2.0",
+          "Semi.Avalonia": "[12.1.0]"
+        },
+        "compile": {
+          "lib/net10.0/MyAvaloniaManagement.PluginSdk.UI.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/MyAvaloniaManagement.PluginSdk.UI.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Semi.Avalonia/12.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "12.1.0",
+          "Irihi.Avalonia.Shared": "0.4.0"
+        },
+        "compile": {
+          "lib/net10.0/Semi.Avalonia.dll": {}
+        },
+        "runtime": {
+          "lib/net10.0/Semi.Avalonia.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Avalonia/12.1.0": {
+      "sha512": "an4ugAy2q6GTdaFl635V8W/LKrWNL+mnSFUprbgyf8m1Zzf9WgoGaF5ajGv5i4gXefMZrzsUPV1QU+kKrgwCWg==",
+      "type": "package",
+      "path": "avalonia/12.1.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "_manifest/cyclonedx/bom.cdx.json",
+        "analyzers/dotnet/cs/Avalonia.Analyzers.CSharp.dll",
+        "analyzers/dotnet/cs/Avalonia.Analyzers.CodeFixes.CSharp.dll",
+        "analyzers/dotnet/cs/Avalonia.Analyzers.VisualBasic.dll",
+        "analyzers/dotnet/cs/Avalonia.Generators.dll",
+        "avalonia.12.1.0.nupkg.sha512",
+        "avalonia.nuspec",
+        "build/Avalonia.Generators.props",
+        "build/Avalonia.props",
+        "build/Avalonia.targets",
+        "build/AvaloniaBuildTasks.props",
+        "build/AvaloniaBuildTasks.targets",
+        "build/AvaloniaItemSchema.xaml",
+        "build/AvaloniaPrivateApis.targets",
+        "build/AvaloniaRules.Project.xml",
+        "build/AvaloniaSingleProject.targets",
+        "build/AvaloniaVersion.props",
+        "buildTransitive/Avalonia.Generators.props",
+        "buildTransitive/Avalonia.props",
+        "buildTransitive/Avalonia.targets",
+        "buildTransitive/AvaloniaBuildTasks.props",
+        "buildTransitive/AvaloniaBuildTasks.targets",
+        "buildTransitive/AvaloniaItemSchema.xaml",
+        "buildTransitive/AvaloniaPrivateApis.targets",
+        "buildTransitive/AvaloniaRules.Project.xml",
+        "buildTransitive/AvaloniaSingleProject.targets",
+        "lib/net10.0/Avalonia.Base.dll",
+        "lib/net10.0/Avalonia.Base.xml",
+        "lib/net10.0/Avalonia.Controls.dll",
+        "lib/net10.0/Avalonia.Controls.xml",
+        "lib/net10.0/Avalonia.DesignerSupport.dll",
+        "lib/net10.0/Avalonia.DesignerSupport.xml",
+        "lib/net10.0/Avalonia.Dialogs.dll",
+        "lib/net10.0/Avalonia.Dialogs.xml",
+        "lib/net10.0/Avalonia.Markup.Xaml.dll",
+        "lib/net10.0/Avalonia.Markup.Xaml.xml",
+        "lib/net10.0/Avalonia.Markup.dll",
+        "lib/net10.0/Avalonia.Markup.xml",
+        "lib/net10.0/Avalonia.Metal.dll",
+        "lib/net10.0/Avalonia.Metal.xml",
+        "lib/net10.0/Avalonia.MicroCom.dll",
+        "lib/net10.0/Avalonia.MicroCom.xml",
+        "lib/net10.0/Avalonia.OpenGL.dll",
+        "lib/net10.0/Avalonia.OpenGL.xml",
+        "lib/net10.0/Avalonia.Vulkan.dll",
+        "lib/net10.0/Avalonia.Vulkan.xml",
+        "lib/net10.0/Avalonia.dll",
+        "lib/net10.0/Avalonia.xml",
+        "lib/net8.0/Avalonia.Base.dll",
+        "lib/net8.0/Avalonia.Base.xml",
+        "lib/net8.0/Avalonia.Controls.dll",
+        "lib/net8.0/Avalonia.Controls.xml",
+        "lib/net8.0/Avalonia.DesignerSupport.dll",
+        "lib/net8.0/Avalonia.DesignerSupport.xml",
+        "lib/net8.0/Avalonia.Dialogs.dll",
+        "lib/net8.0/Avalonia.Dialogs.xml",
+        "lib/net8.0/Avalonia.Markup.Xaml.dll",
+        "lib/net8.0/Avalonia.Markup.Xaml.xml",
+        "lib/net8.0/Avalonia.Markup.dll",
+        "lib/net8.0/Avalonia.Markup.xml",
+        "lib/net8.0/Avalonia.Metal.dll",
+        "lib/net8.0/Avalonia.Metal.xml",
+        "lib/net8.0/Avalonia.MicroCom.dll",
+        "lib/net8.0/Avalonia.MicroCom.xml",
+        "lib/net8.0/Avalonia.OpenGL.dll",
+        "lib/net8.0/Avalonia.OpenGL.xml",
+        "lib/net8.0/Avalonia.Vulkan.dll",
+        "lib/net8.0/Avalonia.Vulkan.xml",
+        "lib/net8.0/Avalonia.dll",
+        "lib/net8.0/Avalonia.xml",
+        "ref/net10.0/Avalonia.Base.dll",
+        "ref/net10.0/Avalonia.Base.xml",
+        "ref/net10.0/Avalonia.Controls.dll",
+        "ref/net10.0/Avalonia.Controls.xml",
+        "ref/net10.0/Avalonia.DesignerSupport.dll",
+        "ref/net10.0/Avalonia.DesignerSupport.xml",
+        "ref/net10.0/Avalonia.Dialogs.dll",
+        "ref/net10.0/Avalonia.Dialogs.xml",
+        "ref/net10.0/Avalonia.Markup.Xaml.dll",
+        "ref/net10.0/Avalonia.Markup.Xaml.xml",
+        "ref/net10.0/Avalonia.Markup.dll",
+        "ref/net10.0/Avalonia.Markup.xml",
+        "ref/net10.0/Avalonia.Metal.dll",
+        "ref/net10.0/Avalonia.Metal.xml",
+        "ref/net10.0/Avalonia.MicroCom.dll",
+        "ref/net10.0/Avalonia.MicroCom.xml",
+        "ref/net10.0/Avalonia.OpenGL.dll",
+        "ref/net10.0/Avalonia.OpenGL.xml",
+        "ref/net10.0/Avalonia.Vulkan.dll",
+        "ref/net10.0/Avalonia.Vulkan.xml",
+        "ref/net10.0/Avalonia.dll",
+        "ref/net10.0/Avalonia.xml",
+        "ref/net8.0/Avalonia.Base.dll",
+        "ref/net8.0/Avalonia.Base.xml",
+        "ref/net8.0/Avalonia.Controls.dll",
+        "ref/net8.0/Avalonia.Controls.xml",
+        "ref/net8.0/Avalonia.DesignerSupport.dll",
+        "ref/net8.0/Avalonia.DesignerSupport.xml",
+        "ref/net8.0/Avalonia.Dialogs.dll",
+        "ref/net8.0/Avalonia.Dialogs.xml",
+        "ref/net8.0/Avalonia.Markup.Xaml.dll",
+        "ref/net8.0/Avalonia.Markup.Xaml.xml",
+        "ref/net8.0/Avalonia.Markup.dll",
+        "ref/net8.0/Avalonia.Markup.xml",
+        "ref/net8.0/Avalonia.Metal.dll",
+        "ref/net8.0/Avalonia.Metal.xml",
+        "ref/net8.0/Avalonia.MicroCom.dll",
+        "ref/net8.0/Avalonia.MicroCom.xml",
+        "ref/net8.0/Avalonia.OpenGL.dll",
+        "ref/net8.0/Avalonia.OpenGL.xml",
+        "ref/net8.0/Avalonia.Vulkan.dll",
+        "ref/net8.0/Avalonia.Vulkan.xml",
+        "ref/net8.0/Avalonia.dll",
+        "ref/net8.0/Avalonia.xml",
+        "tools/net10.0/designer/Avalonia.Designer.HostApp.dll",
+        "tools/net8.0/designer/Avalonia.Designer.HostApp.dll",
+        "tools/netstandard2.0/Avalonia.Build.Tasks.dll"
+      ]
+    },
+    "Avalonia.BuildServices/11.3.2": {
+      "sha512": "qHDToxto1e3hci5YqbG9n0Ty8mlp3zBUN5wT66wKqaDVzXyQ0do3EnRILd4Ke9jpvsktaPpgE0YjEk7hornryQ==",
+      "type": "package",
+      "path": "avalonia.buildservices/11.3.2",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "README.md",
+        "avalonia.buildservices.11.3.2.nupkg.sha512",
+        "avalonia.buildservices.nuspec",
+        "build/Avalonia.BuildServices.targets",
+        "buildTransitive/Avalonia.BuildServices.targets",
+        "tools/netstandard2.0/Avalonia.BuildServices.Collector.dll",
+        "tools/netstandard2.0/Avalonia.BuildServices.dll",
+        "tools/netstandard2.0/runtimeconfig.json"
+      ]
+    },
+    "Avalonia.Remote.Protocol/12.1.0": {
+      "sha512": "p6OKt6O7vOub4TS2pAjaeW0Y13oxrPs4uixeVZpJByiSQKKk+LyApN5yRy2JerpfTMtI86Y5pNwugyKTHZJnAw==",
+      "type": "package",
+      "path": "avalonia.remote.protocol/12.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "_manifest/cyclonedx/bom.cdx.json",
+        "avalonia.remote.protocol.12.1.0.nupkg.sha512",
+        "avalonia.remote.protocol.nuspec",
+        "lib/net10.0/Avalonia.Remote.Protocol.dll",
+        "lib/net10.0/Avalonia.Remote.Protocol.xml",
+        "lib/net8.0/Avalonia.Remote.Protocol.dll",
+        "lib/net8.0/Avalonia.Remote.Protocol.xml",
+        "lib/netstandard2.0/Avalonia.Remote.Protocol.dll",
+        "lib/netstandard2.0/Avalonia.Remote.Protocol.xml"
+      ]
+    },
+    "Avalonia.Themes.Fluent/12.1.0": {
+      "sha512": "MVi5L9HymnNm+gP2aNXNcyrP2iKGJWFubQ5Bv8/Przflxca1aIT9QBpTUV6c3olA9rLYFY7MJRR/C/BZaUhemQ==",
+      "type": "package",
+      "path": "avalonia.themes.fluent/12.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "_manifest/cyclonedx/bom.cdx.json",
+        "avalonia.themes.fluent.12.1.0.nupkg.sha512",
+        "avalonia.themes.fluent.nuspec",
+        "lib/net10.0/Avalonia.Themes.Fluent.dll",
+        "lib/net10.0/Avalonia.Themes.Fluent.xml",
+        "lib/net8.0/Avalonia.Themes.Fluent.dll",
+        "lib/net8.0/Avalonia.Themes.Fluent.xml"
+      ]
+    },
+    "CommunityToolkit.Mvvm/8.4.2": {
+      "sha512": "WadCzGEc2U+3e20avRLng4qNtt4zoOGWrdUISqJWrHe3/FSnrYjuM5Sb4yQb09LhkBXrrI4Zt3dLKgRMbItsrg==",
+      "type": "package",
+      "path": "communitytoolkit.mvvm/8.4.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "License.md",
+        "ThirdPartyNotices.txt",
+        "analyzers/dotnet/roslyn4.0/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.0/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "analyzers/dotnet/roslyn4.12/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.12/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "analyzers/dotnet/roslyn4.3/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.3/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "analyzers/dotnet/roslyn5.0/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn5.0/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "build/CommunityToolkit.Mvvm.FeatureSwitches.targets",
+        "build/CommunityToolkit.Mvvm.SourceGenerators.targets",
+        "build/CommunityToolkit.Mvvm.Windows.targets",
+        "build/CommunityToolkit.Mvvm.WindowsSdk.targets",
+        "build/CommunityToolkit.Mvvm.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.FeatureSwitches.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.SourceGenerators.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.Windows.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.WindowsSdk.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.targets",
+        "communitytoolkit.mvvm.8.4.2.nupkg.sha512",
+        "communitytoolkit.mvvm.nuspec",
+        "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll",
+        "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.xml",
+        "lib/net8.0/CommunityToolkit.Mvvm.dll",
+        "lib/net8.0/CommunityToolkit.Mvvm.xml",
+        "lib/netstandard2.0/CommunityToolkit.Mvvm.dll",
+        "lib/netstandard2.0/CommunityToolkit.Mvvm.xml",
+        "lib/netstandard2.1/CommunityToolkit.Mvvm.dll",
+        "lib/netstandard2.1/CommunityToolkit.Mvvm.xml"
+      ]
+    },
+    "Irihi.Avalonia.Shared/0.4.0": {
+      "sha512": "T6+jezCUjisJNz6zkNcNLVNI2ttWznbyQnW6MS9L45EXhePqRCIxB3xV/5L8gFAJ83JrhiCIokMOxRWdq9/1Zg==",
+      "type": "package",
+      "path": "irihi.avalonia.shared/0.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "irihi.avalonia.shared.0.4.0.nupkg.sha512",
+        "irihi.avalonia.shared.nuspec",
+        "irihi.png",
+        "lib/net10.0/Irihi.Avalonia.Shared.dll",
+        "lib/net8.0/Irihi.Avalonia.Shared.dll"
+      ]
+    },
+    "Irihi.Avalonia.Shared.Contracts/0.4.0": {
+      "sha512": "Du8DY2YqlSmCmywqZtuOhgwLkgklMeE1ajZ4Dd/iqVz6HmAKptjVTqA1oloZX5ihqsdKRiNuUGCdYPe1rekf2Q==",
+      "type": "package",
+      "path": "irihi.avalonia.shared.contracts/0.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "irihi.avalonia.shared.contracts.0.4.0.nupkg.sha512",
+        "irihi.avalonia.shared.contracts.nuspec",
+        "irihi.png",
+        "lib/net10.0/Irihi.Avalonia.Shared.Contracts.dll",
+        "lib/net8.0/Irihi.Avalonia.Shared.Contracts.dll"
+      ]
+    },
+    "Irihi.Ursa/2.1.0": {
+      "sha512": "G2wAmenCgMZkBOqs5MYRtlurhU2tAKKmcNJzjjaA9Mj5v3YIivuv7wyNpIpgYZ602sOZhFtQwYrCaLVUhn9Htw==",
+      "type": "package",
+      "path": "irihi.ursa/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "irihi.png",
+        "irihi.ursa.2.1.0.nupkg.sha512",
+        "irihi.ursa.nuspec",
+        "lib/net10.0/Ursa.dll",
+        "lib/net8.0/Ursa.dll"
+      ]
+    },
+    "Irihi.Ursa.Themes.Semi/2.1.0": {
+      "sha512": "vz7iA6YcAqJ9Z34CXGtapsROERLjZ7vD1CqblO7V5NWQyrJ5igbAYSuFFWnZnPVFKkyKM/c43oGmcWjiDBLoHA==",
+      "type": "package",
+      "path": "irihi.ursa.themes.semi/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "irihi.png",
+        "irihi.ursa.themes.semi.2.1.0.nupkg.sha512",
+        "irihi.ursa.themes.semi.nuspec",
+        "lib/net10.0/Ursa.Themes.Semi.dll",
+        "lib/net8.0/Ursa.Themes.Semi.dll"
+      ]
+    },
+    "MicroCom.Runtime/0.11.6": {
+      "sha512": "NdNWGDiZ6eS/Mf/9+QHR91cj1K7Hy+PX9yrHI/zM7xFYuj9IWT2uxtB6sCHjrnxAeLV9fut1R6zHDUGKX6f9lQ==",
+      "type": "package",
+      "path": "microcom.runtime/0.11.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net5.0/MicroCom.Runtime.dll",
+        "lib/net8.0/MicroCom.Runtime.dll",
+        "lib/netstandard2.0/MicroCom.Runtime.dll",
+        "microcom.runtime.0.11.6.nupkg.sha512",
+        "microcom.runtime.nuspec"
+      ]
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.10": {
+      "sha512": "z/2xXlFw2aLGjHyEm6E0tQ+In6VfzQzTrtArbQ2c0TQE16ZbyDCMGPvaUT9I0s8rgy9sRWlU2P9waW37qV04qA==",
+      "type": "package",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.10",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Extensions.DependencyInjection.Abstractions.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net8.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.DependencyInjection.Abstractions.targets",
+        "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
+        "lib/net462/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "lib/net462/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
+        "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
+        "lib/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "lib/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
+        "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
+        "microsoft.extensions.dependencyinjection.abstractions.10.0.10.nupkg.sha512",
+        "microsoft.extensions.dependencyinjection.abstractions.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
+    "MyAvaloniaManagement.Plugin.Build/1.1.2": {
+      "sha512": "ToF3MifpuZPPAi4ugmtumZp2oiPW/0qWLwtbsMv4mmmhqWiRcD3/ZwbhIXxCvxdSTJh5MA+75HMODX6fa8IT1Q==",
+      "type": "package",
+      "path": "myavaloniamanagement.plugin.build/1.1.2",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        "README.md",
+        "build/MyAvaloniaManagement.Plugin.Build.props",
+        "build/MyAvaloniaManagement.Plugin.Build.targets",
+        "myavaloniamanagement.plugin.build.1.1.2.nupkg.sha512",
+        "myavaloniamanagement.plugin.build.nuspec",
+        "tools/Build-ManagedPluginPackage.ps1",
+        "tools/MyAvaloniaManagement.ManagedPlugin.props",
+        "tools/MyAvaloniaManagement.ManagedPlugin.targets"
+      ]
+    },
+    "MyAvaloniaManagement.PluginSdk/3.2.0": {
+      "sha512": "nW1ANVu0KZutbU/gZovlnKx4/NNbjrXCvUzD4yjwlApYup/3kfuw319GUCyPPUt1kznX/8qwSbYKGOJcA++WbQ==",
+      "type": "package",
+      "path": "myavaloniamanagement.pluginsdk/3.2.0",
+      "files": [
+        ".nupkg.metadata",
+        "README.md",
+        "lib/net10.0/MyAvaloniaManagement.PluginSdk.dll",
+        "lib/net10.0/MyAvaloniaManagement.PluginSdk.xml",
+        "myavaloniamanagement.pluginsdk.3.2.0.nupkg.sha512",
+        "myavaloniamanagement.pluginsdk.nuspec"
+      ]
+    },
+    "MyAvaloniaManagement.PluginSdk.UI/3.2.0": {
+      "sha512": "kG26BFvihBglIbZPNSRkpUXl5r5jBN94N6Dqh5f7jQlqXiS658a3+v5gd58cFMrawduYsLajTpmVjlecg1nVrQ==",
+      "type": "package",
+      "path": "myavaloniamanagement.pluginsdk.ui/3.2.0",
+      "files": [
+        ".nupkg.metadata",
+        "README.md",
+        "lib/net10.0/MyAvaloniaManagement.PluginSdk.UI.dll",
+        "lib/net10.0/MyAvaloniaManagement.PluginSdk.UI.xml",
+        "myavaloniamanagement.pluginsdk.ui.3.2.0.nupkg.sha512",
+        "myavaloniamanagement.pluginsdk.ui.nuspec"
+      ]
+    },
+    "Semi.Avalonia/12.1.0": {
+      "sha512": "me56M9qqcCTdYrsnf2vmd1xNF9gBN33PE3CXc9Gq1NPHO8fieZgFkmeqvaJnLMHg927UQyb7xmRSRf/ORAbv/w==",
+      "type": "package",
+      "path": "semi.avalonia/12.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "irihi.png",
+        "lib/net10.0/Semi.Avalonia.dll",
+        "lib/net8.0/Semi.Avalonia.dll",
+        "semi.avalonia.12.1.0.nupkg.sha512",
+        "semi.avalonia.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net10.0": [
+      "CommunityToolkit.Mvvm >= 8.4.2 <= 8.4.2",
+      "MyAvaloniaManagement.Plugin.Build >= 1.1.2 <= 1.1.2",
+      "MyAvaloniaManagement.PluginSdk >= 3.2.0 <= 3.2.0",
+      "MyAvaloniaManagement.PluginSdk.UI >= 3.2.0 <= 3.2.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\crown\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj",
+      "projectName": "ClassicGamePlugin.Plugin",
+      "projectPath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\ClassicGamePlugin.Plugin.csproj",
+      "packagesPath": "C:\\Users\\crown\\.nuget\\packages\\",
+      "outputPath": "D:\\code\\local\\avalonia_dock_plug_test\\myavalonia-classic-game\\src\\ClassicGamePlugin.Plugin\\obj\\",
+      "projectStyle": "PackageReference",
+      "centralPackageVersionsManagementEnabled": true,
+      "configFilePaths": [
+        "C:\\Users\\crown\\AppData\\Roaming\\NuGet\\NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net10.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net10.0": {
+          "framework": "net10.0",
+          "targetAlias": "net10.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreLockProperties": {
+        "restorePackagesWithLockFile": "true"
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "all"
+      },
+      "SdkAnalysisLevel": "10.0.300"
+    },
+    "frameworks": {
+      "net10.0": {
+        "framework": "net10.0",
+        "targetAlias": "net10.0",
+        "dependencies": {
+          "CommunityToolkit.Mvvm": {
+            "target": "Package",
+            "version": "[8.4.2, 8.4.2]",
+            "versionCentrallyManaged": true
+          },
+          "MyAvaloniaManagement.Plugin.Build": {
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[1.1.2, 1.1.2]",
+            "versionCentrallyManaged": true
+          },
+          "MyAvaloniaManagement.PluginSdk": {
+            "target": "Package",
+            "version": "[3.2.0, 3.2.0]",
+            "versionCentrallyManaged": true
+          },
+          "MyAvaloniaManagement.PluginSdk.UI": {
+            "target": "Package",
+            "version": "[3.2.0, 3.2.0]",
+            "versionCentrallyManaged": true
+          }
+        },
+        "centralPackageVersions": {
+          "Avalonia.Desktop": "[12.1.0]",
+          "CommunityToolkit.Mvvm": "[8.4.2]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1]",
+          "MyAvaloniaManagement.Plugin.Build": "[1.1.2]",
+          "MyAvaloniaManagement.PluginSdk": "[3.2.0]",
+          "MyAvaloniaManagement.PluginSdk.UI": "[3.2.0]",
+          "xunit": "[2.9.3]",
+          "xunit.runner.visualstudio": "[3.1.5]"
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1403",
+      "level": "Error",
+      "message": "Package content hash validation failed for MyAvaloniaManagement.PluginSdk.3.2.0. The package is different than the last restore.\r\nPackage content hash validation failed for MyAvaloniaManagement.PluginSdk.UI.3.2.0. The package is different than the last restore.\r\n"
+    }
+  ]
+}

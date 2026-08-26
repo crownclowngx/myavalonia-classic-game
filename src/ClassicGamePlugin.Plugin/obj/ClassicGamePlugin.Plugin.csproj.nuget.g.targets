@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets" Condition="Exists('$(NuGetPackageRoot)avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets')" />
+    <Import Project="$(NuGetPackageRoot)avalonia\12.1.0\buildTransitive\Avalonia.targets" Condition="Exists('$(NuGetPackageRoot)avalonia\12.1.0\buildTransitive\Avalonia.targets')" />
+    <Import Project="$(NuGetPackageRoot)myavaloniamanagement.plugin.build\1.1.2\build\MyAvaloniaManagement.Plugin.Build.targets" Condition="Exists('$(NuGetPackageRoot)myavaloniamanagement.plugin.build\1.1.2\build\MyAvaloniaManagement.Plugin.Build.targets')" />
+    <Import Project="$(NuGetPackageRoot)communitytoolkit.mvvm\8.4.2\buildTransitive\CommunityToolkit.Mvvm.targets" Condition="Exists('$(NuGetPackageRoot)communitytoolkit.mvvm\8.4.2\buildTransitive\CommunityToolkit.Mvvm.targets')" />
+  </ImportGroup>
+</Project>
