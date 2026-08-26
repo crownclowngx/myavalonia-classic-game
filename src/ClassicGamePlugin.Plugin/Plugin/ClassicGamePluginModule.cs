@@ -6,6 +6,8 @@ using ClassicGamePlugin.Features.SpiderSolitaire;
 using ClassicGamePlugin.Features.SpiderSolitaire.Views;
 using ClassicGamePlugin.Features.Reversi;
 using ClassicGamePlugin.Features.Reversi.Views;
+using ClassicGamePlugin.Features.Gomoku;
+using ClassicGamePlugin.Features.Gomoku.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -33,6 +35,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.ReversiDocument,
                 "黑白棋",
                 "经典黑白棋：夹住并翻转对方棋子，占据更多棋盘位置",
+                "经典游戏"));
+        registration.AddDocument<GomokuDocument, GomokuDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.GomokuDocument,
+                "五子棋",
+                "经典五子棋：自由或禁手规则下连成五子，支持双人与三级人机",
                 "经典游戏"));
     }
 }

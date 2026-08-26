@@ -1,0 +1,149 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Gomoku.Views.GomokuView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.Gomoku.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Gomoku.Views"
+    x:DataType="vm:GomokuViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="GomokuPanelBrush" Color="#FFF4F6F8" />
+          <SolidColorBrush x:Key="GomokuPanelBorderBrush" Color="#FFA8B1BD" />
+          <SolidColorBrush x:Key="GomokuTextBrush" Color="#FF253142" />
+          <SolidColorBrush x:Key="GomokuMutedBrush" Color="#FF667085" />
+          <SolidColorBrush x:Key="GomokuHistoryBrush" Color="#FFFFFFFF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="GomokuPanelBrush" Color="#FF252B33" />
+          <SolidColorBrush x:Key="GomokuPanelBorderBrush" Color="#FF596574" />
+          <SolidColorBrush x:Key="GomokuTextBrush" Color="#FFF4F7FB" />
+          <SolidColorBrush x:Key="GomokuMutedBrush" Color="#FFB7C0CC" />
+          <SolidColorBrush x:Key="GomokuHistoryBrush" Color="#FF1D2229" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="Border.gomoku-panel TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource GomokuTextBrush}" />
+    </Style>
+    <Style Selector="Border.gomoku-panel ComboBox">
+      <Setter Property="Foreground" Value="{DynamicResource GomokuTextBrush}" />
+    </Style>
+  </UserControl.Styles>
+
+  <Grid Margin="20" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+    <Border
+        Classes="gomoku-panel"
+        Padding="12"
+        Background="{DynamicResource GomokuPanelBrush}"
+        BorderBrush="{DynamicResource GomokuPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <StackPanel Margin="0,0,14,6" Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="规则" VerticalAlignment="Center" />
+          <ComboBox Width="104" ItemsSource="{Binding RuleOptions}" SelectedItem="{Binding SelectedRule}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:GomokuRuleOption"><TextBlock Text="{Binding DisplayName}" /></DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+        <StackPanel Margin="0,0,14,6" Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="模式" VerticalAlignment="Center" />
+          <ComboBox Width="108" ItemsSource="{Binding ModeOptions}" SelectedItem="{Binding SelectedMode}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:GomokuGameModeOption"><TextBlock Text="{Binding DisplayName}" /></DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+        <StackPanel
+            Margin="0,0,14,6"
+            IsVisible="{Binding IsHumanVsComputer}"
+            Orientation="Horizontal"
+            Spacing="6">
+          <TextBlock Text="难度" VerticalAlignment="Center" />
+          <ComboBox Width="84" ItemsSource="{Binding DifficultyOptions}" SelectedItem="{Binding SelectedDifficulty}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:GomokuDifficultyOption"><TextBlock Text="{Binding DisplayName}" /></DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+        <ComboBox
+            Margin="0,0,14,6"
+            Width="110"
+            IsVisible="{Binding IsHumanVsComputer}"
+            ItemsSource="{Binding HumanColorOptions}"
+            SelectedItem="{Binding SelectedHumanColor}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:GomokuColorOption"><TextBlock Text="{Binding DisplayName}" /></DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button Margin="0,0,8,6" Command="{Binding RestartCommand}" Content="重新开始" />
+        <Button Margin="0,0,8,6" Command="{Binding UndoCommand}" Content="撤销" />
+        <Button Margin="0,0,8,6" Command="{Binding ContinueCommand}" Content="继续对局" IsVisible="{Binding IsRewinding}" />
+        <Button Margin="0,0,14,6" Command="{Binding HintCommand}" Content="提示" />
+        <TextBlock Margin="0,0,12,6" FontWeight="SemiBold" Text="{Binding StatusText}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" Text="{Binding CurrentTurnText}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,4,6" Text="用时" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,3,6" FontWeight="Bold" Text="{Binding ElapsedSeconds}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,0,6" Text="秒" VerticalAlignment="Center" />
+      </WrapPanel>
+    </Border>
+
+    <Border
+        Grid.Row="1"
+        Classes="gomoku-panel"
+        Padding="10,7"
+        Background="{DynamicResource GomokuPanelBrush}"
+        BorderBrush="{DynamicResource GomokuPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" ColumnSpacing="18">
+        <TextBlock FontWeight="Bold" Text="{Binding BlackCountText}" />
+        <TextBlock Grid.Column="1" FontWeight="Bold" Text="{Binding WhiteCountText}" />
+        <TextBlock Grid.Column="2" Text="{Binding MoveCountText}" />
+        <TextBlock Grid.Column="3" Text="{Binding MessageText}" TextWrapping="Wrap" />
+        <TextBlock Grid.Column="4" Foreground="{DynamicResource GomokuMutedBrush}" Text="{Binding ResultText}" />
+      </Grid>
+    </Border>
+
+    <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+      <Grid ColumnDefinitions="570,260" ColumnSpacing="18" HorizontalAlignment="Center">
+        <StackPanel>
+          <TextBlock
+              Margin="0,0,0,6"
+              Foreground="{DynamicResource GomokuMutedBrush}"
+              Text="列坐标 A-O · 行坐标 1-15 · 红点为最近落子 · 红叉为黑方禁手"
+              TextAlignment="Center" />
+          <views:GomokuBoardControl Width="570" Height="570" Game="{Binding}" />
+        </StackPanel>
+        <Border
+            Grid.Column="1"
+            Classes="gomoku-panel"
+            MinHeight="570"
+            Padding="12"
+            Background="{DynamicResource GomokuHistoryBrush}"
+            BorderBrush="{DynamicResource GomokuPanelBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="6">
+          <Grid RowDefinitions="Auto,*" RowSpacing="8">
+            <TextBlock FontSize="15" FontWeight="SemiBold" Text="本局操作记录" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+              <ItemsControl ItemsSource="{Binding HistoryItems}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:GomokuHistoryItem">
+                    <TextBlock Margin="0,0,0,7" Text="{Binding Text}" TextWrapping="Wrap" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+          </Grid>
+        </Border>
+      </Grid>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

@@ -1,0 +1,14 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Gomoku.Views.GomokuDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.Gomoku"
+    xmlns:vm="using:ClassicGamePlugin.Features.Gomoku.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Gomoku.Views"
+    x:DataType="feature:GomokuDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:GomokuViewModel"><views:GomokuView /></DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

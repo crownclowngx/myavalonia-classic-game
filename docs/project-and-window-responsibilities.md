@@ -31,10 +31,11 @@ Standalone 的 `MainWindow` 是开发工作台，不是插件对 Host 暴露的�
 - 为插件确实需要的 Host Port 提供显式、可识别的开发 Stub；
 - 在插件贡献增多时，扩展成简单的 Document/Tool 浏览工作台，但继续复用 Module 的登记事实。
 
-当前 `MainWindow` 使用标签页分别创建 `MinesweeperDocument`、`SpiderSolitaireDocument` 与 `ReversiDocument`，并承载各自的 SDK
-边界包装 View。三个包装 View 都通过单向绑定把 Document 拥有的 ViewModel 交给真正的游戏 View。该结构用于快速
+当前 `MainWindow` 使用标签页分别创建 `MinesweeperDocument`、`SpiderSolitaireDocument`、`ReversiDocument` 与
+`GomokuDocument`，并承载各自的 SDK 边界包装 View。四个包装 View 都通过单向绑定把 Document 拥有的 ViewModel
+交给真正的游戏 View。该结构用于快速
 检查扫雷和蜘蛛纸牌的布局与交互；规则、计时和状态转换仍全部来自 Plugin 项目，Standalone 不维护第二份实现，
-窗口关闭时也会释放三个 Document 拥有的计时、动画或后台电脑资源。
+窗口关闭时也会释放四个 Document 拥有的计时、动画或后台电脑资源。
 
 它不负责证明以下行为：
 

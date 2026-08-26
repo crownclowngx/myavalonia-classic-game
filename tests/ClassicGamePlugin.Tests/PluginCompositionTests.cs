@@ -9,6 +9,8 @@ using ClassicGamePlugin.Features.SpiderSolitaire.Views;
 using ClassicGamePlugin.Features.Reversi;
 using ClassicGamePlugin.Features.Reversi.ViewModels;
 using ClassicGamePlugin.Features.Reversi.Views;
+using ClassicGamePlugin.Features.Gomoku;
+using ClassicGamePlugin.Features.Gomoku.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -20,7 +22,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册三个独立游戏的普通Document()
+    public void Module注册四个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -51,12 +53,20 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", reversi.Descriptor.MenuCategory);
                 Assert.Equal(typeof(ReversiDocument), reversi.Model);
                 Assert.Equal(typeof(ReversiDocumentView), reversi.View);
+            },
+            gomoku =>
+            {
+                Assert.Equal(PluginIds.GomokuDocument, gomoku.Descriptor.DocumentTypeId);
+                Assert.Equal("五子棋", gomoku.Descriptor.DisplayName);
+                Assert.Equal("经典游戏", gomoku.Descriptor.MenuCategory);
+                Assert.Equal(typeof(GomokuDocument), gomoku.Model);
+                Assert.Equal(typeof(GomokuDocumentView), gomoku.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与三个Document身份保持冻结值()
+    public void 稳定Plugin与四个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -68,6 +78,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.reversi",
             PluginIds.ReversiDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.gomoku",
+            PluginIds.GomokuDocument.Value);
     }
 
     [Fact]
@@ -119,6 +132,17 @@ public sealed class PluginCompositionTests
         Assert.Same(document.ViewModel, wrapper.HostedViewModel);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
         Assert.Equal(1, document.ViewModel.MoveCount);
+    }
+
+    [Fact]
+    public void 五子棋包装View通过单向绑定把独立ViewModel交给游戏View()
+    {
+        using var document = new GomokuDocument();
+        var wrapper = new GomokuDocumentView { DataContext = document };
+        var gameView = new GomokuView { DataContext = document.ViewModel };
+
+        Assert.Same(document.ViewModel, wrapper.HostedViewModel);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
     }
 
     [Fact]

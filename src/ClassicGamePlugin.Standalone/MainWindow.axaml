@@ -5,6 +5,7 @@
     xmlns:mines="using:ClassicGamePlugin.Features.Minesweeper.Views"
     xmlns:spider="using:ClassicGamePlugin.Features.SpiderSolitaire.Views"
     xmlns:reversi="using:ClassicGamePlugin.Features.Reversi.Views"
+    xmlns:gomoku="using:ClassicGamePlugin.Features.Gomoku.Views"
     Width="1080"
     Height="760"
     Title="ClassicGamePlugin Standalone">
@@ -17,6 +18,9 @@
     </TabItem>
     <TabItem Header="黑白棋">
       <reversi:ReversiDocumentView x:Name="ReversiHost" />
+    </TabItem>
+    <TabItem Header="五子棋">
+      <gomoku:GomokuDocumentView x:Name="GomokuHost" />
     </TabItem>
   </TabControl>
 </Window>
