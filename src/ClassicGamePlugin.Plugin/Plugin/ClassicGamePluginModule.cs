@@ -12,6 +12,8 @@ using ClassicGamePlugin.Features.Xiangqi;
 using ClassicGamePlugin.Features.Xiangqi.Views;
 using ClassicGamePlugin.Features.Game2048;
 using ClassicGamePlugin.Features.Game2048.Views;
+using ClassicGamePlugin.Features.Sudoku;
+using ClassicGamePlugin.Features.Sudoku.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -57,6 +59,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.Game2048Document,
                 "2048",
                 "经典数字合并游戏：移动方块、合并同值数字并挑战 2048",
+                "经典游戏"));
+        registration.AddDocument<SudokuDocument, SudokuDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.SudokuDocument,
+                "数独",
+                "经典 9×9 数独：三级难度、候选笔记、提示与唯一解题目生成",
                 "经典游戏"));
     }
 }

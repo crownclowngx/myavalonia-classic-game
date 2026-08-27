@@ -1,0 +1,16 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Sudoku.Views.SudokuDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.Sudoku"
+    xmlns:vm="using:ClassicGamePlugin.Features.Sudoku.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Sudoku.Views"
+    x:DataType="feature:SudokuDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:SudokuViewModel">
+        <views:SudokuView />
+      </DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

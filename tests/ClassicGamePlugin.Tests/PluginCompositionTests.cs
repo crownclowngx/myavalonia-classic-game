@@ -19,6 +19,9 @@ using ClassicGamePlugin.Features.Game2048;
 using ClassicGamePlugin.Features.Game2048.Domain;
 using ClassicGamePlugin.Features.Game2048.ViewModels;
 using ClassicGamePlugin.Features.Game2048.Views;
+using ClassicGamePlugin.Features.Sudoku;
+using ClassicGamePlugin.Features.Sudoku.ViewModels;
+using ClassicGamePlugin.Features.Sudoku.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -30,7 +33,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册六个独立游戏的普通Document()
+    public void Module注册七个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -88,12 +91,23 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", game2048.Descriptor.MenuCategory);
                 Assert.Equal(typeof(Game2048Document), game2048.Model);
                 Assert.Equal(typeof(Game2048DocumentView), game2048.View);
+            },
+            sudoku =>
+            {
+                Assert.Equal(PluginIds.SudokuDocument, sudoku.Descriptor.DocumentTypeId);
+                Assert.Equal("数独", sudoku.Descriptor.DisplayName);
+                Assert.Equal(
+                    "经典 9×9 数独：三级难度、候选笔记、提示与唯一解题目生成",
+                    sudoku.Descriptor.Description);
+                Assert.Equal("经典游戏", sudoku.Descriptor.MenuCategory);
+                Assert.Equal(typeof(SudokuDocument), sudoku.Model);
+                Assert.Equal(typeof(SudokuDocumentView), sudoku.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与六个Document身份保持冻结值()
+    public void 稳定Plugin与七个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -114,6 +128,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.2048",
             PluginIds.Game2048Document.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.sudoku",
+            PluginIds.SudokuDocument.Value);
     }
 
     [Fact]
@@ -206,6 +223,19 @@ public sealed class PluginCompositionTests
         Assert.Equal(3, strategy.CallCount);
         Assert.False(document.ViewModel.IsAnimationRunning);
         Assert.False(gameView.HandleKey(Key.Enter));
+    }
+
+    [Fact]
+    public void 数独包装View通过单向绑定且游戏View只接受ViewModel()
+    {
+        using var document = new SudokuDocument();
+        var wrapper = new SudokuDocumentView { DataContext = document };
+        var gameView = new SudokuView { DataContext = document.ViewModel };
+
+        AssertDocumentWrapperBinding(wrapper, document);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
+        Assert.IsType<SudokuViewModel>(gameView.DataContext);
+        Assert.True(document.ViewModel.AnimationsEnabled);
     }
 
     [Theory]

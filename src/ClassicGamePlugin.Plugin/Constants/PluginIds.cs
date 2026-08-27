@@ -29,4 +29,8 @@ public static class PluginIds
     /// <summary>2048 普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId Game2048Document =
         new("myavalonia.plugin.classic.game.document.2048");
+
+    /// <summary>数独普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId SudokuDocument =
+        new("myavalonia.plugin.classic.game.document.sudoku");
 }

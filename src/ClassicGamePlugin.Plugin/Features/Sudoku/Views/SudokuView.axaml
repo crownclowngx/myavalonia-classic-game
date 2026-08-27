@@ -1,0 +1,118 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Sudoku.Views.SudokuView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:views="using:ClassicGamePlugin.Features.Sudoku.Views"
+    xmlns:vm="using:ClassicGamePlugin.Features.Sudoku.ViewModels"
+    x:DataType="vm:SudokuViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <!-- 数独 Document 使用自己的主题资源，不能假设 Host 窗口提供任何私有颜色键。 -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="SudokuPageBrush" Color="#FFF5F8FB" />
+          <SolidColorBrush x:Key="SudokuPanelBrush" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="SudokuBorderBrush" Color="#FFAAB6C4" />
+          <SolidColorBrush x:Key="SudokuTextBrush" Color="#FF253142" />
+          <SolidColorBrush x:Key="SudokuMutedBrush" Color="#FF667487" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="SudokuPageBrush" Color="#FF1C232C" />
+          <SolidColorBrush x:Key="SudokuPanelBrush" Color="#FF27313D" />
+          <SolidColorBrush x:Key="SudokuBorderBrush" Color="#FF5C6A7B" />
+          <SolidColorBrush x:Key="SudokuTextBrush" Color="#FFF3F6FA" />
+          <SolidColorBrush x:Key="SudokuMutedBrush" Color="#FFB6C0CD" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Border MinWidth="760" Padding="22" Background="{DynamicResource SudokuPageBrush}">
+      <StackPanel MaxWidth="900" HorizontalAlignment="Center" Spacing="14">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="18">
+          <StackPanel>
+            <TextBlock FontSize="36" FontWeight="Bold" Foreground="{DynamicResource SudokuTextBrush}" Text="数独" />
+            <TextBlock Foreground="{DynamicResource SudokuMutedBrush}" Text="经典 9×9 · 每一行、每一列和每一宫填入 1–9" />
+          </StackPanel>
+          <Border Grid.Column="1" Padding="14,8" Background="{DynamicResource SudokuPanelBrush}"
+                  BorderBrush="{DynamicResource SudokuBorderBrush}" BorderThickness="1" CornerRadius="7">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+              <StackPanel>
+                <TextBlock Foreground="{DynamicResource SudokuMutedBrush}" Text="难度" />
+                <TextBlock FontWeight="Bold" Foreground="{DynamicResource SudokuTextBrush}" Text="{Binding DifficultyText}" />
+              </StackPanel>
+              <StackPanel>
+                <TextBlock Foreground="{DynamicResource SudokuMutedBrush}" Text="用时" />
+                <TextBlock FontWeight="Bold" Foreground="{DynamicResource SudokuTextBrush}" Text="{Binding ElapsedSeconds, StringFormat={}{0} 秒}" />
+              </StackPanel>
+              <StackPanel>
+                <TextBlock Foreground="{DynamicResource SudokuMutedBrush}" Text="来源" />
+                <TextBlock FontWeight="Bold" Foreground="{DynamicResource SudokuTextBrush}" Text="{Binding SourceText}" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </Grid>
+
+        <Border Padding="10" Background="{DynamicResource SudokuPanelBrush}"
+                BorderBrush="{DynamicResource SudokuBorderBrush}" BorderThickness="1" CornerRadius="7">
+          <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <TextBlock Margin="0,0,6,6" VerticalAlignment="Center" Foreground="{DynamicResource SudokuTextBrush}" Text="难度" />
+            <ComboBox Margin="0,0,10,6" Width="100" ItemsSource="{Binding DifficultyOptions}"
+                      SelectedItem="{Binding SelectedDifficulty}" IsEnabled="{Binding IsNotGenerating}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:SudokuDifficultyOption">
+                  <TextBlock Text="{Binding DisplayName}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Margin="0,0,8,6" Command="{Binding NewGameCommand}" Content="新游戏" IsEnabled="{Binding IsNotGenerating}" />
+            <Button Margin="0,0,8,6" Command="{Binding GeneratePuzzleCommand}" Content="生成题目" IsEnabled="{Binding IsNotGenerating}" />
+            <Button Margin="0,0,8,6" Command="{Binding GeneratePuzzleCancelCommand}" Content="取消生成" IsVisible="{Binding IsGenerating}" />
+            <Button Margin="0,0,8,6" Command="{Binding RestartCommand}" Content="重新开始" />
+            <Button Margin="0,0,8,6" Command="{Binding UndoCommand}" Content="撤销" IsEnabled="{Binding CanUndo}" />
+            <TextBlock Margin="8,0,0,6" VerticalAlignment="Center" FontWeight="SemiBold"
+                       Foreground="{DynamicResource SudokuTextBrush}" Text="{Binding StatusText}" />
+          </WrapPanel>
+        </Border>
+
+        <Border Padding="10,8" Background="{DynamicResource SudokuPanelBrush}"
+                BorderBrush="{DynamicResource SudokuBorderBrush}" BorderThickness="1" CornerRadius="7">
+          <TextBlock Foreground="{DynamicResource SudokuTextBrush}" Text="{Binding MessageText}" TextWrapping="Wrap" />
+        </Border>
+
+        <Grid ColumnDefinitions="540,190" ColumnSpacing="20" HorizontalAlignment="Center">
+          <views:SudokuBoardControl Width="540" Height="540" Game="{Binding}" />
+
+          <Border Grid.Column="1" Padding="14" Background="{DynamicResource SudokuPanelBrush}"
+                  BorderBrush="{DynamicResource SudokuBorderBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel Spacing="12">
+              <TextBlock FontSize="17" FontWeight="Bold" Foreground="{DynamicResource SudokuTextBrush}" Text="数字输入" />
+              <UniformGrid Rows="3" Columns="3">
+                <Button Margin="3" Height="48" Tag="1" Content="1" Click="OnNumberButtonClick" />
+                <Button Margin="3" Height="48" Tag="2" Content="2" Click="OnNumberButtonClick" />
+                <Button Margin="3" Height="48" Tag="3" Content="3" Click="OnNumberButtonClick" />
+                <Button Margin="3" Height="48" Tag="4" Content="4" Click="OnNumberButtonClick" />
+                <Button Margin="3" Height="48" Tag="5" Content="5" Click="OnNumberButtonClick" />
+                <Button Margin="3" Height="48" Tag="6" Content="6" Click="OnNumberButtonClick" />
+                <Button Margin="3" Height="48" Tag="7" Content="7" Click="OnNumberButtonClick" />
+                <Button Margin="3" Height="48" Tag="8" Content="8" Click="OnNumberButtonClick" />
+                <Button Margin="3" Height="48" Tag="9" Content="9" Click="OnNumberButtonClick" />
+              </UniformGrid>
+              <CheckBox Content="候选笔记（N）" IsChecked="{Binding IsNotesMode, Mode=TwoWay}" />
+              <Button Command="{Binding ClearSelectedCommand}" Content="清除数字" />
+              <Button Command="{Binding HintCommand}" Content="提示一格" IsEnabled="{Binding CanHint}" />
+              <CheckBox Content="动画效果" IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}" />
+              <TextBlock Foreground="{DynamicResource SudokuMutedBrush}"
+                         Text="单击棋盘后可用方向键移动，数字键输入，0 / Backspace / Delete 清除。"
+                         TextWrapping="Wrap" />
+              <TextBlock Foreground="{DynamicResource SudokuMutedBrush}"
+                         Text="红色仅表示行、列或九宫格重复；其他输入会被保留。"
+                         TextWrapping="Wrap" />
+            </StackPanel>
+          </Border>
+        </Grid>
+      </StackPanel>
+    </Border>
+  </ScrollViewer>
+</UserControl>
