@@ -6,6 +6,7 @@ using ClassicGamePlugin.Features.Gomoku;
 using ClassicGamePlugin.Features.Xiangqi;
 using ClassicGamePlugin.Features.Game2048;
 using ClassicGamePlugin.Features.Sudoku;
+using ClassicGamePlugin.Features.Sokoban;
 using MyAvaloniaManagement.PluginSdk;
 
 namespace ClassicGamePlugin.Standalone;
@@ -19,6 +20,7 @@ public sealed partial class MainWindow : Window
     private readonly XiangqiDocument _xiangqiDocument;
     private readonly Game2048Document _game2048Document;
     private readonly SudokuDocument _sudokuDocument;
+    private readonly SokobanDocument _sokobanDocument;
 
     public MainWindow()
     {
@@ -65,11 +67,17 @@ public sealed partial class MainWindow : Window
             new NewDocumentActivation("数独（Standalone）"),
             CancellationToken.None).GetAwaiter().GetResult();
         SudokuHost.DataContext = _sudokuDocument;
+
+        _sokobanDocument = new SokobanDocument();
+        _sokobanDocument.InitializeAsync(
+            new NewDocumentActivation("推箱子（Standalone）"),
+            CancellationToken.None).GetAwaiter().GetResult();
+        SokobanHost.DataContext = _sokobanDocument;
     }
 
     /// <summary>
-    /// Standalone 明确拥有七个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
-    /// 动画或后台任务的六个 Document。2048 没有外部资源，因此不增加空洞的释放调用。
+    /// Standalone 明确拥有八个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
+    /// 动画或后台任务的六个 Document。2048 与推箱子的计时器都只属于视觉树，Document 不增加空洞的释放调用。
     /// </summary>
     protected override void OnClosed(EventArgs eventArgs)
     {

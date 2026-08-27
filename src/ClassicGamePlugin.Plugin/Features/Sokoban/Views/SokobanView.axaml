@@ -1,0 +1,86 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Sokoban.Views.SokobanView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.Sokoban.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Sokoban.Views"
+    x:DataType="vm:SokobanViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="SokobanPageBrush" Color="#FFF6F4EF" />
+          <SolidColorBrush x:Key="SokobanPanelBrush" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="SokobanBorderBrush" Color="#FFB8B2A8" />
+          <SolidColorBrush x:Key="SokobanTextBrush" Color="#FF34312D" />
+          <SolidColorBrush x:Key="SokobanMutedBrush" Color="#FF686159" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="SokobanPageBrush" Color="#FF20252A" />
+          <SolidColorBrush x:Key="SokobanPanelBrush" Color="#FF2C3339" />
+          <SolidColorBrush x:Key="SokobanBorderBrush" Color="#FF66727A" />
+          <SolidColorBrush x:Key="SokobanTextBrush" Color="#FFF1F3F4" />
+          <SolidColorBrush x:Key="SokobanMutedBrush" Color="#FFC5CDD2" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Border MinWidth="760" MinHeight="620" Padding="22" Background="{DynamicResource SokobanPageBrush}">
+      <Grid MaxWidth="1040" HorizontalAlignment="Center" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="14">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="18">
+          <StackPanel>
+            <TextBlock FontSize="32" FontWeight="Bold" Foreground="{DynamicResource SokobanTextBrush}" Text="推箱子" />
+            <TextBlock Foreground="{DynamicResource SokobanMutedBrush}" Text="规划站位，把所有箱子推到目标点" />
+          </StackPanel>
+          <Border Grid.Column="1" Padding="14,8" Background="{DynamicResource SokobanPanelBrush}"
+                  BorderBrush="{DynamicResource SokobanBorderBrush}" BorderThickness="1" CornerRadius="7">
+            <StackPanel Orientation="Horizontal" Spacing="18">
+              <StackPanel><TextBlock Foreground="{DynamicResource SokobanMutedBrush}" Text="移动"/><TextBlock FontSize="20" FontWeight="Bold" Text="{Binding MoveCount}"/></StackPanel>
+              <StackPanel><TextBlock Foreground="{DynamicResource SokobanMutedBrush}" Text="推动"/><TextBlock FontSize="20" FontWeight="Bold" Text="{Binding PushCount}"/></StackPanel>
+              <StackPanel><TextBlock Foreground="{DynamicResource SokobanMutedBrush}" Text="归位"/><TextBlock FontSize="20" FontWeight="Bold" Text="{Binding GoalProgressText}"/></StackPanel>
+            </StackPanel>
+          </Border>
+        </Grid>
+
+        <Border Grid.Row="1" Padding="12" Background="{DynamicResource SokobanPanelBrush}"
+                BorderBrush="{DynamicResource SokobanBorderBrush}" BorderThickness="1" CornerRadius="7">
+          <Grid ColumnDefinitions="Auto,260,Auto,Auto,Auto,Auto,*" ColumnSpacing="8">
+            <Button Grid.Column="0" Command="{Binding PreviousLevelCommand}" Content="上一关" IsEnabled="{Binding CanGoPrevious}" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding LevelOptions}" SelectedIndex="{Binding SelectedLevelIndex, Mode=TwoWay}">
+              <ComboBox.ItemTemplate><DataTemplate x:DataType="vm:SokobanLevelOption"><TextBlock Text="{Binding DisplayText}"/></DataTemplate></ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Grid.Column="2" Command="{Binding NextLevelCommand}" Content="下一关" IsEnabled="{Binding CanGoNext}" />
+            <Button Grid.Column="3" Command="{Binding RestartCommand}" Content="重新开始" />
+            <Button Grid.Column="4" Command="{Binding UndoCommand}" Content="撤销" IsEnabled="{Binding CanUndo}" />
+            <CheckBox Grid.Column="5" VerticalAlignment="Center" Content="动画" IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}" />
+            <StackPanel Grid.Column="6" HorizontalAlignment="Right">
+              <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource SokobanTextBrush}" Text="{Binding LevelName}" TextAlignment="Right" />
+              <TextBlock Foreground="{DynamicResource SokobanMutedBrush}" Text="{Binding DifficultyText}" TextAlignment="Right" />
+            </StackPanel>
+          </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Padding="8" Background="{DynamicResource SokobanPanelBrush}"
+                BorderBrush="{DynamicResource SokobanBorderBrush}" BorderThickness="1" CornerRadius="9">
+          <views:SokobanBoardControl x:Name="GameBoard" MinWidth="700" MinHeight="410" Game="{Binding}" />
+        </Border>
+
+        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="18">
+          <StackPanel VerticalAlignment="Center" Spacing="5">
+            <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource SokobanTextBrush}" Text="{Binding StatusText}" />
+            <TextBlock Foreground="{DynamicResource SokobanMutedBrush}" Text="单击棋盘后使用方向键或 W/A/S/D；U 或 Ctrl+Z 撤销，R 重开" TextWrapping="Wrap" />
+            <TextBlock Foreground="{DynamicResource SokobanMutedBrush}" Text="箱子只能推动不能拉动；进入死角后可连续撤销" />
+          </StackPanel>
+          <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto,Auto">
+            <Button Grid.Row="0" Grid.Column="1" Width="52" Height="42" Command="{Binding MoveUpCommand}" Content="↑" />
+            <Button Grid.Row="1" Grid.Column="0" Width="52" Height="42" Command="{Binding MoveLeftCommand}" Content="←" />
+            <Button Grid.Row="1" Grid.Column="2" Width="52" Height="42" Command="{Binding MoveRightCommand}" Content="→" />
+            <Button Grid.Row="2" Grid.Column="1" Width="52" Height="42" Command="{Binding MoveDownCommand}" Content="↓" />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Border>
+  </ScrollViewer>
+</UserControl>

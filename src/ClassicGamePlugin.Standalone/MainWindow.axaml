@@ -9,6 +9,7 @@
     xmlns:xiangqi="using:ClassicGamePlugin.Features.Xiangqi.Views"
     xmlns:game2048="using:ClassicGamePlugin.Features.Game2048.Views"
     xmlns:sudoku="using:ClassicGamePlugin.Features.Sudoku.Views"
+    xmlns:sokoban="using:ClassicGamePlugin.Features.Sokoban.Views"
     Width="1080"
     Height="760"
     Title="ClassicGamePlugin Standalone">
@@ -33,6 +34,9 @@
     </TabItem>
     <TabItem Header="数独">
       <sudoku:SudokuDocumentView x:Name="SudokuHost" />
+    </TabItem>
+    <TabItem Header="推箱子">
+      <sokoban:SokobanDocumentView x:Name="SokobanHost" />
     </TabItem>
   </TabControl>
 </Window>

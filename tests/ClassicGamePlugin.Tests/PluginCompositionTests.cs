@@ -22,6 +22,9 @@ using ClassicGamePlugin.Features.Game2048.Views;
 using ClassicGamePlugin.Features.Sudoku;
 using ClassicGamePlugin.Features.Sudoku.ViewModels;
 using ClassicGamePlugin.Features.Sudoku.Views;
+using ClassicGamePlugin.Features.Sokoban;
+using ClassicGamePlugin.Features.Sokoban.ViewModels;
+using ClassicGamePlugin.Features.Sokoban.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -33,7 +36,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册七个独立游戏的普通Document()
+    public void Module注册八个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -102,12 +105,23 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", sudoku.Descriptor.MenuCategory);
                 Assert.Equal(typeof(SudokuDocument), sudoku.Model);
                 Assert.Equal(typeof(SudokuDocumentView), sudoku.View);
+            },
+            sokoban =>
+            {
+                Assert.Equal(PluginIds.SokobanDocument, sokoban.Descriptor.DocumentTypeId);
+                Assert.Equal("推箱子", sokoban.Descriptor.DisplayName);
+                Assert.Equal(
+                    "经典推箱子：递进地图、键盘移动、不限次数撤销与轻量动画",
+                    sokoban.Descriptor.Description);
+                Assert.Equal("经典游戏", sokoban.Descriptor.MenuCategory);
+                Assert.Equal(typeof(SokobanDocument), sokoban.Model);
+                Assert.Equal(typeof(SokobanDocumentView), sokoban.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与七个Document身份保持冻结值()
+    public void 稳定Plugin与八个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -131,6 +145,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.sudoku",
             PluginIds.SudokuDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.sokoban",
+            PluginIds.SokobanDocument.Value);
     }
 
     [Fact]
@@ -235,6 +252,19 @@ public sealed class PluginCompositionTests
         AssertDocumentWrapperBinding(wrapper, document);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
         Assert.IsType<SudokuViewModel>(gameView.DataContext);
+        Assert.True(document.ViewModel.AnimationsEnabled);
+    }
+
+    [Fact]
+    public void 推箱子包装View通过单向绑定且游戏View只接受ViewModel()
+    {
+        var document = new SokobanDocument();
+        var wrapper = new SokobanDocumentView { DataContext = document };
+        var gameView = new SokobanView { DataContext = document.ViewModel };
+
+        AssertDocumentWrapperBinding(wrapper, document);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
+        Assert.IsType<SokobanViewModel>(gameView.DataContext);
         Assert.True(document.ViewModel.AnimationsEnabled);
     }
 

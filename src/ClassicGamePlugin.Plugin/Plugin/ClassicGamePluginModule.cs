@@ -14,6 +14,8 @@ using ClassicGamePlugin.Features.Game2048;
 using ClassicGamePlugin.Features.Game2048.Views;
 using ClassicGamePlugin.Features.Sudoku;
 using ClassicGamePlugin.Features.Sudoku.Views;
+using ClassicGamePlugin.Features.Sokoban;
+using ClassicGamePlugin.Features.Sokoban.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -65,6 +67,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.SudokuDocument,
                 "数独",
                 "经典 9×9 数独：三级难度、候选笔记、提示与唯一解题目生成",
+                "经典游戏"));
+        registration.AddDocument<SokobanDocument, SokobanDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.SokobanDocument,
+                "推箱子",
+                "经典推箱子：递进地图、键盘移动、不限次数撤销与轻量动画",
                 "经典游戏"));
     }
 }

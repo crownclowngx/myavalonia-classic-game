@@ -33,4 +33,8 @@ public static class PluginIds
     /// <summary>数独普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId SudokuDocument =
         new("myavalonia.plugin.classic.game.document.sudoku");
+
+    /// <summary>推箱子普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId SokobanDocument =
+        new("myavalonia.plugin.classic.game.document.sokoban");
 }

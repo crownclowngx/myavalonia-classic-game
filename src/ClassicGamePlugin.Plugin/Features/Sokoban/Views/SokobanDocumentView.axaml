@@ -1,0 +1,14 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Sokoban.Views.SokobanDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.Sokoban"
+    xmlns:vm="using:ClassicGamePlugin.Features.Sokoban.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Sokoban.Views"
+    x:DataType="feature:SokobanDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:SokobanViewModel"><views:SokobanView /></DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>
