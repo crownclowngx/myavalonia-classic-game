@@ -18,6 +18,8 @@ using ClassicGamePlugin.Features.Sokoban;
 using ClassicGamePlugin.Features.Sokoban.Views;
 using ClassicGamePlugin.Features.Tetris;
 using ClassicGamePlugin.Features.Tetris.Views;
+using ClassicGamePlugin.Features.FreeCell;
+using ClassicGamePlugin.Features.FreeCell.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -81,6 +83,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.TetrisDocument,
                 "俄罗斯方块",
                 "现代俄罗斯方块：SRS 旋转、暂存、幽灵块、完整计分与逐级加速",
+                "经典游戏"));
+        registration.AddDocument<FreeCellDocument, FreeCellDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.FreeCellDocument,
+                "空当接龙",
+                "经典空当接龙：可解编号牌局、拖放纸牌、求解提示与安全自动收牌",
                 "经典游戏"));
     }
 }

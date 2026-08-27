@@ -8,6 +8,7 @@ using ClassicGamePlugin.Features.Game2048;
 using ClassicGamePlugin.Features.Sudoku;
 using ClassicGamePlugin.Features.Sokoban;
 using ClassicGamePlugin.Features.Tetris;
+using ClassicGamePlugin.Features.FreeCell;
 using MyAvaloniaManagement.PluginSdk;
 
 namespace ClassicGamePlugin.Standalone;
@@ -23,6 +24,7 @@ public sealed partial class MainWindow : Window
     private readonly SudokuDocument _sudokuDocument;
     private readonly SokobanDocument _sokobanDocument;
     private readonly TetrisDocument _tetrisDocument;
+    private readonly FreeCellDocument _freeCellDocument;
 
     public MainWindow()
     {
@@ -81,11 +83,17 @@ public sealed partial class MainWindow : Window
             new NewDocumentActivation("俄罗斯方块（Standalone）"),
             CancellationToken.None).GetAwaiter().GetResult();
         TetrisHost.DataContext = _tetrisDocument;
+
+        _freeCellDocument = new FreeCellDocument();
+        _freeCellDocument.InitializeAsync(
+            new NewDocumentActivation("空当接龙（Standalone）"),
+            CancellationToken.None).GetAwaiter().GetResult();
+        FreeCellHost.DataContext = _freeCellDocument;
     }
 
     /// <summary>
-    /// Standalone 明确拥有九个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
-    /// 动画或后台任务的六个 Document。2048、推箱子与俄罗斯方块的计时器只属于视觉树，Document 不增加空洞的释放调用。
+    /// Standalone 明确拥有十个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
+    /// 动画或后台任务的七个 Document。2048、推箱子与俄罗斯方块的计时器只属于视觉树，Document 不增加空洞的释放调用。
     /// </summary>
     protected override void OnClosed(EventArgs eventArgs)
     {
@@ -95,6 +103,7 @@ public sealed partial class MainWindow : Window
         _gomokuDocument.Dispose();
         _xiangqiDocument.Dispose();
         _sudokuDocument.Dispose();
+        _freeCellDocument.Dispose();
         base.OnClosed(eventArgs);
     }
 }

@@ -1,0 +1,16 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.FreeCell.Views.FreeCellDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.FreeCell"
+    xmlns:vm="using:ClassicGamePlugin.Features.FreeCell.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.FreeCell.Views"
+    x:DataType="feature:FreeCellDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:FreeCellViewModel">
+        <views:FreeCellView />
+      </DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

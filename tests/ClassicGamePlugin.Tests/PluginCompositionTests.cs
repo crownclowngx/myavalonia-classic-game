@@ -28,6 +28,9 @@ using ClassicGamePlugin.Features.Sokoban.Views;
 using ClassicGamePlugin.Features.Tetris;
 using ClassicGamePlugin.Features.Tetris.ViewModels;
 using ClassicGamePlugin.Features.Tetris.Views;
+using ClassicGamePlugin.Features.FreeCell;
+using ClassicGamePlugin.Features.FreeCell.ViewModels;
+using ClassicGamePlugin.Features.FreeCell.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -39,7 +42,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册九个独立游戏的普通Document()
+    public void Module注册十个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -130,12 +133,23 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", tetris.Descriptor.MenuCategory);
                 Assert.Equal(typeof(TetrisDocument), tetris.Model);
                 Assert.Equal(typeof(TetrisDocumentView), tetris.View);
+            },
+            freeCell =>
+            {
+                Assert.Equal(PluginIds.FreeCellDocument, freeCell.Descriptor.DocumentTypeId);
+                Assert.Equal("空当接龙", freeCell.Descriptor.DisplayName);
+                Assert.Equal(
+                    "经典空当接龙：可解编号牌局、拖放纸牌、求解提示与安全自动收牌",
+                    freeCell.Descriptor.Description);
+                Assert.Equal("经典游戏", freeCell.Descriptor.MenuCategory);
+                Assert.Equal(typeof(FreeCellDocument), freeCell.Model);
+                Assert.Equal(typeof(FreeCellDocumentView), freeCell.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与九个Document身份保持冻结值()
+    public void 稳定Plugin与十个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -165,6 +179,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.tetris",
             PluginIds.TetrisDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.freecell",
+            PluginIds.FreeCellDocument.Value);
     }
 
     [Fact]
@@ -296,6 +313,19 @@ public sealed class PluginCompositionTests
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
         Assert.IsType<TetrisViewModel>(gameView.DataContext);
         Assert.True(document.ViewModel.AnimationsEnabled);
+    }
+
+    [Fact]
+    public void 空当接龙包装View通过单向绑定且游戏View只接受ViewModel()
+    {
+        using var document = new FreeCellDocument();
+        var wrapper = new FreeCellDocumentView { DataContext = document };
+        var gameView = new FreeCellView { DataContext = document.ViewModel };
+
+        AssertDocumentWrapperBinding(wrapper, document);
+        Assert.Same(document.ViewModel, gameView.DataContext);
+        Assert.IsType<FreeCellViewModel>(gameView.DataContext);
+        Assert.True(document.ViewModel.AreAnimationsEnabled);
     }
 
     [Theory]

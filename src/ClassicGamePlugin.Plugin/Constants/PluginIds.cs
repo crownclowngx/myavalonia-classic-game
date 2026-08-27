@@ -41,4 +41,8 @@ public static class PluginIds
     /// <summary>俄罗斯方块普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId TetrisDocument =
         new("myavalonia.plugin.classic.game.document.tetris");
+
+    /// <summary>空当接龙普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId FreeCellDocument =
+        new("myavalonia.plugin.classic.game.document.freecell");
 }
