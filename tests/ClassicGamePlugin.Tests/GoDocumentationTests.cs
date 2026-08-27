@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace ClassicGamePlugin.Tests;
@@ -22,7 +23,7 @@ public sealed class GoDocumentationTests
     }
 
     [Fact]
-    public void 根说明文档索引与窗口职责同步为十一个游戏并链接围棋文档()
+    public void 根说明文档索引与窗口职责同步为十二个游戏并链接围棋文档()
     {
         var root = FindRepositoryRoot();
         var readme = File.ReadAllText(Path.Combine(root, "README.md"));
@@ -30,13 +31,13 @@ public sealed class GoDocumentationTests
         var responsibilities = File.ReadAllText(Path.Combine(root, "docs", "project-and-window-responsibilities.md"));
 
         Assert.Contains("docs/go.md", readme, StringComparison.Ordinal);
-        Assert.Contains("十一个游戏", readme, StringComparison.Ordinal);
+        Assert.Contains("十二个游戏", readme, StringComparison.Ordinal);
         Assert.Contains("(go.md)", index, StringComparison.Ordinal);
-        Assert.Contains("十一个标签页", responsibilities, StringComparison.Ordinal);
+        Assert.Contains("十二个标签页", responsibilities, StringComparison.Ordinal);
     }
 
     [Fact]
-    public void Standalone显式创建并释放第十一个围棋Document()
+    public void Standalone显式创建并释放围棋Document()
     {
         var root = FindRepositoryRoot();
         var view = File.ReadAllText(Path.Combine(root, "src", "ClassicGamePlugin.Standalone", "MainWindow.axaml"));
@@ -48,9 +49,14 @@ public sealed class GoDocumentationTests
         Assert.Contains("_goDocument.Dispose()", codeBehind, StringComparison.Ordinal);
     }
 
-    private static string FindRepositoryRoot()
+    private static string FindRepositoryRoot([CallerFilePath] string sourceFilePath = "")
     {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        if (File.Exists(Path.Combine(Environment.CurrentDirectory, "ClassicGamePlugin.slnx")))
+        {
+            return Environment.CurrentDirectory;
+        }
+
+        var directory = new DirectoryInfo(Path.GetDirectoryName(sourceFilePath) ?? AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "ClassicGamePlugin.slnx")))
         {
             directory = directory.Parent;

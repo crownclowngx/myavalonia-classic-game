@@ -1,6 +1,6 @@
 # ClassicGamePlugin
 
-这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块和空当接龙 Document。真实交付物是
+这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙和消消乐 Document。真实交付物是
 `src/ClassicGamePlugin.Plugin`；`Standalone` 只负责快速预览 Plugin 中同一份 View、ViewModel、Document 与领域代码。
 
 > 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了三个子项目和
@@ -39,6 +39,9 @@
 空当接龙的标准规则、容量公式、可解编号牌局、求解提示、CardControl 拖放、动画和测试矩阵见
 [空当接龙 Document 设计与开发说明](docs/freecell.md)。
 
+消消乐的固定步数挑战、完整特殊组合、连锁消除、提示、拖动交互、轻量动画和测试矩阵见
+[消消乐 Document 设计与开发说明](docs/match3.md)。
+
 ```powershell
 dotnet restore
 dotnet build
@@ -54,5 +57,5 @@ dotnet msbuild src/ClassicGamePlugin.Plugin/ClassicGamePlugin.Plugin.csproj `
   -p:ManagedPluginDeployRoot=C:\Path\To\Host\Controls
 ```
 
-Standalone 只能验证十一个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
+Standalone 只能验证十二个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
 生命周期必须使用真实 Host 做最终验收。

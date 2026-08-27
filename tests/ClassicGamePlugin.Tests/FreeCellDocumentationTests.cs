@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace ClassicGamePlugin.Tests;
@@ -20,7 +21,7 @@ public sealed class FreeCellDocumentationTests
     }
 
     [Fact]
-    public void 根说明与文档索引链接空当接龙专项文档并更新为十一个游戏()
+    public void 根说明与文档索引链接空当接龙专项文档并更新为十二个游戏()
     {
         var root = FindRepositoryRoot();
         var readme = File.ReadAllText(Path.Combine(root, "README.md"));
@@ -28,14 +29,35 @@ public sealed class FreeCellDocumentationTests
         var responsibilities = File.ReadAllText(Path.Combine(root, "docs", "project-and-window-responsibilities.md"));
 
         Assert.Contains("docs/freecell.md", readme, StringComparison.Ordinal);
-        Assert.Contains("十一个游戏", readme, StringComparison.Ordinal);
+        Assert.Contains("十二个游戏", readme, StringComparison.Ordinal);
         Assert.Contains("(freecell.md)", index, StringComparison.Ordinal);
-        Assert.Contains("十一个标签页", responsibilities, StringComparison.Ordinal);
+        Assert.Contains("十二个标签页", responsibilities, StringComparison.Ordinal);
     }
 
-    private static string FindRepositoryRoot()
+    [Fact]
+    public void Standalone在窗口打开后异步初始化空当接龙以免阻塞UI线程()
     {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        var root = FindRepositoryRoot();
+        var codeBehind = File.ReadAllText(
+            Path.Combine(root, "src", "ClassicGamePlugin.Standalone", "MainWindow.axaml.cs"));
+
+        Assert.Contains("Opened += OnOpened;", codeBehind, StringComparison.Ordinal);
+        Assert.Contains("private async void OnOpened", codeBehind, StringComparison.Ordinal);
+        Assert.Contains("await _freeCellDocument.InitializeAsync(", codeBehind, StringComparison.Ordinal);
+        Assert.DoesNotContain(
+            "new NewDocumentActivation(\"空当接龙（Standalone）\"),\n            CancellationToken.None).GetAwaiter().GetResult();",
+            codeBehind,
+            StringComparison.Ordinal);
+    }
+
+    private static string FindRepositoryRoot([CallerFilePath] string sourceFilePath = "")
+    {
+        if (File.Exists(Path.Combine(Environment.CurrentDirectory, "ClassicGamePlugin.slnx")))
+        {
+            return Environment.CurrentDirectory;
+        }
+
+        var directory = new DirectoryInfo(Path.GetDirectoryName(sourceFilePath) ?? AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "ClassicGamePlugin.slnx")))
         {
             directory = directory.Parent;

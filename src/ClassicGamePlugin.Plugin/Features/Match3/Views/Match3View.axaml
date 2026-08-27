@@ -1,0 +1,81 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Match3.Views.Match3View"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.Match3.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Match3.Views"
+    x:DataType="vm:Match3ViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="Match3PageBrush" Color="#FFF7F1E8" />
+          <SolidColorBrush x:Key="Match3PanelBrush" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="Match3BorderBrush" Color="#FFC9BBA8" />
+          <SolidColorBrush x:Key="Match3TextBrush" Color="#FF332E2A" />
+          <SolidColorBrush x:Key="Match3MutedBrush" Color="#FF6E6258" />
+          <SolidColorBrush x:Key="Match3AccentBrush" Color="#FF8E5CD6" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="Match3PageBrush" Color="#FF20252B" />
+          <SolidColorBrush x:Key="Match3PanelBrush" Color="#FF2B333B" />
+          <SolidColorBrush x:Key="Match3BorderBrush" Color="#FF66737E" />
+          <SolidColorBrush x:Key="Match3TextBrush" Color="#FFF4F1EE" />
+          <SolidColorBrush x:Key="Match3MutedBrush" Color="#FFC9D0D6" />
+          <SolidColorBrush x:Key="Match3AccentBrush" Color="#FFB58AEE" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Border MinWidth="720" MinHeight="650" Padding="22" Background="{DynamicResource Match3PageBrush}">
+      <Grid MaxWidth="940" HorizontalAlignment="Center" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="14">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="18">
+          <StackPanel>
+            <TextBlock FontSize="32" FontWeight="Bold" Foreground="{DynamicResource Match3TextBrush}" Text="消消乐" />
+            <TextBlock Foreground="{DynamicResource Match3MutedBrush}" Text="交换、连锁，并组合特殊棋子挑战目标分数" />
+          </StackPanel>
+          <Border Grid.Column="1" Padding="16,9" Background="{DynamicResource Match3PanelBrush}"
+                  BorderBrush="{DynamicResource Match3BorderBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel Orientation="Horizontal" Spacing="24">
+              <StackPanel>
+                <TextBlock Foreground="{DynamicResource Match3MutedBrush}" Text="分数 / 目标" />
+                <TextBlock FontSize="21" FontWeight="Bold" Foreground="{DynamicResource Match3AccentBrush}" Text="{Binding ScoreText}" />
+              </StackPanel>
+              <StackPanel>
+                <TextBlock Foreground="{DynamicResource Match3MutedBrush}" Text="剩余步数" />
+                <TextBlock FontSize="21" FontWeight="Bold" Foreground="{DynamicResource Match3TextBrush}" Text="{Binding RemainingMoves}" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </Grid>
+
+        <Border Grid.Row="1" Padding="11" Background="{DynamicResource Match3PanelBrush}"
+                BorderBrush="{DynamicResource Match3BorderBrush}" BorderThickness="1" CornerRadius="8">
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Command="{Binding RestartCommand}" Content="重新开始" />
+            <Button Command="{Binding HintCommand}" Content="提示" />
+            <CheckBox VerticalAlignment="Center" Content="动画效果" IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}" />
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Padding="8" Background="{DynamicResource Match3PanelBrush}"
+                BorderBrush="{DynamicResource Match3BorderBrush}" BorderThickness="1" CornerRadius="10">
+          <views:Match3BoardControl x:Name="GameBoard" Width="540" Height="540" MinWidth="420" MinHeight="420"
+                                    HorizontalAlignment="Center" Game="{Binding}" />
+        </Border>
+
+        <StackPanel Grid.Row="3" Spacing="5">
+          <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource Match3TextBrush}" Text="{Binding StatusText}" />
+          <TextBlock Foreground="{DynamicResource Match3MutedBrush}"
+                     Text="依次点击两个相邻棋子，或按住后拖到相邻格完成交换；动画播放期间输入会暂时锁定。"
+                     TextWrapping="Wrap" />
+          <TextBlock Foreground="{DynamicResource Match3MutedBrush}"
+                     Text="四连生成行列消，五连生成彩虹球，T/L 交叉生成范围炸弹；没有可行动作时棋盘会自动重排。"
+                     TextWrapping="Wrap" />
+        </StackPanel>
+      </Grid>
+    </Border>
+  </ScrollViewer>
+</UserControl>

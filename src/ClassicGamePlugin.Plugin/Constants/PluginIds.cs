@@ -49,4 +49,8 @@ public static class PluginIds
     /// <summary>空当接龙普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId FreeCellDocument =
         new("myavalonia.plugin.classic.game.document.freecell");
+
+    /// <summary>消消乐普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId Match3Document =
+        new("myavalonia.plugin.classic.game.document.match3");
 }

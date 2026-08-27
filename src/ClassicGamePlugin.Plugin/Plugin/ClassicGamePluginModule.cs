@@ -22,6 +22,8 @@ using ClassicGamePlugin.Features.Tetris;
 using ClassicGamePlugin.Features.Tetris.Views;
 using ClassicGamePlugin.Features.FreeCell;
 using ClassicGamePlugin.Features.FreeCell.Views;
+using ClassicGamePlugin.Features.Match3;
+using ClassicGamePlugin.Features.Match3.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -97,6 +99,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.FreeCellDocument,
                 "空当接龙",
                 "经典空当接龙：可解编号牌局、拖放纸牌、求解提示与安全自动收牌",
+                "经典游戏"));
+        registration.AddDocument<Match3Document, Match3DocumentView>(
+            new DocumentDescriptor(
+                PluginIds.Match3Document,
+                "消消乐",
+                "经典消消乐：完整特殊组合、连锁消除、提示与轻量动画",
                 "经典游戏"));
     }
 }

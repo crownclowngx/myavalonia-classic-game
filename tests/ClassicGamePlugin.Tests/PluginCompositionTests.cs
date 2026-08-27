@@ -33,6 +33,9 @@ using ClassicGamePlugin.Features.Tetris.Views;
 using ClassicGamePlugin.Features.FreeCell;
 using ClassicGamePlugin.Features.FreeCell.ViewModels;
 using ClassicGamePlugin.Features.FreeCell.Views;
+using ClassicGamePlugin.Features.Match3;
+using ClassicGamePlugin.Features.Match3.ViewModels;
+using ClassicGamePlugin.Features.Match3.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -44,7 +47,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册十一个独立游戏的普通Document()
+    public void Module注册十二个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -157,12 +160,23 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", freeCell.Descriptor.MenuCategory);
                 Assert.Equal(typeof(FreeCellDocument), freeCell.Model);
                 Assert.Equal(typeof(FreeCellDocumentView), freeCell.View);
+            },
+            match3 =>
+            {
+                Assert.Equal(PluginIds.Match3Document, match3.Descriptor.DocumentTypeId);
+                Assert.Equal("消消乐", match3.Descriptor.DisplayName);
+                Assert.Equal(
+                    "经典消消乐：完整特殊组合、连锁消除、提示与轻量动画",
+                    match3.Descriptor.Description);
+                Assert.Equal("经典游戏", match3.Descriptor.MenuCategory);
+                Assert.Equal(typeof(Match3Document), match3.Model);
+                Assert.Equal(typeof(Match3DocumentView), match3.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与十一个Document身份保持冻结值()
+    public void 稳定Plugin与十二个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -198,6 +212,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.freecell",
             PluginIds.FreeCellDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.match3",
+            PluginIds.Match3Document.Value);
     }
 
     [Fact]
@@ -354,6 +371,19 @@ public sealed class PluginCompositionTests
         Assert.Same(document.ViewModel, gameView.DataContext);
         Assert.IsType<FreeCellViewModel>(gameView.DataContext);
         Assert.True(document.ViewModel.AreAnimationsEnabled);
+    }
+
+    [Fact]
+    public void 消消乐包装View通过单向绑定且游戏View只接受ViewModel()
+    {
+        var document = new Match3Document();
+        var wrapper = new Match3DocumentView { DataContext = document };
+        var gameView = new Match3View { DataContext = document.ViewModel };
+
+        AssertDocumentWrapperBinding(wrapper, document);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
+        Assert.IsType<Match3ViewModel>(gameView.DataContext);
+        Assert.True(document.ViewModel.AnimationsEnabled);
     }
 
     [Theory]

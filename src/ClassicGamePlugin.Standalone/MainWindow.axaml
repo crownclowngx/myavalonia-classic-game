@@ -13,6 +13,7 @@
     xmlns:sokoban="using:ClassicGamePlugin.Features.Sokoban.Views"
     xmlns:tetris="using:ClassicGamePlugin.Features.Tetris.Views"
     xmlns:freecell="using:ClassicGamePlugin.Features.FreeCell.Views"
+    xmlns:match3="using:ClassicGamePlugin.Features.Match3.Views"
     Width="1080"
     Height="760"
     Title="ClassicGamePlugin Standalone">
@@ -49,6 +50,9 @@
     </TabItem>
     <TabItem Header="空当接龙">
       <freecell:FreeCellDocumentView x:Name="FreeCellHost" />
+    </TabItem>
+    <TabItem Header="消消乐">
+      <match3:Match3DocumentView x:Name="Match3Host" />
     </TabItem>
   </TabControl>
 </Window>

@@ -10,6 +10,7 @@ using ClassicGamePlugin.Features.Sudoku;
 using ClassicGamePlugin.Features.Sokoban;
 using ClassicGamePlugin.Features.Tetris;
 using ClassicGamePlugin.Features.FreeCell;
+using ClassicGamePlugin.Features.Match3;
 using MyAvaloniaManagement.PluginSdk;
 
 namespace ClassicGamePlugin.Standalone;
@@ -27,6 +28,7 @@ public sealed partial class MainWindow : Window
     private readonly SokobanDocument _sokobanDocument;
     private readonly TetrisDocument _tetrisDocument;
     private readonly FreeCellDocument _freeCellDocument;
+    private readonly Match3Document _match3Document;
 
     public MainWindow()
     {
@@ -93,18 +95,35 @@ public sealed partial class MainWindow : Window
         TetrisHost.DataContext = _tetrisDocument;
 
         _freeCellDocument = new FreeCellDocument();
-        _freeCellDocument.InitializeAsync(
-            new NewDocumentActivation("空当接龙（Standalone）"),
-            CancellationToken.None).GetAwaiter().GetResult();
         FreeCellHost.DataContext = _freeCellDocument;
+
+        _match3Document = new Match3Document();
+        _match3Document.InitializeAsync(
+            new NewDocumentActivation("消消乐（Standalone）"),
+            CancellationToken.None).GetAwaiter().GetResult();
+        Match3Host.DataContext = _match3Document;
+        Opened += OnOpened;
     }
 
     /// <summary>
-    /// Standalone 明确拥有十一个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
+    /// 空当接龙首次牌局会在线程池中生成；窗口显示后异步等待，避免在 Avalonia UI 线程上
+    /// 同步阻塞需要回到该线程的延续。
+    /// </summary>
+    private async void OnOpened(object? sender, EventArgs eventArgs)
+    {
+        Opened -= OnOpened;
+        await _freeCellDocument.InitializeAsync(
+            new NewDocumentActivation("空当接龙（Standalone）"),
+            CancellationToken.None);
+    }
+
+    /// <summary>
+    /// Standalone 明确拥有十二个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
     /// 动画或后台任务的八个 Document。2048、推箱子与俄罗斯方块的计时器只属于视觉树，Document 不增加空洞的释放调用。
     /// </summary>
     protected override void OnClosed(EventArgs eventArgs)
     {
+        Opened -= OnOpened;
         _minesweeperDocument.Dispose();
         _spiderSolitaireDocument.Dispose();
         _reversiDocument.Dispose();
