@@ -1,0 +1,14 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Xiangqi.Views.XiangqiDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.Xiangqi"
+    xmlns:vm="using:ClassicGamePlugin.Features.Xiangqi.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Xiangqi.Views"
+    x:DataType="feature:XiangqiDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:XiangqiViewModel"><views:XiangqiView /></DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

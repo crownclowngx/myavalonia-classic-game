@@ -1,0 +1,146 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Xiangqi.Views.XiangqiView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.Xiangqi.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Xiangqi.Views"
+    x:DataType="vm:XiangqiViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="XiangqiPanelBrush" Color="#FFF4F6F8" />
+          <SolidColorBrush x:Key="XiangqiPanelBorderBrush" Color="#FFA8B1BD" />
+          <SolidColorBrush x:Key="XiangqiTextBrush" Color="#FF253142" />
+          <SolidColorBrush x:Key="XiangqiMutedBrush" Color="#FF667085" />
+          <SolidColorBrush x:Key="XiangqiHistoryBrush" Color="#FFFFFFFF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="XiangqiPanelBrush" Color="#FF252B33" />
+          <SolidColorBrush x:Key="XiangqiPanelBorderBrush" Color="#FF596574" />
+          <SolidColorBrush x:Key="XiangqiTextBrush" Color="#FFF4F7FB" />
+          <SolidColorBrush x:Key="XiangqiMutedBrush" Color="#FFB7C0CC" />
+          <SolidColorBrush x:Key="XiangqiHistoryBrush" Color="#FF1D2229" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="Border.xiangqi-panel TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource XiangqiTextBrush}" />
+    </Style>
+    <Style Selector="Border.xiangqi-panel ComboBox">
+      <Setter Property="Foreground" Value="{DynamicResource XiangqiTextBrush}" />
+    </Style>
+  </UserControl.Styles>
+
+  <Grid Margin="20" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+    <Border
+        Classes="xiangqi-panel"
+        Padding="12"
+        Background="{DynamicResource XiangqiPanelBrush}"
+        BorderBrush="{DynamicResource XiangqiPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <StackPanel Margin="0,0,14,6" Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="模式" VerticalAlignment="Center" />
+          <ComboBox Width="108" ItemsSource="{Binding ModeOptions}" SelectedItem="{Binding SelectedMode}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:XiangqiGameModeOption"><TextBlock Text="{Binding DisplayName}" /></DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+        <StackPanel
+            Margin="0,0,14,6"
+            IsVisible="{Binding IsHumanVsComputer}"
+            Orientation="Horizontal"
+            Spacing="6">
+          <TextBlock Text="难度" VerticalAlignment="Center" />
+          <ComboBox Width="84" ItemsSource="{Binding DifficultyOptions}" SelectedItem="{Binding SelectedDifficulty}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:XiangqiDifficultyOption"><TextBlock Text="{Binding DisplayName}" /></DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+        <ComboBox
+            Margin="0,0,14,6"
+            Width="110"
+            IsVisible="{Binding IsHumanVsComputer}"
+            ItemsSource="{Binding HumanSideOptions}"
+            SelectedItem="{Binding SelectedHumanSide}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:XiangqiSideOption"><TextBlock Text="{Binding DisplayName}" /></DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button Margin="0,0,8,6" Command="{Binding RestartCommand}" Content="重新开始" />
+        <Button Margin="0,0,8,6" Command="{Binding UndoCommand}" Content="撤销" />
+        <Button Margin="0,0,8,6" Command="{Binding HintCommand}" Content="提示" />
+        <Button Margin="0,0,14,6" Command="{Binding ResignCommand}" Content="{Binding ResignButtonText}" />
+        <TextBlock Margin="0,0,12,6" FontWeight="SemiBold" Text="{Binding StatusText}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" Text="{Binding CurrentTurnText}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,4,6" Text="用时" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,3,6" FontWeight="Bold" Text="{Binding ElapsedSeconds}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,0,6" Text="秒" VerticalAlignment="Center" />
+      </WrapPanel>
+    </Border>
+
+    <Border
+        Grid.Row="1"
+        Classes="xiangqi-panel"
+        Padding="10,7"
+        Background="{DynamicResource XiangqiPanelBrush}"
+        BorderBrush="{DynamicResource XiangqiPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" ColumnSpacing="18">
+        <TextBlock FontWeight="Bold" Text="{Binding RedCountText}" />
+        <TextBlock Grid.Column="1" FontWeight="Bold" Text="{Binding BlackCountText}" />
+        <TextBlock Grid.Column="2" Text="{Binding MoveCountText}" />
+        <TextBlock Grid.Column="3" Text="{Binding MessageText}" TextWrapping="Wrap" />
+        <TextBlock Grid.Column="4" Foreground="{DynamicResource XiangqiMutedBrush}" Text="{Binding ResultText}" />
+      </Grid>
+    </Border>
+
+    <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+      <Grid ColumnDefinitions="560,280" ColumnSpacing="18" HorizontalAlignment="Center">
+        <StackPanel>
+          <TextBlock
+              Margin="0,0,0,6"
+              Foreground="{DynamicResource XiangqiMutedBrush}"
+              Text="黄圈为选中 · 绿点为合法落点 · 蓝圈为最近走法 · 红圈为被将军"
+              TextAlignment="Center" />
+          <views:XiangqiBoardControl Width="560" Height="630" Game="{Binding}" />
+        </StackPanel>
+        <Border
+            Grid.Column="1"
+            Classes="xiangqi-panel"
+            MinHeight="630"
+            Padding="12"
+            Background="{DynamicResource XiangqiHistoryBrush}"
+            BorderBrush="{DynamicResource XiangqiPanelBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="6">
+          <Grid RowDefinitions="Auto,Auto,*" RowSpacing="8">
+            <TextBlock FontSize="15" FontWeight="SemiBold" Text="本局中文棋谱与操作记录" />
+            <TextBlock
+                Grid.Row="1"
+                Foreground="{DynamicResource XiangqiMutedBrush}"
+                Text="标准休闲规则：长将变着，普通三次重复和棋"
+                TextWrapping="Wrap" />
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+              <ItemsControl ItemsSource="{Binding HistoryItems}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:XiangqiHistoryItem">
+                    <TextBlock Margin="0,0,0,7" Text="{Binding Text}" TextWrapping="Wrap" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+          </Grid>
+        </Border>
+      </Grid>
+    </ScrollViewer>
+  </Grid>
+</UserControl>
