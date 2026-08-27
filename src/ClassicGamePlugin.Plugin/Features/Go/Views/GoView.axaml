@@ -1,0 +1,145 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Go.Views.GoView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.Go.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Go.Views"
+    x:DataType="vm:GoViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="GoPanelBrush" Color="#FFF4F6F8" />
+          <SolidColorBrush x:Key="GoPanelBorderBrush" Color="#FFA8B1BD" />
+          <SolidColorBrush x:Key="GoTextBrush" Color="#FF253142" />
+          <SolidColorBrush x:Key="GoMutedBrush" Color="#FF667085" />
+          <SolidColorBrush x:Key="GoHistoryBrush" Color="#FFFFFFFF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="GoPanelBrush" Color="#FF252B33" />
+          <SolidColorBrush x:Key="GoPanelBorderBrush" Color="#FF596574" />
+          <SolidColorBrush x:Key="GoTextBrush" Color="#FFF4F7FB" />
+          <SolidColorBrush x:Key="GoMutedBrush" Color="#FFB7C0CC" />
+          <SolidColorBrush x:Key="GoHistoryBrush" Color="#FF1D2229" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="Border.go-panel TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource GoTextBrush}" />
+    </Style>
+  </UserControl.Styles>
+
+  <Grid Margin="20" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+    <Border
+        Classes="go-panel"
+        Padding="12"
+        Background="{DynamicResource GoPanelBrush}"
+        BorderBrush="{DynamicResource GoPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <Button Margin="0,0,8,6" Command="{Binding RestartCommand}" Content="重新开始" />
+        <Button Margin="0,0,8,6" Command="{Binding UndoCommand}" Content="撤销" />
+        <Button Margin="0,0,8,6" Command="{Binding PassCommand}" Content="停一手" />
+        <Button Margin="0,0,14,6" Command="{Binding ResignCommand}" Content="认输" />
+        <Button
+            Margin="0,0,8,6"
+            Command="{Binding ResumePlayCommand}"
+            Content="恢复对局"
+            IsVisible="{Binding IsScoring}" />
+        <Button
+            Margin="0,0,14,6"
+            Command="{Binding ConfirmScoreCommand}"
+            Content="确认结果"
+            IsVisible="{Binding IsScoring}" />
+        <CheckBox
+            Margin="0,0,14,6"
+            Content="启用动画"
+            IsChecked="{Binding AnimationsEnabled}"
+            VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" FontWeight="SemiBold" Text="{Binding StatusText}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,12,6" Text="{Binding CurrentTurnText}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,4,6" Text="用时" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,3,6" FontWeight="Bold" Text="{Binding ElapsedSeconds}" VerticalAlignment="Center" />
+        <TextBlock Margin="0,0,0,6" Text="秒" VerticalAlignment="Center" />
+      </WrapPanel>
+    </Border>
+
+    <Border
+        Grid.Row="1"
+        Classes="go-panel"
+        Padding="10,7"
+        Background="{DynamicResource GoPanelBrush}"
+        BorderBrush="{DynamicResource GoPanelBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+      <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" ColumnSpacing="18">
+        <TextBlock FontWeight="Bold" Text="{Binding BlackCaptureText}" />
+        <TextBlock Grid.Column="1" FontWeight="Bold" Text="{Binding WhiteCaptureText}" />
+        <TextBlock Grid.Column="2" Text="{Binding MoveCountText}" />
+        <TextBlock Grid.Column="3" Text="{Binding MessageText}" TextWrapping="Wrap" />
+        <TextBlock Grid.Column="4" Foreground="{DynamicResource GoMutedBrush}" Text="{Binding ResultText}" />
+      </Grid>
+    </Border>
+
+    <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+      <Grid ColumnDefinitions="650,300" ColumnSpacing="18" HorizontalAlignment="Center">
+        <StackPanel>
+          <TextBlock
+              Margin="0,0,0,6"
+              Foreground="{DynamicResource GoMutedBrush}"
+              Text="列坐标 A-T（跳过 I） · 行坐标自下向上 1-19 · 红点为最近落子"
+              TextAlignment="Center" />
+          <views:GoBoardControl Width="650" Height="650" Game="{Binding}" />
+        </StackPanel>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*" RowSpacing="12">
+          <Border
+              Classes="go-panel"
+              Padding="12"
+              Background="{DynamicResource GoPanelBrush}"
+              BorderBrush="{DynamicResource GoPanelBorderBrush}"
+              BorderThickness="1"
+              CornerRadius="6">
+            <StackPanel Spacing="7">
+              <TextBlock FontSize="15" FontWeight="SemiBold" Text="规则速览" />
+              <TextBlock Text="• 黑方先手，双方轮流在交叉点落子。" TextWrapping="Wrap" />
+              <TextBlock Text="• 棋子上下左右相连为一组；相邻空点称为“气”。" TextWrapping="Wrap" />
+              <TextBlock Text="• 无气棋组会被提走；不能落下无气且未提子的自杀棋。" TextWrapping="Wrap" />
+              <TextBlock Text="• 不能通过落子重现本局出现过的棋盘（全局同形禁着）。" TextWrapping="Wrap" />
+              <TextBlock Text="• 双方连续停一手后，共同点击棋组标记死子。" TextWrapping="Wrap" />
+              <TextBlock Text="• 中国数子法计算活子加围空；白方固定贴 7.5 目。" TextWrapping="Wrap" />
+              <TextBlock Text="• 对死活有异议时选择“恢复对局”继续行棋。" TextWrapping="Wrap" />
+            </StackPanel>
+          </Border>
+
+          <Border
+              Grid.Row="1"
+              Classes="go-panel"
+              MinHeight="280"
+              Padding="12"
+              Background="{DynamicResource GoHistoryBrush}"
+              BorderBrush="{DynamicResource GoPanelBorderBrush}"
+              BorderThickness="1"
+              CornerRadius="6">
+            <Grid RowDefinitions="Auto,*" RowSpacing="8">
+              <TextBlock FontSize="15" FontWeight="SemiBold" Text="本局操作记录" />
+              <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding HistoryItems}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:GoHistoryItem">
+                      <TextBlock Margin="0,0,0,7" Text="{Binding Text}" TextWrapping="Wrap" />
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Grid>
+          </Border>
+        </Grid>
+      </Grid>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

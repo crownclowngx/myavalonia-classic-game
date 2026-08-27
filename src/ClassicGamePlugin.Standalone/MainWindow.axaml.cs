@@ -3,6 +3,7 @@ using ClassicGamePlugin.Features.Minesweeper;
 using ClassicGamePlugin.Features.SpiderSolitaire;
 using ClassicGamePlugin.Features.Reversi;
 using ClassicGamePlugin.Features.Gomoku;
+using ClassicGamePlugin.Features.Go;
 using ClassicGamePlugin.Features.Xiangqi;
 using ClassicGamePlugin.Features.Game2048;
 using ClassicGamePlugin.Features.Sudoku;
@@ -19,6 +20,7 @@ public sealed partial class MainWindow : Window
     private readonly SpiderSolitaireDocument _spiderSolitaireDocument;
     private readonly ReversiDocument _reversiDocument;
     private readonly GomokuDocument _gomokuDocument;
+    private readonly GoDocument _goDocument;
     private readonly XiangqiDocument _xiangqiDocument;
     private readonly Game2048Document _game2048Document;
     private readonly SudokuDocument _sudokuDocument;
@@ -53,6 +55,12 @@ public sealed partial class MainWindow : Window
             new NewDocumentActivation("五子棋（Standalone）"),
             CancellationToken.None).GetAwaiter().GetResult();
         GomokuHost.DataContext = _gomokuDocument;
+
+        _goDocument = new GoDocument();
+        _goDocument.InitializeAsync(
+            new NewDocumentActivation("围棋（Standalone）"),
+            CancellationToken.None).GetAwaiter().GetResult();
+        GoHost.DataContext = _goDocument;
 
         _xiangqiDocument = new XiangqiDocument();
         _xiangqiDocument.InitializeAsync(
@@ -92,8 +100,8 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Standalone 明确拥有十个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
-    /// 动画或后台任务的七个 Document。2048、推箱子与俄罗斯方块的计时器只属于视觉树，Document 不增加空洞的释放调用。
+    /// Standalone 明确拥有十一个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
+    /// 动画或后台任务的八个 Document。2048、推箱子与俄罗斯方块的计时器只属于视觉树，Document 不增加空洞的释放调用。
     /// </summary>
     protected override void OnClosed(EventArgs eventArgs)
     {
@@ -101,6 +109,7 @@ public sealed partial class MainWindow : Window
         _spiderSolitaireDocument.Dispose();
         _reversiDocument.Dispose();
         _gomokuDocument.Dispose();
+        _goDocument.Dispose();
         _xiangqiDocument.Dispose();
         _sudokuDocument.Dispose();
         _freeCellDocument.Dispose();

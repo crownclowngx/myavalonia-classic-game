@@ -6,6 +6,7 @@
     xmlns:spider="using:ClassicGamePlugin.Features.SpiderSolitaire.Views"
     xmlns:reversi="using:ClassicGamePlugin.Features.Reversi.Views"
     xmlns:gomoku="using:ClassicGamePlugin.Features.Gomoku.Views"
+    xmlns:go="using:ClassicGamePlugin.Features.Go.Views"
     xmlns:xiangqi="using:ClassicGamePlugin.Features.Xiangqi.Views"
     xmlns:game2048="using:ClassicGamePlugin.Features.Game2048.Views"
     xmlns:sudoku="using:ClassicGamePlugin.Features.Sudoku.Views"
@@ -27,6 +28,9 @@
     </TabItem>
     <TabItem Header="五子棋">
       <gomoku:GomokuDocumentView x:Name="GomokuHost" />
+    </TabItem>
+    <TabItem Header="围棋">
+      <go:GoDocumentView x:Name="GoHost" />
     </TabItem>
     <TabItem Header="中国象棋">
       <xiangqi:XiangqiDocumentView x:Name="XiangqiHost" />

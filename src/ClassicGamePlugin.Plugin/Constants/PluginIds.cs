@@ -22,6 +22,10 @@ public static class PluginIds
     public static readonly DocumentTypeId GomokuDocument =
         new("myavalonia.plugin.classic.game.document.gomoku");
 
+    /// <summary>围棋普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId GoDocument =
+        new("myavalonia.plugin.classic.game.document.go");
+
     /// <summary>中国象棋普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId XiangqiDocument =
         new("myavalonia.plugin.classic.game.document.xiangqi");

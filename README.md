@@ -1,6 +1,6 @@
 # ClassicGamePlugin
 
-这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、中国象棋、2048、数独、推箱子、俄罗斯方块和空当接龙 Document。真实交付物是
+这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块和空当接龙 Document。真实交付物是
 `src/ClassicGamePlugin.Plugin`；`Standalone` 只负责快速预览 Plugin 中同一份 View、ViewModel、Document 与领域代码。
 
 > 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了三个子项目和
@@ -17,6 +17,9 @@
 
 五子棋的自由/禁手规则、双人/三级人机、单步回退、AI 搜索和测试矩阵见
 [五子棋 Document 设计与开发说明](docs/gomoku.md)。
+
+围棋的标准 19 路、本地双人、提子与全局同形、中国数子、死子标记、轻量动画和测试矩阵见
+[围棋 Document 设计与开发说明](docs/go.md)。
 
 中国象棋的标准休闲规则、长将/重复裁定、中文棋谱、决策点撤销、三级 AI 和测试矩阵见
 [中国象棋 Document 设计与开发说明](docs/xiangqi.md)。
@@ -51,5 +54,5 @@ dotnet msbuild src/ClassicGamePlugin.Plugin/ClassicGamePlugin.Plugin.csproj `
   -p:ManagedPluginDeployRoot=C:\Path\To\Host\Controls
 ```
 
-Standalone 只能验证十个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
+Standalone 只能验证十一个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
 生命周期必须使用真实 Host 做最终验收。

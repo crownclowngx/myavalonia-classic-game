@@ -8,6 +8,8 @@ using ClassicGamePlugin.Features.Reversi;
 using ClassicGamePlugin.Features.Reversi.Views;
 using ClassicGamePlugin.Features.Gomoku;
 using ClassicGamePlugin.Features.Gomoku.Views;
+using ClassicGamePlugin.Features.Go;
+using ClassicGamePlugin.Features.Go.Views;
 using ClassicGamePlugin.Features.Xiangqi;
 using ClassicGamePlugin.Features.Xiangqi.Views;
 using ClassicGamePlugin.Features.Game2048;
@@ -53,6 +55,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.GomokuDocument,
                 "五子棋",
                 "经典五子棋：自由或禁手规则下连成五子，支持双人与三级人机",
+                "经典游戏"));
+        registration.AddDocument<GoDocument, GoDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.GoDocument,
+                "围棋",
+                "标准 19 路围棋：本地双人、提子、全局同形禁着与中国数子",
                 "经典游戏"));
         registration.AddDocument<XiangqiDocument, XiangqiDocumentView>(
             new DocumentDescriptor(

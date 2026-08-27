@@ -13,6 +13,8 @@ using ClassicGamePlugin.Features.Reversi.ViewModels;
 using ClassicGamePlugin.Features.Reversi.Views;
 using ClassicGamePlugin.Features.Gomoku;
 using ClassicGamePlugin.Features.Gomoku.Views;
+using ClassicGamePlugin.Features.Go;
+using ClassicGamePlugin.Features.Go.Views;
 using ClassicGamePlugin.Features.Xiangqi;
 using ClassicGamePlugin.Features.Xiangqi.Views;
 using ClassicGamePlugin.Features.Game2048;
@@ -42,7 +44,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册十个独立游戏的普通Document()
+    public void Module注册十一个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -81,6 +83,17 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", gomoku.Descriptor.MenuCategory);
                 Assert.Equal(typeof(GomokuDocument), gomoku.Model);
                 Assert.Equal(typeof(GomokuDocumentView), gomoku.View);
+            },
+            go =>
+            {
+                Assert.Equal(PluginIds.GoDocument, go.Descriptor.DocumentTypeId);
+                Assert.Equal("围棋", go.Descriptor.DisplayName);
+                Assert.Equal(
+                    "标准 19 路围棋：本地双人、提子、全局同形禁着与中国数子",
+                    go.Descriptor.Description);
+                Assert.Equal("经典游戏", go.Descriptor.MenuCategory);
+                Assert.Equal(typeof(GoDocument), go.Model);
+                Assert.Equal(typeof(GoDocumentView), go.View);
             },
             xiangqi =>
             {
@@ -149,7 +162,7 @@ public sealed class PluginCompositionTests
     }
 
     [Fact]
-    public void 稳定Plugin与十个Document身份保持冻结值()
+    public void 稳定Plugin与十一个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -164,6 +177,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.gomoku",
             PluginIds.GomokuDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.go",
+            PluginIds.GoDocument.Value);
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.xiangqi",
             PluginIds.XiangqiDocument.Value);
@@ -243,6 +259,18 @@ public sealed class PluginCompositionTests
 
         AssertDocumentWrapperBinding(wrapper, document);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
+    }
+
+    [Fact]
+    public void 围棋包装View通过单向绑定把独立ViewModel交给游戏View()
+    {
+        using var document = new GoDocument();
+        var wrapper = new GoDocumentView { DataContext = document };
+        var gameView = new GoView { DataContext = document.ViewModel };
+
+        AssertDocumentWrapperBinding(wrapper, document);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
+        Assert.True(document.ViewModel.AnimationsEnabled);
     }
 
     [Fact]
