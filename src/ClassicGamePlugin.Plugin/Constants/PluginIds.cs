@@ -25,4 +25,8 @@ public static class PluginIds
     /// <summary>中国象棋普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId XiangqiDocument =
         new("myavalonia.plugin.classic.game.document.xiangqi");
+
+    /// <summary>2048 普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId Game2048Document =
+        new("myavalonia.plugin.classic.game.document.2048");
 }

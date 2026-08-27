@@ -7,6 +7,7 @@
     xmlns:reversi="using:ClassicGamePlugin.Features.Reversi.Views"
     xmlns:gomoku="using:ClassicGamePlugin.Features.Gomoku.Views"
     xmlns:xiangqi="using:ClassicGamePlugin.Features.Xiangqi.Views"
+    xmlns:game2048="using:ClassicGamePlugin.Features.Game2048.Views"
     Width="1080"
     Height="760"
     Title="ClassicGamePlugin Standalone">
@@ -25,6 +26,9 @@
     </TabItem>
     <TabItem Header="中国象棋">
       <xiangqi:XiangqiDocumentView x:Name="XiangqiHost" />
+    </TabItem>
+    <TabItem Header="2048">
+      <game2048:Game2048DocumentView x:Name="Game2048Host" />
     </TabItem>
   </TabControl>
 </Window>

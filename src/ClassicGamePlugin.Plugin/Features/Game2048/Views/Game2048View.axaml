@@ -1,0 +1,213 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Game2048.Views.Game2048View"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:primitives="using:Avalonia.Controls.Primitives"
+    xmlns:vm="using:ClassicGamePlugin.Features.Game2048.ViewModels"
+    x:DataType="vm:Game2048ViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <!-- Document 不能假设 Host 的窗口背景；面板和文案使用插件自己的浅色/深色资源。 -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="Game2048PageBrush" Color="#FFF7F5F0" />
+          <SolidColorBrush x:Key="Game2048PanelBrush" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="Game2048BorderBrush" Color="#FFB8AFA5" />
+          <SolidColorBrush x:Key="Game2048TextBrush" Color="#FF3D3731" />
+          <SolidColorBrush x:Key="Game2048MutedBrush" Color="#FF6F665E" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="Game2048PageBrush" Color="#FF24211F" />
+          <SolidColorBrush x:Key="Game2048PanelBrush" Color="#FF302C29" />
+          <SolidColorBrush x:Key="Game2048BorderBrush" Color="#FF756C64" />
+          <SolidColorBrush x:Key="Game2048TextBrush" Color="#FFF7F2EC" />
+          <SolidColorBrush x:Key="Game2048MutedBrush" Color="#FFD1C8BF" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Border MinWidth="560" Padding="24" Background="{DynamicResource Game2048PageBrush}">
+      <StackPanel MaxWidth="620" HorizontalAlignment="Center" Spacing="16">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+          <StackPanel>
+            <TextBlock
+                FontSize="38"
+                FontWeight="Bold"
+                Foreground="{DynamicResource Game2048TextBrush}"
+                Text="2048" />
+            <TextBlock
+                Foreground="{DynamicResource Game2048MutedBrush}"
+                Text="合并相同数字，创建 2048 方块"
+                TextWrapping="Wrap" />
+          </StackPanel>
+
+          <Border
+              Grid.Column="1"
+              MinWidth="112"
+              Padding="16,8"
+              Background="{DynamicResource Game2048PanelBrush}"
+              BorderBrush="{DynamicResource Game2048BorderBrush}"
+              BorderThickness="1"
+              CornerRadius="7">
+            <StackPanel HorizontalAlignment="Center">
+              <TextBlock
+                  Foreground="{DynamicResource Game2048MutedBrush}"
+                  Text="当前分数"
+                  TextAlignment="Center" />
+              <TextBlock
+                  FontSize="24"
+                  FontWeight="Bold"
+                  Foreground="{DynamicResource Game2048TextBrush}"
+                  Text="{Binding Score}"
+                  TextAlignment="Center" />
+            </StackPanel>
+          </Border>
+        </Grid>
+
+        <Border
+            Padding="12,9"
+            Background="{DynamicResource Game2048PanelBrush}"
+            BorderBrush="{DynamicResource Game2048BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="7">
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <TextBlock
+                VerticalAlignment="Center"
+                FontWeight="SemiBold"
+                Foreground="{DynamicResource Game2048TextBrush}"
+                Text="{Binding StatusText}"
+                TextWrapping="Wrap" />
+            <Button
+                Grid.Column="1"
+                Command="{Binding ContinueGameCommand}"
+                Content="继续游戏"
+                IsVisible="{Binding IsAwaitingContinue}" />
+          </Grid>
+        </Border>
+
+        <Border
+            x:Name="GameBoard"
+            Width="430"
+            Height="430"
+            Padding="9"
+            HorizontalAlignment="Center"
+            Background="#BBADA0"
+            ClipToBounds="True"
+            CornerRadius="9"
+            Focusable="True"
+            PointerPressed="OnBoardPointerPressed">
+          <Grid x:Name="BoardSurface" ClipToBounds="True">
+            <!-- 空格层始终可见，因此隐藏落定方块播放动画时仍保留完整棋盘结构。 -->
+            <ItemsControl ItemsSource="{Binding BoardCells}" IsHitTestVisible="False">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <primitives:UniformGrid Rows="4" Columns="4" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:Game2048CellViewModel">
+                  <Border Margin="5" Background="#CDC1B4" CornerRadius="6" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- 落定层继续使用可绑定格子，动画结束后一次读取领域最终状态。 -->
+            <ItemsControl
+                x:Name="SettledTileLayer"
+                ItemsSource="{Binding BoardCells}"
+                IsHitTestVisible="False">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <primitives:UniformGrid Rows="4" Columns="4" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:Game2048CellViewModel">
+                  <Border
+                      Margin="5"
+                      Background="{Binding Background}"
+                      CornerRadius="6"
+                      IsVisible="{Binding HasValue}"
+                      ToolTip.Tip="{Binding AccessibleText}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="{Binding FontSize}"
+                        FontWeight="Bold"
+                        Foreground="{Binding Foreground}"
+                        Text="{Binding DisplayText}" />
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Canvas 只承载一次 Transition 的临时方块，完成或取消后立即清空。 -->
+            <Canvas
+                x:Name="AnimationLayer"
+                ClipToBounds="True"
+                IsHitTestVisible="False" />
+          </Grid>
+        </Border>
+
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="18">
+          <StackPanel VerticalAlignment="Center" Spacing="5">
+            <TextBlock
+                Foreground="{DynamicResource Game2048MutedBrush}"
+                Text="单击棋盘后可使用方向键或 W/A/S/D"
+                TextWrapping="Wrap" />
+            <TextBlock
+                Foreground="{DynamicResource Game2048MutedBrush}"
+                Text="无效移动不会生成新方块"
+                TextWrapping="Wrap" />
+            <CheckBox
+                Margin="0,4,0,0"
+                Content="动画效果"
+                IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}" />
+            <Button
+                Margin="0,6,0,0"
+                HorizontalAlignment="Left"
+                Command="{Binding RestartCommand}"
+                Content="重新开始" />
+          </StackPanel>
+
+          <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto,Auto">
+            <Button
+                Grid.Row="0"
+                Grid.Column="1"
+                Width="54"
+                Height="46"
+                Command="{Binding MoveUpCommand}"
+                Content="↑"
+                IsEnabled="{Binding CanMove}" />
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                Width="54"
+                Height="46"
+                Command="{Binding MoveLeftCommand}"
+                Content="←"
+                IsEnabled="{Binding CanMove}" />
+            <Button
+                Grid.Row="1"
+                Grid.Column="2"
+                Width="54"
+                Height="46"
+                Command="{Binding MoveRightCommand}"
+                Content="→"
+                IsEnabled="{Binding CanMove}" />
+            <Button
+                Grid.Row="2"
+                Grid.Column="1"
+                Width="54"
+                Height="46"
+                Command="{Binding MoveDownCommand}"
+                Content="↓"
+                IsEnabled="{Binding CanMove}" />
+          </Grid>
+        </Grid>
+      </StackPanel>
+    </Border>
+  </ScrollViewer>
+</UserControl>

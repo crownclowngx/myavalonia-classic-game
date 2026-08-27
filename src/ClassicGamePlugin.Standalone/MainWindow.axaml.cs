@@ -4,6 +4,7 @@ using ClassicGamePlugin.Features.SpiderSolitaire;
 using ClassicGamePlugin.Features.Reversi;
 using ClassicGamePlugin.Features.Gomoku;
 using ClassicGamePlugin.Features.Xiangqi;
+using ClassicGamePlugin.Features.Game2048;
 using MyAvaloniaManagement.PluginSdk;
 
 namespace ClassicGamePlugin.Standalone;
@@ -15,6 +16,7 @@ public sealed partial class MainWindow : Window
     private readonly ReversiDocument _reversiDocument;
     private readonly GomokuDocument _gomokuDocument;
     private readonly XiangqiDocument _xiangqiDocument;
+    private readonly Game2048Document _game2048Document;
 
     public MainWindow()
     {
@@ -49,9 +51,18 @@ public sealed partial class MainWindow : Window
             new NewDocumentActivation("中国象棋（Standalone）"),
             CancellationToken.None).GetAwaiter().GetResult();
         XiangqiHost.DataContext = _xiangqiDocument;
+
+        _game2048Document = new Game2048Document();
+        _game2048Document.InitializeAsync(
+            new NewDocumentActivation("2048（Standalone）"),
+            CancellationToken.None).GetAwaiter().GetResult();
+        Game2048Host.DataContext = _game2048Document;
     }
 
-    /// <summary>Standalone 明确拥有五个预览 Document，窗口关闭时按 Host 的语义释放局内计时和后台资源。</summary>
+    /// <summary>
+    /// Standalone 明确拥有六个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
+    /// 动画或后台任务的五个 Document。2048 没有外部资源，因此不增加空洞的释放调用。
+    /// </summary>
     protected override void OnClosed(EventArgs eventArgs)
     {
         _minesweeperDocument.Dispose();

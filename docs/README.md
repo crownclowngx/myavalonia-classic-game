@@ -1,6 +1,6 @@
 # ClassicGamePlugin 开发快速开始
 
-本解决方案用于开发 `myavalonia.plugin.classic.game` Managed Plugin，当前由独立的扫雷、蜘蛛纸牌、黑白棋、五子棋与中国象棋功能域
+本解决方案用于开发 `myavalonia.plugin.classic.game` Managed Plugin，当前由独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、中国象棋与 2048 功能域
 分别提供普通 Document。它把真实插件、独立 Avalonia 开发窗口和自动化测试放在同一个解决方案中，使界面与业务代码既能
 快速预览，也能由 MyAvaloniaManagement Host 按正式插件协议加载。
 
@@ -41,9 +41,10 @@ Standalone 适合快速检查 AXAML、编译绑定、命令和插件自身对象
 3. [黑白棋 Document 设计与开发说明](reversi.md)
 4. [五子棋 Document 设计与开发说明](gomoku.md)
 5. [中国象棋 Document 设计与开发说明](xiangqi.md)
-6. [项目、Host 与 Standalone 窗口职责](project-and-window-responsibilities.md)
-7. [临时部署、正式发布与验收](deployment-and-release.md)
-8. [Workflow Action Provider 与 Consumer 接入](workflow-actions.md)
+6. [2048 Document 设计与开发说明](2048.md)
+7. [项目、Host 与 Standalone 窗口职责](project-and-window-responsibilities.md)
+8. [临时部署、正式发布与验收](deployment-and-release.md)
+9. [Workflow Action Provider 与 Consumer 接入](workflow-actions.md)
 
 ## 开发前记住
 

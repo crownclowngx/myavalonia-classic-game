@@ -1,0 +1,16 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Game2048.Views.Game2048DocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.Game2048"
+    xmlns:vm="using:ClassicGamePlugin.Features.Game2048.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Game2048.Views"
+    x:DataType="feature:Game2048Document">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:Game2048ViewModel">
+        <views:Game2048View />
+      </DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

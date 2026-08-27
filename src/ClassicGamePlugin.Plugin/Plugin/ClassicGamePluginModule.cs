@@ -10,6 +10,8 @@ using ClassicGamePlugin.Features.Gomoku;
 using ClassicGamePlugin.Features.Gomoku.Views;
 using ClassicGamePlugin.Features.Xiangqi;
 using ClassicGamePlugin.Features.Xiangqi.Views;
+using ClassicGamePlugin.Features.Game2048;
+using ClassicGamePlugin.Features.Game2048.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -49,6 +51,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.XiangqiDocument,
                 "中国象棋",
                 "经典中国象棋：标准休闲规则、中文棋谱、决策点撤销与三级人机",
+                "经典游戏"));
+        registration.AddDocument<Game2048Document, Game2048DocumentView>(
+            new DocumentDescriptor(
+                PluginIds.Game2048Document,
+                "2048",
+                "经典数字合并游戏：移动方块、合并同值数字并挑战 2048",
                 "经典游戏"));
     }
 }

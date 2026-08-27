@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Input;
 using ClassicGamePlugin.Constants;
 using ClassicGamePlugin.Features.Minesweeper;
 using ClassicGamePlugin.Features.Minesweeper.Domain;
@@ -13,6 +15,10 @@ using ClassicGamePlugin.Features.Gomoku;
 using ClassicGamePlugin.Features.Gomoku.Views;
 using ClassicGamePlugin.Features.Xiangqi;
 using ClassicGamePlugin.Features.Xiangqi.Views;
+using ClassicGamePlugin.Features.Game2048;
+using ClassicGamePlugin.Features.Game2048.Domain;
+using ClassicGamePlugin.Features.Game2048.ViewModels;
+using ClassicGamePlugin.Features.Game2048.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -24,7 +30,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册五个独立游戏的普通Document()
+    public void Module注册六个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -71,12 +77,23 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", xiangqi.Descriptor.MenuCategory);
                 Assert.Equal(typeof(XiangqiDocument), xiangqi.Model);
                 Assert.Equal(typeof(XiangqiDocumentView), xiangqi.View);
+            },
+            game2048 =>
+            {
+                Assert.Equal(PluginIds.Game2048Document, game2048.Descriptor.DocumentTypeId);
+                Assert.Equal("2048", game2048.Descriptor.DisplayName);
+                Assert.Equal(
+                    "经典数字合并游戏：移动方块、合并同值数字并挑战 2048",
+                    game2048.Descriptor.Description);
+                Assert.Equal("经典游戏", game2048.Descriptor.MenuCategory);
+                Assert.Equal(typeof(Game2048Document), game2048.Model);
+                Assert.Equal(typeof(Game2048DocumentView), game2048.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与五个Document身份保持冻结值()
+    public void 稳定Plugin与六个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -94,6 +111,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.xiangqi",
             PluginIds.XiangqiDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.2048",
+            PluginIds.Game2048Document.Value);
     }
 
     [Fact]
@@ -105,8 +125,7 @@ public sealed class PluginCompositionTests
             DataContext = document,
         };
 
-        Assert.Same(document, view.DataContext);
-        Assert.Same(document.ViewModel, view.HostedViewModel);
+        AssertDocumentWrapperBinding(view, document);
     }
 
     [Fact]
@@ -128,7 +147,7 @@ public sealed class PluginCompositionTests
         var wrapper = new SpiderSolitaireDocumentView { DataContext = document };
         var gameView = new SpiderSolitaireView { DataContext = document.ViewModel };
 
-        Assert.Same(document.ViewModel, wrapper.HostedViewModel);
+        AssertDocumentWrapperBinding(wrapper, document);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
     }
 
@@ -142,7 +161,7 @@ public sealed class PluginCompositionTests
 
         gameView.HandleCellClick(move);
 
-        Assert.Same(document.ViewModel, wrapper.HostedViewModel);
+        AssertDocumentWrapperBinding(wrapper, document);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
         Assert.Equal(1, document.ViewModel.MoveCount);
     }
@@ -154,7 +173,7 @@ public sealed class PluginCompositionTests
         var wrapper = new GomokuDocumentView { DataContext = document };
         var gameView = new GomokuView { DataContext = document.ViewModel };
 
-        Assert.Same(document.ViewModel, wrapper.HostedViewModel);
+        AssertDocumentWrapperBinding(wrapper, document);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
     }
 
@@ -165,8 +184,42 @@ public sealed class PluginCompositionTests
         var wrapper = new XiangqiDocumentView { DataContext = document };
         var gameView = new XiangqiView { DataContext = document.ViewModel };
 
-        Assert.Same(document.ViewModel, wrapper.HostedViewModel);
+        AssertDocumentWrapperBinding(wrapper, document);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
+    }
+
+    [Fact]
+    public void 二零四八包装View通过单向绑定且游戏View只接受ViewModel()
+    {
+        var strategy = new FirstEmptyTileSpawnStrategy(2, 4, 2);
+        var document = new Game2048Document(strategy);
+        var wrapper = new Game2048DocumentView { DataContext = document };
+        var gameView = new Game2048View { DataContext = document.ViewModel };
+
+        AssertDocumentWrapperBinding(wrapper, document);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
+        Assert.IsType<Game2048ViewModel>(gameView.DataContext);
+        Assert.True(document.ViewModel.AnimationsEnabled);
+        // 无窗口 Avalonia 测试不启动 DispatcherTimer；动画计划和取消生命周期由纯状态机测试覆盖。
+        document.ViewModel.AnimationsEnabled = false;
+        Assert.True(gameView.HandleKey(Key.Down));
+        Assert.Equal(3, strategy.CallCount);
+        Assert.False(document.ViewModel.IsAnimationRunning);
+        Assert.False(gameView.HandleKey(Key.Enter));
+    }
+
+    [Theory]
+    [MemberData(nameof(Game2048MovementKeys))]
+    public void 二零四八方向键与WASD映射为领域方向(Key key, int expectedDirection)
+    {
+        Assert.True(Game2048View.TryMapDirection(key, out var actual));
+        Assert.Equal((Game2048Direction)expectedDirection, actual);
+    }
+
+    [Fact]
+    public void 二零四八无关按键不会被游戏映射或吞掉()
+    {
+        Assert.False(Game2048View.TryMapDirection(Key.Enter, out _));
     }
 
     [Fact]
@@ -255,6 +308,29 @@ public sealed class PluginCompositionTests
         int row,
         int column) =>
         Assert.Single(viewModel.BoardCells, cell => cell.Row == row && cell.Column == column);
+
+    /// <summary>
+    /// 无窗口单元测试没有 Avalonia UI 消息循环，因此不等待绑定结果值；这里直接验证包装层的
+    /// Content 属性已经安装编译绑定，同时验证 Host 传入的 Document 未被 View 改写。
+    /// </summary>
+    private static void AssertDocumentWrapperBinding(Control wrapper, object expectedDataContext)
+    {
+        Assert.Same(expectedDataContext, wrapper.DataContext);
+        var host = Assert.IsType<ContentControl>(wrapper.FindControl<ContentControl>("ViewModelHost"));
+        Assert.NotNull(BindingOperations.GetBindingExpressionBase(host, ContentControl.ContentProperty));
+    }
+
+    public static TheoryData<Key, int> Game2048MovementKeys => new()
+    {
+        { Key.Left, (int)Game2048Direction.Left },
+        { Key.A, (int)Game2048Direction.Left },
+        { Key.Right, (int)Game2048Direction.Right },
+        { Key.D, (int)Game2048Direction.Right },
+        { Key.Up, (int)Game2048Direction.Up },
+        { Key.W, (int)Game2048Direction.Up },
+        { Key.Down, (int)Game2048Direction.Down },
+        { Key.S, (int)Game2048Direction.Down },
+    };
 
     private sealed class CapturingRegistration : IPluginRegistration
     {
