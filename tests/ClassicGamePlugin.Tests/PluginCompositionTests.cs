@@ -25,6 +25,9 @@ using ClassicGamePlugin.Features.Sudoku.Views;
 using ClassicGamePlugin.Features.Sokoban;
 using ClassicGamePlugin.Features.Sokoban.ViewModels;
 using ClassicGamePlugin.Features.Sokoban.Views;
+using ClassicGamePlugin.Features.Tetris;
+using ClassicGamePlugin.Features.Tetris.ViewModels;
+using ClassicGamePlugin.Features.Tetris.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -36,7 +39,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册八个独立游戏的普通Document()
+    public void Module注册九个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -116,12 +119,23 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", sokoban.Descriptor.MenuCategory);
                 Assert.Equal(typeof(SokobanDocument), sokoban.Model);
                 Assert.Equal(typeof(SokobanDocumentView), sokoban.View);
+            },
+            tetris =>
+            {
+                Assert.Equal(PluginIds.TetrisDocument, tetris.Descriptor.DocumentTypeId);
+                Assert.Equal("俄罗斯方块", tetris.Descriptor.DisplayName);
+                Assert.Equal(
+                    "现代俄罗斯方块：SRS 旋转、暂存、幽灵块、完整计分与逐级加速",
+                    tetris.Descriptor.Description);
+                Assert.Equal("经典游戏", tetris.Descriptor.MenuCategory);
+                Assert.Equal(typeof(TetrisDocument), tetris.Model);
+                Assert.Equal(typeof(TetrisDocumentView), tetris.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与八个Document身份保持冻结值()
+    public void 稳定Plugin与九个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -148,6 +162,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.sokoban",
             PluginIds.SokobanDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.tetris",
+            PluginIds.TetrisDocument.Value);
     }
 
     [Fact]
@@ -265,6 +282,19 @@ public sealed class PluginCompositionTests
         AssertDocumentWrapperBinding(wrapper, document);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
         Assert.IsType<SokobanViewModel>(gameView.DataContext);
+        Assert.True(document.ViewModel.AnimationsEnabled);
+    }
+
+    [Fact]
+    public void 俄罗斯方块包装View通过单向绑定且游戏View只接受ViewModel()
+    {
+        var document = new TetrisDocument();
+        var wrapper = new TetrisDocumentView { DataContext = document };
+        var gameView = new TetrisView { DataContext = document.ViewModel };
+
+        AssertDocumentWrapperBinding(wrapper, document);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
+        Assert.IsType<TetrisViewModel>(gameView.DataContext);
         Assert.True(document.ViewModel.AnimationsEnabled);
     }
 

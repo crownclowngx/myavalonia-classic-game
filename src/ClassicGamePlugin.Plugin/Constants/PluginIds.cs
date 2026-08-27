@@ -37,4 +37,8 @@ public static class PluginIds
     /// <summary>推箱子普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId SokobanDocument =
         new("myavalonia.plugin.classic.game.document.sokoban");
+
+    /// <summary>俄罗斯方块普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId TetrisDocument =
+        new("myavalonia.plugin.classic.game.document.tetris");
 }

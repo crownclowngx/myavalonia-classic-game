@@ -1,0 +1,15 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Tetris.Views.TetrisDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.Tetris"
+    xmlns:vm="using:ClassicGamePlugin.Features.Tetris.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Tetris.Views"
+    x:DataType="feature:TetrisDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:TetrisViewModel"><views:TetrisView /></DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>
+

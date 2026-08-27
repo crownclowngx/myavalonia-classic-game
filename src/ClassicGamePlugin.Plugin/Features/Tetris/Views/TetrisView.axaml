@@ -1,0 +1,82 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.Tetris.Views.TetrisView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.Tetris.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.Tetris.Views"
+    x:DataType="vm:TetrisViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="TetrisPageBrush" Color="#FFF1F4F8" />
+          <SolidColorBrush x:Key="TetrisPanelBrush" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="TetrisBorderBrush" Color="#FFB7C2D0" />
+          <SolidColorBrush x:Key="TetrisTextBrush" Color="#FF202938" />
+          <SolidColorBrush x:Key="TetrisMutedBrush" Color="#FF59677A" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="TetrisPageBrush" Color="#FF151A24" />
+          <SolidColorBrush x:Key="TetrisPanelBrush" Color="#FF232B38" />
+          <SolidColorBrush x:Key="TetrisBorderBrush" Color="#FF526174" />
+          <SolidColorBrush x:Key="TetrisTextBrush" Color="#FFF3F6FA" />
+          <SolidColorBrush x:Key="TetrisMutedBrush" Color="#FFBAC5D2" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Border MinWidth="820" MinHeight="700" Padding="22" Background="{DynamicResource TetrisPageBrush}">
+      <Grid MaxWidth="1100" HorizontalAlignment="Center" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="14">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="18">
+          <StackPanel>
+            <TextBlock FontSize="32" FontWeight="Bold" Foreground="{DynamicResource TetrisTextBrush}" Text="俄罗斯方块" />
+            <TextBlock Foreground="{DynamicResource TetrisMutedBrush}" Text="SRS 旋转、暂存、幽灵块与现代完整计分" />
+          </StackPanel>
+          <Border Grid.Column="1" Padding="14,8" Background="{DynamicResource TetrisPanelBrush}"
+                  BorderBrush="{DynamicResource TetrisBorderBrush}" BorderThickness="1" CornerRadius="7">
+            <StackPanel Orientation="Horizontal" Spacing="20">
+              <StackPanel><TextBlock Foreground="{DynamicResource TetrisMutedBrush}" Text="分数"/><TextBlock FontSize="20" FontWeight="Bold" Text="{Binding Score}"/></StackPanel>
+              <StackPanel><TextBlock Foreground="{DynamicResource TetrisMutedBrush}" Text="等级"/><TextBlock FontSize="20" FontWeight="Bold" Text="{Binding Level}"/></StackPanel>
+              <StackPanel><TextBlock Foreground="{DynamicResource TetrisMutedBrush}" Text="消行"/><TextBlock FontSize="20" FontWeight="Bold" Text="{Binding TotalLines}"/></StackPanel>
+              <StackPanel><TextBlock Foreground="{DynamicResource TetrisMutedBrush}" Text="Combo"/><TextBlock FontSize="20" FontWeight="Bold" Text="{Binding ComboText}"/></StackPanel>
+              <StackPanel><TextBlock Foreground="{DynamicResource TetrisMutedBrush}" Text="B2B"/><TextBlock FontSize="20" FontWeight="Bold" Text="{Binding BackToBackText}"/></StackPanel>
+            </StackPanel>
+          </Border>
+        </Grid>
+
+        <Border Grid.Row="1" Padding="10" Background="{DynamicResource TetrisPanelBrush}"
+                BorderBrush="{DynamicResource TetrisBorderBrush}" BorderThickness="1" CornerRadius="7">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Command="{Binding RestartCommand}" Content="重新开始" />
+            <Button Command="{Binding TogglePauseCommand}" Content="{Binding PauseButtonText}" />
+            <CheckBox Margin="8,0,0,0" VerticalAlignment="Center" Content="动画" IsChecked="{Binding AnimationsEnabled, Mode=TwoWay}" />
+            <TextBlock Margin="18,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource TetrisMutedBrush}" Text="{Binding StatusText}" />
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Padding="8" Background="{DynamicResource TetrisPanelBrush}"
+                BorderBrush="{DynamicResource TetrisBorderBrush}" BorderThickness="1" CornerRadius="9">
+          <views:TetrisBoardControl x:Name="GameBoard" MinWidth="760" MinHeight="500" Game="{Binding}" />
+        </Border>
+
+        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="18">
+          <StackPanel VerticalAlignment="Center" Spacing="4">
+            <TextBlock Foreground="{DynamicResource TetrisMutedBrush}" Text="单击棋盘后：←/A、→/D 移动，↓/S 软降，↑/X 顺时针，Z 逆时针" TextWrapping="Wrap" />
+            <TextBlock Foreground="{DynamicResource TetrisMutedBrush}" Text="Space 硬降，C 或 Shift 暂存，P 暂停；游戏离开可见区域时自动暂停" TextWrapping="Wrap" />
+          </StackPanel>
+          <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Spacing="6">
+            <Button Width="44" Command="{Binding MoveLeftCommand}" Content="←" />
+            <Button Width="44" Command="{Binding MoveRightCommand}" Content="→" />
+            <Button Width="52" Command="{Binding SoftDropCommand}" Content="软降" />
+            <Button Width="52" Command="{Binding RotateCounterClockwiseCommand}" Content="↶" />
+            <Button Width="52" Command="{Binding RotateClockwiseCommand}" Content="↷" />
+            <Button Width="62" Command="{Binding HoldCommand}" Content="暂存" />
+            <Button Width="62" Command="{Binding HardDropCommand}" Content="硬降" />
+          </StackPanel>
+        </Grid>
+      </Grid>
+    </Border>
+  </ScrollViewer>
+</UserControl>

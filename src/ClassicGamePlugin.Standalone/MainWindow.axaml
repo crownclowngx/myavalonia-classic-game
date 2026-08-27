@@ -10,6 +10,7 @@
     xmlns:game2048="using:ClassicGamePlugin.Features.Game2048.Views"
     xmlns:sudoku="using:ClassicGamePlugin.Features.Sudoku.Views"
     xmlns:sokoban="using:ClassicGamePlugin.Features.Sokoban.Views"
+    xmlns:tetris="using:ClassicGamePlugin.Features.Tetris.Views"
     Width="1080"
     Height="760"
     Title="ClassicGamePlugin Standalone">
@@ -37,6 +38,9 @@
     </TabItem>
     <TabItem Header="推箱子">
       <sokoban:SokobanDocumentView x:Name="SokobanHost" />
+    </TabItem>
+    <TabItem Header="俄罗斯方块">
+      <tetris:TetrisDocumentView x:Name="TetrisHost" />
     </TabItem>
   </TabControl>
 </Window>

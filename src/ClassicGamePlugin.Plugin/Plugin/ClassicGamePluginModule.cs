@@ -16,6 +16,8 @@ using ClassicGamePlugin.Features.Sudoku;
 using ClassicGamePlugin.Features.Sudoku.Views;
 using ClassicGamePlugin.Features.Sokoban;
 using ClassicGamePlugin.Features.Sokoban.Views;
+using ClassicGamePlugin.Features.Tetris;
+using ClassicGamePlugin.Features.Tetris.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -73,6 +75,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.SokobanDocument,
                 "推箱子",
                 "经典推箱子：递进地图、键盘移动、不限次数撤销与轻量动画",
+                "经典游戏"));
+        registration.AddDocument<TetrisDocument, TetrisDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.TetrisDocument,
+                "俄罗斯方块",
+                "现代俄罗斯方块：SRS 旋转、暂存、幽灵块、完整计分与逐级加速",
                 "经典游戏"));
     }
 }
