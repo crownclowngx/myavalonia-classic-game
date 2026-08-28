@@ -81,6 +81,9 @@ Features/Gomoku/
 - 黑方可操作且启用禁手规则时显示全部禁手点；悬停和点击反馈具体原因，领域仍会再次拒绝提交。
 - 工具区与记录区提供 Light/Dark 资源，木色棋盘保持稳定；固定 570×570 棋盘在空间不足时由滚动区域承载。
 - Plugin Module 注册第四个普通 Document；Standalone 第四个页签复用正式 Document、ViewModel、View 和领域代码。
+- Workbench Command G8 把全部游戏已有的 Restart/Undo 提升到 Host Catalog/Tools 菜单；五子棋另外作为
+  `Ctrl+Shift+R` / `Ctrl+Z` 的无冲突快捷键端到端样本；
+  原 View 按钮继续调用同一实例命令，其他游戏和棋盘点击不进入工作台 Catalog。
 
 ## 自动化测试与开发门禁
 
@@ -92,12 +95,16 @@ Features/Gomoku/
 | 电脑与提示 | 三级合法性、输入不变、固定随机、立即获胜、防守、禁手规避、取消和预算 |
 | ViewModel | 双人、人机黑白方、输入锁定、配置重置、计时、记录、连续回退、暂停/继续和旧搜索隔离 |
 | UI/Document | 交叉点命中、边界拒绝、默认/Host 标题、释放级联、包装绑定、稳定 ID 和第四个注册 |
+| Workbench Command | Restart/Undo 状态、未知 ID、预取消、定向通知、两个 Document 隔离和释放退订 |
 
 开发阶段只执行：
 
 ```powershell
 dotnet build -c Debug -warnaserror
 dotnet test -c Debug --no-build --no-restore
+
+# 修改 Workbench Command 或 SDK 3.3 消费时执行本地非发布专项门禁
+pwsh -NoProfile -File .\scripts\Test-ClassicGameWorkbenchCommandG8.ps1 -Configuration Release
 ```
 
 当前不是发布阶段，不增加 Windows CI、覆盖率阈值、Release 构建、ZIP 打包、Host 部署或发布门禁。本功能不使用 AIFLOW，

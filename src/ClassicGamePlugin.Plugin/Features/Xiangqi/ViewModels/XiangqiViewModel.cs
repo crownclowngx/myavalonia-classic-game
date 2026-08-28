@@ -630,12 +630,12 @@ public sealed partial class XiangqiViewModel : ObservableObject, IDisposable
     private static string TerminationText(
         XiangqiTerminationReason? reason,
         XiangqiSide? winner) => reason switch
-    {
-        XiangqiTerminationReason.Checkmate => $"{SideName(winner!.Value)}方将死对手",
-        XiangqiTerminationReason.Stalemate => $"{SideName(winner!.Value)}方困毙对手",
-        XiangqiTerminationReason.Resignation => $"{SideName(winner!.Value)}方因对手认输获胜",
-        XiangqiTerminationReason.ThreefoldRepetition => "三次重复局面，双方和棋",
-        XiangqiTerminationReason.NoCaptureLimit => "连续 120 手未吃子，双方和棋",
-        _ => string.Empty,
-    };
+        {
+            XiangqiTerminationReason.Checkmate => $"{SideName(winner!.Value)}方将死对手",
+            XiangqiTerminationReason.Stalemate => $"{SideName(winner!.Value)}方困毙对手",
+            XiangqiTerminationReason.Resignation => $"{SideName(winner!.Value)}方因对手认输获胜",
+            XiangqiTerminationReason.ThreefoldRepetition => "三次重复局面，双方和棋",
+            XiangqiTerminationReason.NoCaptureLimit => "连续 120 手未吃子，双方和棋",
+            _ => string.Empty,
+        };
 }

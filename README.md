@@ -6,6 +6,10 @@
 > 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了三个子项目和
 > Standalone 窗口的职责、接入真实 Host 的边界，以及临时部署和正式 ZIP 发布流程。
 
+13 个游戏的 22 条“重新开始 / 已有撤销”Workbench Command、多实例路由、SOLID 边界与本地非发布门禁见
+[ClassicGame Workbench Command 设计](docs/workbench-commands.md)和
+[G8 专用实施记录](docs/plan-history/workbench-command/g8-classic-game-multi-instance-commands.md)。
+
 扫雷的规则、SOLID 职责划分、设计选择与测试矩阵见
 [扫雷 Document 设计与开发说明](docs/minesweeper.md)。
 

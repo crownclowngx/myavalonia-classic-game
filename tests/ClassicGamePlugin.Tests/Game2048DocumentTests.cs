@@ -32,7 +32,7 @@ public sealed class Game2048DocumentTests
     }
 
     [Fact]
-    public void Document只持有独立ViewModel且不伪造释放接口()
+    public void Document只持有独立ViewModel且释放职责限于工作台订阅()
     {
         var first = CreateDocument();
         var second = CreateDocument();
@@ -40,12 +40,14 @@ public sealed class Game2048DocumentTests
         Assert.IsType<Game2048ViewModel>(first.ViewModel);
         Assert.NotSame(first.ViewModel, second.ViewModel);
         Assert.IsNotAssignableFrom<IPluginDocument>(first.ViewModel);
-        Assert.IsNotAssignableFrom<IDisposable>(first);
+        Assert.IsAssignableFrom<IDisposable>(first);
         Assert.Null(typeof(Game2048Document).GetProperty("BoardCells"));
 
         first.ViewModel.AnimationsEnabled = false;
         Assert.False(first.ViewModel.AnimationsEnabled);
         Assert.True(second.ViewModel.AnimationsEnabled);
+        first.Dispose();
+        second.Dispose();
     }
 
     private static Game2048Document CreateDocument() =>

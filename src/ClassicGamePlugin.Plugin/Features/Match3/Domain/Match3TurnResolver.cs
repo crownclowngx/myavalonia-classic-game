@@ -405,10 +405,10 @@ internal sealed class Match3TurnResolver
 
     private static Match3GemKind FindMostFrequentColor(IReadOnlyList<Match3Tile?> board) =>
         Kinds.Select(kind => new
-            {
-                Kind = kind,
-                Count = board.Count(tile => tile?.Kind == kind),
-            })
+        {
+            Kind = kind,
+            Count = board.Count(tile => tile?.Kind == kind),
+        })
             .OrderByDescending(item => item.Count)
             .ThenBy(item => item.Kind)
             .First().Kind;

@@ -21,7 +21,7 @@ public sealed class TetrisDocumentTests
     }
 
     [Fact]
-    public void 每个Document创建独立对局且不声明虚假释放接口()
+    public void 每个Document创建独立对局且只释放工作台订阅()
     {
         var first = new TetrisDocument();
         var second = new TetrisDocument();
@@ -30,6 +30,8 @@ public sealed class TetrisDocumentTests
 
         Assert.NotSame(first.ViewModel, second.ViewModel);
         Assert.True(first.ViewModel.Score > second.ViewModel.Score);
-        Assert.IsNotAssignableFrom<IDisposable>(first);
+        Assert.IsAssignableFrom<IDisposable>(first);
+        first.Dispose();
+        second.Dispose();
     }
 }

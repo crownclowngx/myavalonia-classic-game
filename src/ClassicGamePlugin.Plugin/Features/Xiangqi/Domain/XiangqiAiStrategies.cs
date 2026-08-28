@@ -607,12 +607,12 @@ internal static class XiangqiPositionEvaluator
         XiangqiPiece?[] board,
         XiangqiPiece piece,
         XiangqiPosition position) => piece.Type switch
-    {
-        XiangqiPieceType.Chariot => CountOpenRayPoints(board, position) * 2,
-        XiangqiPieceType.Horse => CountOpenHorseLegs(board, position) * 3,
-        XiangqiPieceType.Cannon => CountCannonContacts(board, piece.Side, position) * 5,
-        _ => 0,
-    };
+        {
+            XiangqiPieceType.Chariot => CountOpenRayPoints(board, position) * 2,
+            XiangqiPieceType.Horse => CountOpenHorseLegs(board, position) * 3,
+            XiangqiPieceType.Cannon => CountCannonContacts(board, piece.Side, position) * 5,
+            _ => 0,
+        };
 
     private static int CountOpenRayPoints(XiangqiPiece?[] board, XiangqiPosition position)
     {

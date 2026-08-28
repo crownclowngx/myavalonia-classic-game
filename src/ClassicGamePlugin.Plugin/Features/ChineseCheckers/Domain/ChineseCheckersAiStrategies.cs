@@ -119,7 +119,7 @@ internal sealed class HardChineseCheckersMoveStrategy : IChineseCheckersMoveStra
     {
         if (timeLimit <= TimeSpan.Zero || maximumDepth <= 0 || nodeLimit <= 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(timeLimit), "搜索时间、深度和节点预算都必须为正数。" );
+            throw new ArgumentOutOfRangeException(nameof(timeLimit), "搜索时间、深度和节点预算都必须为正数。");
         }
 
         _timeLimit = timeLimit;

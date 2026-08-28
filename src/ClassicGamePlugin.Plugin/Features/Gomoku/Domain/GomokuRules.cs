@@ -228,7 +228,7 @@ internal static class GomokuRules
             var openEnds = (IsEmpty(board, first) ? 1 : 0) + (IsEmpty(board, last) ? 1 : 0);
             total += (length, openEnds) switch
             {
-                (>= 5, _) => 1_000_000,
+                ( >= 5, _) => 1_000_000,
                 (4, 2) => 120_000,
                 (4, 1) => 35_000,
                 (3, 2) => 9_000,

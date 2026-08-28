@@ -1,5 +1,7 @@
+using ClassicGamePlugin.Constants;
 using ClassicGamePlugin.Features.Minesweeper.Domain;
 using ClassicGamePlugin.Features.Minesweeper.ViewModels;
+using ClassicGamePlugin.Workbench;
 using MyAvaloniaManagement.PluginSdk;
 
 namespace ClassicGamePlugin.Features.Minesweeper;
@@ -8,9 +10,10 @@ namespace ClassicGamePlugin.Features.Minesweeper;
 /// 扫雷与 Plugin SDK 之间的窄适配器。Document 只管理 Host 标签、初始化和释放生命周期，
 /// 所有界面状态与玩家操作均委托给独立的 <see cref="MinesweeperViewModel"/>。
 /// </summary>
-public sealed class MinesweeperDocument : IPluginDocument, IDisposable
+public sealed class MinesweeperDocument : IPluginDocument, IWorkbenchDocumentCommandTarget, IDisposable
 {
     private DocumentPresentationState _presentation = new("扫雷");
+    private readonly WorkbenchDocumentCommandAdapter _workbenchCommands;
     private bool _disposed;
 
     /// <summary>创建供 Host 或 Standalone 使用的 Document，并组合生产环境 ViewModel。</summary>
@@ -34,6 +37,7 @@ public sealed class MinesweeperDocument : IPluginDocument, IDisposable
     private MinesweeperDocument(MinesweeperViewModel viewModel)
     {
         ViewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+        _workbenchCommands = new(this, (PluginIds.RestartMinesweeper, ViewModel.RestartCommand));
     }
 
     /// <summary>获取由 View 使用的独立扫雷展示模型。</summary>
@@ -44,6 +48,21 @@ public sealed class MinesweeperDocument : IPluginDocument, IDisposable
 
     /// <summary>当 Host 标签展示信息变化时发出通知。</summary>
     public event EventHandler? PresentationChanged;
+
+    /// <summary>转发当前扫雷实例中精确到 CommandId 的工作台状态变化。</summary>
+    public event EventHandler<WorkbenchCommandStateChangedEventArgs>? CommandStateChanged
+    {
+        add => _workbenchCommands.CommandStateChanged += value;
+        remove => _workbenchCommands.CommandStateChanged -= value;
+    }
+
+    bool IWorkbenchDocumentCommandTarget.CanExecute(CommandId commandId) =>
+        _workbenchCommands.CanExecute(commandId);
+
+    ValueTask IWorkbenchDocumentCommandTarget.ExecuteAsync(
+        CommandId commandId,
+        CancellationToken cancellationToken) =>
+        _workbenchCommands.ExecuteAsync(commandId, cancellationToken);
 
     /// <summary>使用 Host 已验证的标题初始化 Document；空白标题保留“扫雷”默认值。</summary>
     public ValueTask InitializeAsync(
@@ -73,6 +92,7 @@ public sealed class MinesweeperDocument : IPluginDocument, IDisposable
         }
 
         _disposed = true;
+        _workbenchCommands.Dispose();
         ViewModel.Dispose();
     }
 }

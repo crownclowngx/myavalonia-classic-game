@@ -190,6 +190,79 @@ public sealed class PluginCompositionTests
     }
 
     [Fact]
+    public void Module为十三个游戏声明二十二条适用命令且只保留一组无冲突快捷键()
+    {
+        var registration = new CapturingRegistration();
+
+        new ClassicGamePluginModule().Configure(registration);
+
+        var expected = new (string GameKey, DocumentTypeId DocumentTypeId, bool HasUndo)[]
+        {
+            ("minesweeper", PluginIds.MinesweeperDocument, false),
+            ("spider-solitaire", PluginIds.SpiderSolitaireDocument, true),
+            ("reversi", PluginIds.ReversiDocument, true),
+            ("gomoku", PluginIds.GomokuDocument, true),
+            ("go", PluginIds.GoDocument, true),
+            ("xiangqi", PluginIds.XiangqiDocument, true),
+            ("2048", PluginIds.Game2048Document, false),
+            ("sudoku", PluginIds.SudokuDocument, true),
+            ("sokoban", PluginIds.SokobanDocument, true),
+            ("tetris", PluginIds.TetrisDocument, false),
+            ("freecell", PluginIds.FreeCellDocument, true),
+            ("match3", PluginIds.Match3Document, false),
+            ("chinese-checkers", PluginIds.ChineseCheckersDocument, true),
+        };
+
+        Assert.Equal(22, registration.Commands.Count);
+        Assert.Equal(22, registration.MenuContributions.Count);
+        Assert.Equal(22, registration.Commands.Select(item => item.Descriptor.CommandId).Distinct().Count());
+        Assert.Equal(22, registration.MenuContributions.Select(item => item.PlacementId).Distinct().Count());
+        foreach (var (gameKey, documentTypeId, hasUndo) in expected)
+        {
+            var restartId = new CommandId($"myavalonia.plugin.classic.game.command.{gameKey}.restart");
+            var restart = Assert.Single(registration.Commands, item => item.Descriptor.CommandId == restartId);
+            Assert.Equal(documentTypeId, restart.TargetDocumentTypeId);
+            Assert.StartsWith("重新开始当前", restart.Descriptor.DisplayName, StringComparison.Ordinal);
+            AssertMenu(registration, gameKey, restartId, order: 0);
+
+            var undoId = new CommandId($"myavalonia.plugin.classic.game.command.{gameKey}.undo");
+            if (hasUndo)
+            {
+                var undo = Assert.Single(registration.Commands, item => item.Descriptor.CommandId == undoId);
+                Assert.Equal(documentTypeId, undo.TargetDocumentTypeId);
+                Assert.StartsWith("撤销当前", undo.Descriptor.DisplayName, StringComparison.Ordinal);
+                AssertMenu(registration, gameKey, undoId, order: 10);
+            }
+            else
+            {
+                Assert.DoesNotContain(registration.Commands, item => item.Descriptor.CommandId == undoId);
+            }
+        }
+
+        Assert.All(
+            registration.MenuContributions,
+            item =>
+            {
+                Assert.Equal(WorkbenchMenuLocations.ToolsShared, item.LocationId);
+                Assert.Equal(MenuCommandTargetUnavailableBehavior.Hide, item.TargetUnavailableBehavior);
+            });
+        Assert.Collection(
+            registration.KeyBindingContributions,
+            restart =>
+            {
+                Assert.Equal(PluginIds.RestartGomoku, restart.CommandId);
+                Assert.Equal(Key.R, restart.Key);
+                Assert.Equal(KeyModifiers.Control | KeyModifiers.Shift, restart.Modifiers);
+            },
+            undo =>
+            {
+                Assert.Equal(PluginIds.UndoGomoku, undo.CommandId);
+                Assert.Equal(Key.Z, undo.Key);
+                Assert.Equal(KeyModifiers.Control, undo.Modifiers);
+            });
+    }
+
+    [Fact]
     public void 稳定Plugin与十三个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
@@ -232,6 +305,43 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.chinese-checkers",
             PluginIds.ChineseCheckersDocument.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.command.gomoku.restart",
+            PluginIds.RestartGomoku.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.command.gomoku.undo",
+            PluginIds.UndoGomoku.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.command-placement.menu.tools.gomoku.restart",
+            PluginIds.RestartGomokuMenu.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.command-placement.menu.tools.gomoku.undo",
+            PluginIds.UndoGomokuMenu.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.command-placement.keybinding.gomoku.restart",
+            PluginIds.RestartGomokuKeyBinding.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.command-placement.keybinding.gomoku.undo",
+            PluginIds.UndoGomokuKeyBinding.Value);
+
+        var commandIds = typeof(PluginIds)
+            .GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
+            .Where(field => field.FieldType == typeof(CommandId))
+            .Select(field => Assert.IsType<CommandId>(field.GetValue(null)))
+            .ToArray();
+        var placementIds = typeof(PluginIds)
+            .GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
+            .Where(field => field.FieldType == typeof(CommandPlacementId))
+            .Select(field => Assert.IsType<CommandPlacementId>(field.GetValue(null)))
+            .ToArray();
+        Assert.Equal(22, commandIds.Length);
+        Assert.Equal(24, placementIds.Length);
+        Assert.Equal(commandIds.Length, commandIds.Distinct().Count());
+        Assert.Equal(placementIds.Length, placementIds.Distinct().Count());
+        Assert.All(commandIds, id => Assert.StartsWith(
+            "myavalonia.plugin.classic.game.command.", id.Value, StringComparison.Ordinal));
+        Assert.All(placementIds, id => Assert.StartsWith(
+            "myavalonia.plugin.classic.game.command-placement.", id.Value, StringComparison.Ordinal));
     }
 
     [Fact]
@@ -517,6 +627,23 @@ public sealed class PluginCompositionTests
         int column) =>
         Assert.Single(viewModel.BoardCells, cell => cell.Row == row && cell.Column == column);
 
+    private static void AssertMenu(
+        CapturingRegistration registration,
+        string gameKey,
+        CommandId commandId,
+        int order)
+    {
+        var menu = Assert.Single(
+            registration.MenuContributions,
+            item => item.CommandId == commandId);
+        Assert.Equal($"classic-game.{gameKey}", menu.Group);
+        Assert.Equal(order, menu.Order);
+        Assert.Equal(
+            $"myavalonia.plugin.classic.game.command-placement.menu.tools.{gameKey}." +
+            (order == 0 ? "restart" : "undo"),
+            menu.PlacementId.Value);
+    }
+
     /// <summary>
     /// 无窗口单元测试没有 Avalonia UI 消息循环，因此不等待绑定结果值；这里直接验证包装层的
     /// Content 属性已经安装编译绑定，同时验证 Host 传入的 Document 未被 View 改写。
@@ -540,12 +667,18 @@ public sealed class PluginCompositionTests
         { Key.S, (int)Game2048Direction.Down },
     };
 
-    private sealed class CapturingRegistration : IPluginRegistration
+    private sealed class CapturingRegistration :
+        IPluginRegistration,
+        IWorkbenchCommandRegistration
     {
         public PluginId PluginId { get; } = PluginIds.Plugin;
         public IServiceCollection Services { get; } = new ServiceCollection();
         internal List<(DocumentDescriptor Descriptor, Type Model, Type View)> Documents { get; } = [];
         internal List<(DocumentDescriptor Descriptor, Type Model, Type View)> PersistableDocuments { get; } = [];
+        internal List<(CommandDescriptor Descriptor, DocumentTypeId TargetDocumentTypeId)> Commands
+        { get; } = [];
+        internal List<MenuCommandContributionDescriptor> MenuContributions { get; } = [];
+        internal List<KeyBindingContributionDescriptor> KeyBindingContributions { get; } = [];
 
         public void UseLifecycle<TLifecycle>() where TLifecycle : class, IPluginLifecycle =>
             throw new NotSupportedException();
@@ -563,5 +696,16 @@ public sealed class PluginCompositionTests
         public void AddTool<TTool, TView>(ToolDescriptor descriptor)
             where TTool : class
             where TView : Control, new() => throw new NotSupportedException();
+
+        public void AddDocumentCommand(
+            CommandDescriptor descriptor,
+            DocumentTypeId targetDocumentTypeId) =>
+            Commands.Add((descriptor, targetDocumentTypeId));
+
+        public void AddMenuCommandContribution(MenuCommandContributionDescriptor descriptor) =>
+            MenuContributions.Add(descriptor);
+
+        public void AddKeyBindingContribution(KeyBindingContributionDescriptor descriptor) =>
+            KeyBindingContributions.Add(descriptor);
     }
 }

@@ -120,6 +120,18 @@ Host 提供的导入入口；若由维护者手工解压，也必须保留 ZIP �
 - Host 没有报告共享程序集、私有依赖、入口类型或稳定 ID 错误；
 - 替换为正式 ZIP 后完整重启 Host，并再次完成一次关键业务流程。
 
+## Workbench Command G8 本地非发布验收
+
+修改 13 个游戏的 Restart/Undo 工作台命令、SDK 3.3 引用或真实包边界时执行：
+
+```powershell
+pwsh -NoProfile -File .\scripts\Test-ClassicGameWorkbenchCommandG8.ps1 -Configuration Release
+```
+
+入口使用公开 NuGet、locked restore、全量测试/覆盖率、Standalone 构建和两轮确定性 ZIP，并把真实包输入交给
+Host 的 `scripts/Test-WorkbenchCommandG8.ps1`。Release 仅表示本地编译配置；该入口不运行 Windows CI/Smoke、
+Release Acceptance 或发布门禁，不上传、不签名、不打 tag。
+
 ## 常见注意事项
 
 - Standalone 正常不代表 Host 一定能加载，优先检查正式 manifest、依赖边界和 SDK 区间。

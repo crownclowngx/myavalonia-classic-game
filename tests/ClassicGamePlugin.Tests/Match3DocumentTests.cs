@@ -26,7 +26,7 @@ public sealed class Match3DocumentTests
     }
 
     [Fact]
-    public void Document只拥有独立ViewModel且不伪造持久化或释放能力()
+    public void Document只拥有独立ViewModel且释放职责限于工作台订阅()
     {
         var first = CreateDocument();
         var second = CreateDocument();
@@ -34,7 +34,9 @@ public sealed class Match3DocumentTests
         Assert.IsType<Match3ViewModel>(first.ViewModel);
         Assert.NotSame(first.ViewModel, second.ViewModel);
         Assert.IsNotAssignableFrom<IPersistablePluginDocument>(first);
-        Assert.IsNotAssignableFrom<IDisposable>(first);
+        Assert.IsAssignableFrom<IDisposable>(first);
+        first.Dispose();
+        second.Dispose();
     }
 
     [Fact]

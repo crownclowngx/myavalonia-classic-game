@@ -1,3 +1,5 @@
+using Avalonia.Input;
+using MyAvaloniaManagement.PluginSdk;
 using MyAvaloniaManagement.PluginSdk.UI;
 using ClassicGamePlugin.Constants;
 using ClassicGamePlugin.Features.Minesweeper;
@@ -114,5 +116,131 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 "中国跳棋",
                 "六角星中国跳棋：稳定连续跳、本地双人、三级人机与轻量路径动画",
                 "经典游戏"));
+
+        // G8 只提升每个游戏已经存在的“重新开始/重开同局”和“撤销”用户意图。没有撤销业务
+        // 能力的 2048、扫雷、消消乐和俄罗斯方块只声明 Restart；不会为了表面对称伪造 Undo。
+        // 注册表只保存不可变身份、文字和 DocumentTypeId，不捕获 Document、ViewModel 或 ICommand。
+        RegisterRestartCommand(registration, "minesweeper", "扫雷",
+            PluginIds.MinesweeperDocument, PluginIds.RestartMinesweeper, PluginIds.RestartMinesweeperMenu);
+        RegisterRestartCommand(registration, "spider-solitaire", "蜘蛛纸牌",
+            PluginIds.SpiderSolitaireDocument, PluginIds.RestartSpiderSolitaire, PluginIds.RestartSpiderSolitaireMenu);
+        RegisterUndoCommand(registration, "spider-solitaire", "蜘蛛纸牌",
+            PluginIds.SpiderSolitaireDocument, PluginIds.UndoSpiderSolitaire, PluginIds.UndoSpiderSolitaireMenu);
+        RegisterRestartCommand(registration, "reversi", "黑白棋",
+            PluginIds.ReversiDocument, PluginIds.RestartReversi, PluginIds.RestartReversiMenu);
+        RegisterUndoCommand(registration, "reversi", "黑白棋",
+            PluginIds.ReversiDocument, PluginIds.UndoReversi, PluginIds.UndoReversiMenu);
+        RegisterRestartCommand(registration, "gomoku", "五子棋",
+            PluginIds.GomokuDocument, PluginIds.RestartGomoku, PluginIds.RestartGomokuMenu);
+        RegisterUndoCommand(registration, "gomoku", "五子棋",
+            PluginIds.GomokuDocument, PluginIds.UndoGomoku, PluginIds.UndoGomokuMenu);
+        RegisterRestartCommand(registration, "go", "围棋",
+            PluginIds.GoDocument, PluginIds.RestartGo, PluginIds.RestartGoMenu);
+        RegisterUndoCommand(registration, "go", "围棋",
+            PluginIds.GoDocument, PluginIds.UndoGo, PluginIds.UndoGoMenu);
+        RegisterRestartCommand(registration, "xiangqi", "中国象棋",
+            PluginIds.XiangqiDocument, PluginIds.RestartXiangqi, PluginIds.RestartXiangqiMenu);
+        RegisterUndoCommand(registration, "xiangqi", "中国象棋",
+            PluginIds.XiangqiDocument, PluginIds.UndoXiangqi, PluginIds.UndoXiangqiMenu);
+        RegisterRestartCommand(registration, "2048", "2048",
+            PluginIds.Game2048Document, PluginIds.RestartGame2048, PluginIds.RestartGame2048Menu);
+        RegisterRestartCommand(registration, "sudoku", "数独",
+            PluginIds.SudokuDocument, PluginIds.RestartSudoku, PluginIds.RestartSudokuMenu);
+        RegisterUndoCommand(registration, "sudoku", "数独",
+            PluginIds.SudokuDocument, PluginIds.UndoSudoku, PluginIds.UndoSudokuMenu);
+        RegisterRestartCommand(registration, "sokoban", "推箱子",
+            PluginIds.SokobanDocument, PluginIds.RestartSokoban, PluginIds.RestartSokobanMenu);
+        RegisterUndoCommand(registration, "sokoban", "推箱子",
+            PluginIds.SokobanDocument, PluginIds.UndoSokoban, PluginIds.UndoSokobanMenu);
+        RegisterRestartCommand(registration, "tetris", "俄罗斯方块",
+            PluginIds.TetrisDocument, PluginIds.RestartTetris, PluginIds.RestartTetrisMenu);
+        RegisterRestartCommand(registration, "freecell", "空当接龙",
+            PluginIds.FreeCellDocument, PluginIds.RestartFreeCell, PluginIds.RestartFreeCellMenu);
+        RegisterUndoCommand(registration, "freecell", "空当接龙",
+            PluginIds.FreeCellDocument, PluginIds.UndoFreeCell, PluginIds.UndoFreeCellMenu);
+        RegisterRestartCommand(registration, "match3", "消消乐",
+            PluginIds.Match3Document, PluginIds.RestartMatch3, PluginIds.RestartMatch3Menu);
+        RegisterRestartCommand(registration, "chinese-checkers", "中国跳棋",
+            PluginIds.ChineseCheckersDocument, PluginIds.RestartChineseCheckers, PluginIds.RestartChineseCheckersMenu);
+        RegisterUndoCommand(registration, "chinese-checkers", "中国跳棋",
+            PluginIds.ChineseCheckersDocument, PluginIds.UndoChineseCheckers, PluginIds.UndoChineseCheckersMenu);
+
+        // 快捷键使用 UI SDK 的强类型枚举，不解析字符串 Gesture。Ctrl+Shift+R 避免占用常见刷新键，
+        // Ctrl+Z 延续桌面应用的撤销习惯；发生 Host 保留项或跨插件冲突时仍由 Host 统一治理。
+        registration.AddKeyBindingContribution(
+            new KeyBindingContributionDescriptor(
+                PluginIds.RestartGomokuKeyBinding,
+                PluginIds.RestartGomoku,
+                Key.R,
+                KeyModifiers.Control | KeyModifiers.Shift));
+        registration.AddKeyBindingContribution(
+            new KeyBindingContributionDescriptor(
+                PluginIds.UndoGomokuKeyBinding,
+                PluginIds.UndoGomoku,
+                Key.Z,
+                KeyModifiers.Control));
+    }
+
+    /// <summary>声明某个游戏已有的重新开始命令及其 Tools 菜单投影。</summary>
+    private static void RegisterRestartCommand(
+        IPluginRegistration registration,
+        string gameKey,
+        string gameDisplayName,
+        DocumentTypeId targetDocumentTypeId,
+        CommandId commandId,
+        CommandPlacementId menuPlacementId) =>
+        RegisterCommand(
+            registration,
+            gameKey,
+            targetDocumentTypeId,
+            commandId,
+            menuPlacementId,
+            $"重新开始当前{gameDisplayName}",
+            $"重新开始当前活动的{gameDisplayName}对局，不影响其他已打开实例。",
+            order: 0);
+
+    /// <summary>声明某个游戏确实支持的撤销命令及其 Tools 菜单投影。</summary>
+    private static void RegisterUndoCommand(
+        IPluginRegistration registration,
+        string gameKey,
+        string gameDisplayName,
+        DocumentTypeId targetDocumentTypeId,
+        CommandId commandId,
+        CommandPlacementId menuPlacementId) =>
+        RegisterCommand(
+            registration,
+            gameKey,
+            targetDocumentTypeId,
+            commandId,
+            menuPlacementId,
+            $"撤销当前{gameDisplayName}",
+            $"撤销当前活动{gameDisplayName}实例中的上一项可撤销操作。",
+            order: 10);
+
+    /// <summary>
+    /// 集中应用所有游戏共享的菜单位置和 fail-closed 展示政策；该方法只创建 Descriptor，
+    /// 不执行游戏代码，也不保存运行态，因此 Module 仍保持单一的声明职责。
+    /// </summary>
+    private static void RegisterCommand(
+        IPluginRegistration registration,
+        string gameKey,
+        DocumentTypeId targetDocumentTypeId,
+        CommandId commandId,
+        CommandPlacementId menuPlacementId,
+        string displayName,
+        string description,
+        int order)
+    {
+        registration.AddDocumentCommand(
+            new CommandDescriptor(commandId, displayName, description),
+            targetDocumentTypeId);
+        registration.AddMenuCommandContribution(
+            new MenuCommandContributionDescriptor(
+                menuPlacementId,
+                commandId,
+                WorkbenchMenuLocations.ToolsShared,
+                group: $"classic-game.{gameKey}",
+                order,
+                targetUnavailableBehavior: MenuCommandTargetUnavailableBehavior.Hide));
     }
 }

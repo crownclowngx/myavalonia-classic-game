@@ -337,7 +337,7 @@ internal static class ChineseCheckersRules
 
         if (all.Count != CellCount || camps.Any(camp => camp.Count != 10))
         {
-            throw new InvalidOperationException("中国跳棋静态拓扑生成失败。" );
+            throw new InvalidOperationException("中国跳棋静态拓扑生成失败。");
         }
 
         var positions = all.OrderBy(position => position.Z)

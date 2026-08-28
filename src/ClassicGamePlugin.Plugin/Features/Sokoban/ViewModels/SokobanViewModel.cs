@@ -118,7 +118,7 @@ public sealed partial class SokobanViewModel : ObservableObject
     [RelayCommand]
     private void MoveRight() => Move(SokobanDirection.Right);
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanUndo))]
     internal void Undo()
     {
         CancelAnimationAndDiscardQueuedInput();

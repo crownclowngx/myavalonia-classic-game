@@ -159,7 +159,7 @@ public sealed partial class SudokuViewModel : ObservableObject, IDisposable
         ApplyMove(result, "已填入一个提示数字，可使用撤销恢复");
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanUndo))]
     private void Undo()
     {
         var result = _disposed ? null : _game.Undo();
@@ -391,6 +391,7 @@ public sealed partial class SudokuViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(IsCompleted));
         OnPropertyChanged(nameof(CanInteract));
         OnPropertyChanged(nameof(CanUndo));
+        UndoCommand.NotifyCanExecuteChanged();
         OnPropertyChanged(nameof(CanHint));
         OnPropertyChanged(nameof(DifficultyText));
         OnPropertyChanged(nameof(SourceText));
