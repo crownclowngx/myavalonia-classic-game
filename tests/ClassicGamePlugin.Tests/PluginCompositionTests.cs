@@ -36,6 +36,9 @@ using ClassicGamePlugin.Features.FreeCell.Views;
 using ClassicGamePlugin.Features.Match3;
 using ClassicGamePlugin.Features.Match3.ViewModels;
 using ClassicGamePlugin.Features.Match3.Views;
+using ClassicGamePlugin.Features.ChineseCheckers;
+using ClassicGamePlugin.Features.ChineseCheckers.ViewModels;
+using ClassicGamePlugin.Features.ChineseCheckers.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -47,7 +50,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册十二个独立游戏的普通Document()
+    public void Module注册十三个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -171,12 +174,23 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", match3.Descriptor.MenuCategory);
                 Assert.Equal(typeof(Match3Document), match3.Model);
                 Assert.Equal(typeof(Match3DocumentView), match3.View);
+            },
+            chineseCheckers =>
+            {
+                Assert.Equal(PluginIds.ChineseCheckersDocument, chineseCheckers.Descriptor.DocumentTypeId);
+                Assert.Equal("中国跳棋", chineseCheckers.Descriptor.DisplayName);
+                Assert.Equal(
+                    "六角星中国跳棋：稳定连续跳、本地双人、三级人机与轻量路径动画",
+                    chineseCheckers.Descriptor.Description);
+                Assert.Equal("经典游戏", chineseCheckers.Descriptor.MenuCategory);
+                Assert.Equal(typeof(ChineseCheckersDocument), chineseCheckers.Model);
+                Assert.Equal(typeof(ChineseCheckersDocumentView), chineseCheckers.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void 稳定Plugin与十二个Document身份保持冻结值()
+    public void 稳定Plugin与十三个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -215,6 +229,9 @@ public sealed class PluginCompositionTests
         Assert.Equal(
             "myavalonia.plugin.classic.game.document.match3",
             PluginIds.Match3Document.Value);
+        Assert.Equal(
+            "myavalonia.plugin.classic.game.document.chinese-checkers",
+            PluginIds.ChineseCheckersDocument.Value);
     }
 
     [Fact]
@@ -383,6 +400,19 @@ public sealed class PluginCompositionTests
         AssertDocumentWrapperBinding(wrapper, document);
         Assert.Same(document.ViewModel, gameView.HostedViewModel);
         Assert.IsType<Match3ViewModel>(gameView.DataContext);
+        Assert.True(document.ViewModel.AnimationsEnabled);
+    }
+
+    [Fact]
+    public void 中国跳棋包装View通过单向绑定且游戏View只接受ViewModel()
+    {
+        using var document = new ChineseCheckersDocument();
+        var wrapper = new ChineseCheckersDocumentView { DataContext = document };
+        var gameView = new ChineseCheckersView { DataContext = document.ViewModel };
+
+        AssertDocumentWrapperBinding(wrapper, document);
+        Assert.Same(document.ViewModel, gameView.HostedViewModel);
+        Assert.IsType<ChineseCheckersViewModel>(gameView.DataContext);
         Assert.True(document.ViewModel.AnimationsEnabled);
     }
 

@@ -1,0 +1,14 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.ChineseCheckers.Views.ChineseCheckersDocumentView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.ChineseCheckers"
+    xmlns:vm="using:ClassicGamePlugin.Features.ChineseCheckers.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.ChineseCheckers.Views"
+    x:DataType="feature:ChineseCheckersDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:ChineseCheckersViewModel"><views:ChineseCheckersView /></DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

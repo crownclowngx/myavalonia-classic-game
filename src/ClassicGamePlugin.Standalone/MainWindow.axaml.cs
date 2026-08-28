@@ -11,6 +11,7 @@ using ClassicGamePlugin.Features.Sokoban;
 using ClassicGamePlugin.Features.Tetris;
 using ClassicGamePlugin.Features.FreeCell;
 using ClassicGamePlugin.Features.Match3;
+using ClassicGamePlugin.Features.ChineseCheckers;
 using MyAvaloniaManagement.PluginSdk;
 
 namespace ClassicGamePlugin.Standalone;
@@ -29,6 +30,7 @@ public sealed partial class MainWindow : Window
     private readonly TetrisDocument _tetrisDocument;
     private readonly FreeCellDocument _freeCellDocument;
     private readonly Match3Document _match3Document;
+    private readonly ChineseCheckersDocument _chineseCheckersDocument;
 
     public MainWindow()
     {
@@ -102,6 +104,12 @@ public sealed partial class MainWindow : Window
             new NewDocumentActivation("消消乐（Standalone）"),
             CancellationToken.None).GetAwaiter().GetResult();
         Match3Host.DataContext = _match3Document;
+
+        _chineseCheckersDocument = new ChineseCheckersDocument();
+        _chineseCheckersDocument.InitializeAsync(
+            new NewDocumentActivation("中国跳棋（Standalone）"),
+            CancellationToken.None).GetAwaiter().GetResult();
+        ChineseCheckersHost.DataContext = _chineseCheckersDocument;
         Opened += OnOpened;
     }
 
@@ -118,8 +126,8 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>
-    /// Standalone 明确拥有十二个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
-    /// 动画或后台任务的八个 Document。2048、推箱子与俄罗斯方块的计时器只属于视觉树，Document 不增加空洞的释放调用。
+    /// Standalone 明确拥有十三个预览 Document；窗口关闭时按 Host 的语义释放其中确实拥有计时器、
+    /// 动画或后台任务的九个 Document。2048、推箱子与俄罗斯方块的计时器只属于视觉树，Document 不增加空洞的释放调用。
     /// </summary>
     protected override void OnClosed(EventArgs eventArgs)
     {
@@ -132,6 +140,7 @@ public sealed partial class MainWindow : Window
         _xiangqiDocument.Dispose();
         _sudokuDocument.Dispose();
         _freeCellDocument.Dispose();
+        _chineseCheckersDocument.Dispose();
         base.OnClosed(eventArgs);
     }
 }

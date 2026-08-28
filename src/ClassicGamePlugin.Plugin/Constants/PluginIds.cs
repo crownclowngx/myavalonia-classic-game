@@ -53,4 +53,8 @@ public static class PluginIds
     /// <summary>消消乐普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId Match3Document =
         new("myavalonia.plugin.classic.game.document.match3");
+
+    /// <summary>中国跳棋普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId ChineseCheckersDocument =
+        new("myavalonia.plugin.classic.game.document.chinese-checkers");
 }

@@ -23,7 +23,7 @@ public sealed class GoDocumentationTests
     }
 
     [Fact]
-    public void 根说明文档索引与窗口职责同步为十二个游戏并链接围棋文档()
+    public void 根说明文档索引与窗口职责同步为十三个游戏并链接围棋文档()
     {
         var root = FindRepositoryRoot();
         var readme = File.ReadAllText(Path.Combine(root, "README.md"));
@@ -31,9 +31,9 @@ public sealed class GoDocumentationTests
         var responsibilities = File.ReadAllText(Path.Combine(root, "docs", "project-and-window-responsibilities.md"));
 
         Assert.Contains("docs/go.md", readme, StringComparison.Ordinal);
-        Assert.Contains("十二个游戏", readme, StringComparison.Ordinal);
+        Assert.Contains("十三个游戏", readme, StringComparison.Ordinal);
         Assert.Contains("(go.md)", index, StringComparison.Ordinal);
-        Assert.Contains("十二个标签页", responsibilities, StringComparison.Ordinal);
+        Assert.Contains("十三个标签页", responsibilities, StringComparison.Ordinal);
     }
 
     [Fact]

@@ -24,6 +24,8 @@ using ClassicGamePlugin.Features.FreeCell;
 using ClassicGamePlugin.Features.FreeCell.Views;
 using ClassicGamePlugin.Features.Match3;
 using ClassicGamePlugin.Features.Match3.Views;
+using ClassicGamePlugin.Features.ChineseCheckers;
+using ClassicGamePlugin.Features.ChineseCheckers.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -105,6 +107,12 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 PluginIds.Match3Document,
                 "消消乐",
                 "经典消消乐：完整特殊组合、连锁消除、提示与轻量动画",
+                "经典游戏"));
+        registration.AddDocument<ChineseCheckersDocument, ChineseCheckersDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.ChineseCheckersDocument,
+                "中国跳棋",
+                "六角星中国跳棋：稳定连续跳、本地双人、三级人机与轻量路径动画",
                 "经典游戏"));
     }
 }

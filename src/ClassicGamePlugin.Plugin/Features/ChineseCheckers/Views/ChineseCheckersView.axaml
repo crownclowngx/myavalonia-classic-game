@@ -1,0 +1,110 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.ChineseCheckers.Views.ChineseCheckersView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.ChineseCheckers.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.ChineseCheckers.Views"
+    x:DataType="vm:ChineseCheckersViewModel">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="ChineseCheckersPanelBrush" Color="#FFF5F7FA" />
+          <SolidColorBrush x:Key="ChineseCheckersBorderBrush" Color="#FFAAB4C2" />
+          <SolidColorBrush x:Key="ChineseCheckersTextBrush" Color="#FF253142" />
+          <SolidColorBrush x:Key="ChineseCheckersMutedBrush" Color="#FF667085" />
+          <SolidColorBrush x:Key="ChineseCheckersHistoryBrush" Color="#FFFFFFFF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="ChineseCheckersPanelBrush" Color="#FF252B33" />
+          <SolidColorBrush x:Key="ChineseCheckersBorderBrush" Color="#FF596574" />
+          <SolidColorBrush x:Key="ChineseCheckersTextBrush" Color="#FFF4F7FB" />
+          <SolidColorBrush x:Key="ChineseCheckersMutedBrush" Color="#FFB7C0CC" />
+          <SolidColorBrush x:Key="ChineseCheckersHistoryBrush" Color="#FF1D2229" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Border.cc-panel TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource ChineseCheckersTextBrush}" />
+    </Style>
+  </UserControl.Styles>
+
+  <Grid Margin="20" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+    <Border Classes="cc-panel" Padding="12" Background="{DynamicResource ChineseCheckersPanelBrush}"
+            BorderBrush="{DynamicResource ChineseCheckersBorderBrush}" BorderThickness="1" CornerRadius="6">
+      <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <TextBlock Margin="0,0,5,6" Text="模式" VerticalAlignment="Center" />
+        <ComboBox Width="112" Margin="0,0,10,6" ItemsSource="{Binding ModeOptions}"
+                  SelectedItem="{Binding SelectedMode}" DisplayMemberBinding="{Binding DisplayName}" />
+        <TextBlock Margin="0,0,5,6" Text="难度" VerticalAlignment="Center" IsVisible="{Binding IsHumanVsComputer}" />
+        <ComboBox Width="145" Margin="0,0,10,6" ItemsSource="{Binding DifficultyOptions}"
+                  SelectedItem="{Binding SelectedDifficulty}" DisplayMemberBinding="{Binding DisplayName}"
+                  IsVisible="{Binding IsHumanVsComputer}" />
+        <ComboBox Width="105" Margin="0,0,12,6" ItemsSource="{Binding HumanColorOptions}"
+                  SelectedItem="{Binding SelectedHumanColor}" DisplayMemberBinding="{Binding DisplayName}"
+                  IsVisible="{Binding IsHumanVsComputer}" />
+        <Button Margin="0,0,8,6" Command="{Binding RestartCommand}" Content="重新开始" />
+        <Button Margin="0,0,8,6" Command="{Binding UndoCommand}" Content="撤销" />
+        <Button Margin="0,0,12,6" Command="{Binding HintCommand}" Content="提示" />
+        <CheckBox Margin="0,0,12,6" Content="启用动画" IsChecked="{Binding AnimationsEnabled}" />
+        <TextBlock Margin="0,0,12,6" FontWeight="SemiBold" Text="{Binding StatusText}" />
+        <TextBlock Margin="0,0,8,6" Text="{Binding CurrentTurnText}" />
+        <TextBlock Margin="0,0,3,6" Text="用时" />
+        <TextBlock Margin="0,0,3,6" FontWeight="Bold" Text="{Binding ElapsedSeconds}" />
+        <TextBlock Margin="0,0,0,6" Text="秒" />
+      </WrapPanel>
+    </Border>
+
+    <Border Grid.Row="1" Classes="cc-panel" Padding="10,7" Background="{DynamicResource ChineseCheckersPanelBrush}"
+            BorderBrush="{DynamicResource ChineseCheckersBorderBrush}" BorderThickness="1" CornerRadius="6">
+      <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" ColumnSpacing="18">
+        <TextBlock FontWeight="Bold" Foreground="#FF1E69C7" Text="{Binding BlueProgressText}" />
+        <TextBlock Grid.Column="1" FontWeight="Bold" Foreground="#FFD84A4A" Text="{Binding RedProgressText}" />
+        <TextBlock Grid.Column="2" Text="{Binding MoveCountText}" />
+        <TextBlock Grid.Column="3" Text="{Binding MessageText}" TextWrapping="Wrap" />
+        <TextBlock Grid.Column="4" Foreground="{DynamicResource ChineseCheckersMutedBrush}" Text="{Binding ResultText}" />
+      </Grid>
+    </Border>
+
+    <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+      <Grid ColumnDefinitions="690,300" ColumnSpacing="18" HorizontalAlignment="Center">
+        <StackPanel>
+          <TextBlock Margin="0,0,0,6" Foreground="{DynamicResource ChineseCheckersMutedBrush}"
+                     Text="绿点为单步 · 金圈为连续跳终点 · 紫线为提示路径" TextAlignment="Center" />
+          <views:ChineseCheckersBoardControl Width="680" Height="610" Game="{Binding}" />
+        </StackPanel>
+        <Grid Grid.Column="1" RowDefinitions="Auto,*" RowSpacing="12">
+          <Border Classes="cc-panel" Padding="12" Background="{DynamicResource ChineseCheckersPanelBrush}"
+                  BorderBrush="{DynamicResource ChineseCheckersBorderBrush}" BorderThickness="1" CornerRadius="6">
+            <StackPanel Spacing="7">
+              <TextBlock FontSize="15" FontWeight="SemiBold" Text="规则速览" />
+              <TextBlock Text="• 蓝方先手，把十枚棋子全部移入对角营地。" TextWrapping="Wrap" />
+              <TextBlock Text="• 每回合单步移动，或连续跳过紧邻的任意棋子。" TextWrapping="Wrap" />
+              <TextBlock Text="• 连跳可转向、可提前停止，不吃掉被跳棋子。" TextWrapping="Wrap" />
+              <TextBlock Text="• 进入目标营后不能退出；点击最终落点自动走最短路径。" TextWrapping="Wrap" />
+              <TextBlock Text="• 对手进入己方起始营后，存在撤营着法时必须优先撤营。" TextWrapping="Wrap" />
+            </StackPanel>
+          </Border>
+          <Border Grid.Row="1" Classes="cc-panel" MinHeight="280" Padding="12"
+                  Background="{DynamicResource ChineseCheckersHistoryBrush}"
+                  BorderBrush="{DynamicResource ChineseCheckersBorderBrush}" BorderThickness="1" CornerRadius="6">
+            <Grid RowDefinitions="Auto,*" RowSpacing="8">
+              <TextBlock FontSize="15" FontWeight="SemiBold" Text="本局操作记录" />
+              <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding HistoryItems}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ChineseCheckersHistoryItem">
+                      <TextBlock Margin="0,0,0,7" Text="{Binding Text}" TextWrapping="Wrap" />
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Grid>
+          </Border>
+        </Grid>
+      </Grid>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

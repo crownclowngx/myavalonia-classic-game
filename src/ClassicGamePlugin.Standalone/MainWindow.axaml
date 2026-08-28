@@ -14,6 +14,7 @@
     xmlns:tetris="using:ClassicGamePlugin.Features.Tetris.Views"
     xmlns:freecell="using:ClassicGamePlugin.Features.FreeCell.Views"
     xmlns:match3="using:ClassicGamePlugin.Features.Match3.Views"
+    xmlns:chineseCheckers="using:ClassicGamePlugin.Features.ChineseCheckers.Views"
     Width="1080"
     Height="760"
     Title="ClassicGamePlugin Standalone">
@@ -53,6 +54,9 @@
     </TabItem>
     <TabItem Header="消消乐">
       <match3:Match3DocumentView x:Name="Match3Host" />
+    </TabItem>
+    <TabItem Header="中国跳棋">
+      <chineseCheckers:ChineseCheckersDocumentView x:Name="ChineseCheckersHost" />
     </TabItem>
   </TabControl>
 </Window>
