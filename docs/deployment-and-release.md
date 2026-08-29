@@ -1,5 +1,8 @@
 # 临时部署、正式发布与验收
 
+> 当前跨仓验收统一由主仓 `tools/MyAvaloniaManagement.Gate` 执行。本文中的 `scripts/*.ps1` 命令是历史记录，
+> 已退役；使用方式见本仓 README。
+
 部署分为开发期临时联调和正式 ZIP 发布。两者都必须使用 Build 包筛选出的干净插件目录，不能直接复制
 普通 `bin/Debug` 或 `bin/Release`，因为普通输出可能包含 Host 应当统一提供的共享程序集。
 

@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace ClassicGamePlugin.Tests;
@@ -8,7 +7,7 @@ public sealed class GoDocumentationTests
     [Fact]
     public void 专项文档记录规则SOLID动画测试与明确非发布边界()
     {
-        var root = FindRepositoryRoot();
+        var root = TestRepository.Root;
         var document = File.ReadAllText(Path.Combine(root, "docs", "go.md"));
 
         Assert.Contains("SOLID 职责与朴素设计", document, StringComparison.Ordinal);
@@ -25,7 +24,7 @@ public sealed class GoDocumentationTests
     [Fact]
     public void 根说明文档索引与窗口职责同步为十三个游戏并链接围棋文档()
     {
-        var root = FindRepositoryRoot();
+        var root = TestRepository.Root;
         var readme = File.ReadAllText(Path.Combine(root, "README.md"));
         var index = File.ReadAllText(Path.Combine(root, "docs", "README.md"));
         var responsibilities = File.ReadAllText(Path.Combine(root, "docs", "project-and-window-responsibilities.md"));
@@ -39,7 +38,7 @@ public sealed class GoDocumentationTests
     [Fact]
     public void Standalone显式创建并释放围棋Document()
     {
-        var root = FindRepositoryRoot();
+        var root = TestRepository.Root;
         var view = File.ReadAllText(Path.Combine(root, "src", "ClassicGamePlugin.Standalone", "MainWindow.axaml"));
         var codeBehind = File.ReadAllText(Path.Combine(root, "src", "ClassicGamePlugin.Standalone", "MainWindow.axaml.cs"));
 
@@ -49,19 +48,4 @@ public sealed class GoDocumentationTests
         Assert.Contains("_goDocument.Dispose()", codeBehind, StringComparison.Ordinal);
     }
 
-    private static string FindRepositoryRoot([CallerFilePath] string sourceFilePath = "")
-    {
-        if (File.Exists(Path.Combine(Environment.CurrentDirectory, "ClassicGamePlugin.slnx")))
-        {
-            return Environment.CurrentDirectory;
-        }
-
-        var directory = new DirectoryInfo(Path.GetDirectoryName(sourceFilePath) ?? AppContext.BaseDirectory);
-        while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "ClassicGamePlugin.slnx")))
-        {
-            directory = directory.Parent;
-        }
-
-        return directory?.FullName ?? throw new DirectoryNotFoundException("未找到 ClassicGamePlugin 解决方案根目录。");
-    }
 }

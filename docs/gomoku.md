@@ -1,5 +1,7 @@
 # 五子棋 Document 设计与开发说明
 
+> 当前验收统一从主仓运行 `dotnet run --project tools/MyAvaloniaManagement.Gate -- verify --scope workbench`；本文中的旧脚本命令仅记录历史执行事实。
+
 ## 功能边界与规则口径
 
 五子棋以普通、不可持久化的 `IPluginDocument` 接入 Host，稳定身份为
@@ -103,8 +105,8 @@ Features/Gomoku/
 dotnet build -c Debug -warnaserror
 dotnet test -c Debug --no-build --no-restore
 
-# 修改 Workbench Command 或 SDK 3.3 消费时执行本地非发布专项门禁
-pwsh -NoProfile -File .\scripts\Test-ClassicGameWorkbenchCommandG8.ps1 -Configuration Release
+# 修改 Workbench Command 或 SDK 3.3 消费时，从主仓执行统一非发布门禁
+dotnet run --project tools/MyAvaloniaManagement.Gate -- verify --scope workbench
 ```
 
 当前不是发布阶段，不增加 Windows CI、覆盖率阈值、Release 构建、ZIP 打包、Host 部署或发布门禁。本功能不使用 AIFLOW，

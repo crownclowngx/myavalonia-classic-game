@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace ClassicGamePlugin.Tests;
@@ -8,7 +7,7 @@ public sealed class FreeCellDocumentationTests
     [Fact]
     public void 专项文档记录规则设计求解动画测试与非发布边界()
     {
-        var root = FindRepositoryRoot();
+        var root = TestRepository.Root;
         var document = File.ReadAllText(Path.Combine(root, "docs", "freecell.md"));
 
         Assert.Contains("SOLID 职责与朴素设计", document, StringComparison.Ordinal);
@@ -23,7 +22,7 @@ public sealed class FreeCellDocumentationTests
     [Fact]
     public void 根说明与文档索引链接空当接龙专项文档并更新为十三个游戏()
     {
-        var root = FindRepositoryRoot();
+        var root = TestRepository.Root;
         var readme = File.ReadAllText(Path.Combine(root, "README.md"));
         var index = File.ReadAllText(Path.Combine(root, "docs", "README.md"));
         var responsibilities = File.ReadAllText(Path.Combine(root, "docs", "project-and-window-responsibilities.md"));
@@ -37,7 +36,7 @@ public sealed class FreeCellDocumentationTests
     [Fact]
     public void Standalone在窗口打开后异步初始化空当接龙以免阻塞UI线程()
     {
-        var root = FindRepositoryRoot();
+        var root = TestRepository.Root;
         var codeBehind = File.ReadAllText(
             Path.Combine(root, "src", "ClassicGamePlugin.Standalone", "MainWindow.axaml.cs"));
 
@@ -50,19 +49,4 @@ public sealed class FreeCellDocumentationTests
             StringComparison.Ordinal);
     }
 
-    private static string FindRepositoryRoot([CallerFilePath] string sourceFilePath = "")
-    {
-        if (File.Exists(Path.Combine(Environment.CurrentDirectory, "ClassicGamePlugin.slnx")))
-        {
-            return Environment.CurrentDirectory;
-        }
-
-        var directory = new DirectoryInfo(Path.GetDirectoryName(sourceFilePath) ?? AppContext.BaseDirectory);
-        while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "ClassicGamePlugin.slnx")))
-        {
-            directory = directory.Parent;
-        }
-
-        return directory?.FullName ?? throw new DirectoryNotFoundException("未找到 ClassicGamePlugin 解决方案根目录。");
-    }
 }

@@ -1,6 +1,7 @@
 # ClassicGame Workbench Command 设计
 
 > 当前实现：Workbench Command G10 本地封板；ClassicGame `1.1.0`，Core/UI SDK `3.3.0`。
+> 当前验收统一从主仓运行 `dotnet run --project tools/MyAvaloniaManagement.Gate -- verify --scope workbench`；旧脚本命令已退役。
 
 ## 1. 全游戏命令矩阵
 
@@ -73,12 +74,12 @@ View 内按钮与工作台入口调用同一个命令对象，不产生第二套
 ## 4. 测试与本地非发布门禁
 
 ```powershell
-pwsh -NoProfile -File .\scripts\Test-ClassicGameWorkbenchCommandG8.ps1 -Configuration Release
+dotnet run --project tools/MyAvaloniaManagement.Gate -- verify --scope workbench
 ```
 
-入口使用纯 NuGet.org 和隔离缓存完成 locked restore、零警告构建、格式验证、全量单测、覆盖率、Standalone
-构建、两轮确定性 ZIP、manifest/共享 SDK 边界和 Markdown 链接检查。Host 侧通过生产 Loader、独立 ALC、
+入口由主仓 Gate 完成 locked restore、零警告构建、全量单测、Standalone 构建、manifest/共享 SDK 边界和 Markdown 链接检查。Host 侧通过生产 Loader、独立 ALC、
 13 个真实 Document Scope、五子棋双实例、Host-owned 菜单/快捷键和窗口释放复核整条链。
+覆盖率阈值、双包确定性和窗口 Smoke 由干净主仓上的 `seal` 执行。
 
 ```text
 aiflow=false

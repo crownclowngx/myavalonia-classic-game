@@ -68,3 +68,16 @@ dotnet msbuild src/ClassicGamePlugin.Plugin/ClassicGamePlugin.Plugin.csproj `
 
 Standalone 只能验证十三个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
 生命周期必须使用真实 Host 做最终验收。
+
+## 统一跨仓门禁
+
+本仓不再维护 G8/G10 PowerShell 封板入口。请在 `avalonia_dock_simple_test` 主仓根目录运行：
+
+```powershell
+dotnet run --project tools/MyAvaloniaManagement.Gate -- verify --scope workbench
+dotnet run --project tools/MyAvaloniaManagement.Gate -- seal
+```
+
+非默认目录可通过 `--classic-game C:\Path\To\myavalonia-classic-game` 指定。本仓可以带未提交修改，Gate 会
+复制 `git ls-files` 描述的实际内容并记录 SHA-256；正式 Host 发布资格仍只绑定干净的主仓提交。历史 G8/G10
+文档保留当时的验收事实，但其中脚本命令已经退役。
