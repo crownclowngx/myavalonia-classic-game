@@ -1,6 +1,6 @@
 # ClassicGame Workbench Command 设计
 
-> 当前实现：Workbench Command G8，ClassicGame `1.1.0`，Core/UI SDK `3.3.0`。
+> 当前实现：Workbench Command G10 本地封板；ClassicGame `1.1.0`，Core/UI SDK `3.3.0`。
 
 ## 1. 全游戏命令矩阵
 
@@ -95,3 +95,5 @@ tagCreated=false
 
 Release 仅是本地编译配置。完整实数与回滚边界见
 [G8 专用实施记录](plan-history/workbench-command/g8-classic-game-multi-instance-commands.md)。
+跨仓单轮完整复核、实体包组合和非发布边界见
+[G10 本地封板记录](plan-history/workbench-command/g10-classic-game-local-sealing.md)。

@@ -115,10 +115,12 @@ internal sealed class WorkbenchDocumentCommandAdapter : IDisposable
         NotifyStateChanged(commandId);
     }
 
-    private void NotifyStateChanged(CommandId commandId) =>
+    private void NotifyStateChanged(CommandId commandId)
+    {
         // Host 通过 sender 的引用相等验证迟到通知，事件发送者必须是实现 Target 的 Document，
         // 不能泄露这个内部组合对象；否则正确的状态事件会被 Host 按失效来源安全忽略。
         CommandStateChanged?.Invoke(
             _eventSender,
             new WorkbenchCommandStateChangedEventArgs(commandId));
+    }
 }

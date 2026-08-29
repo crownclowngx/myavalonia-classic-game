@@ -54,6 +54,7 @@ Standalone 适合快速检查 AXAML、编译绑定、命令和插件自身对象
 16. [Workflow Action Provider 与 Consumer 接入](workflow-actions.md)
 17. [ClassicGame Workbench Command 设计](workbench-commands.md)
 18. [Workbench Command G8 专用实施记录](plan-history/workbench-command/g8-classic-game-multi-instance-commands.md)
+19. [Workbench Command G10 本地封板记录](plan-history/workbench-command/g10-classic-game-local-sealing.md)
 
 ## 开发前记住
 
@@ -64,5 +65,6 @@ Standalone 适合快速检查 AXAML、编译绑定、命令和插件自身对象
   `PackageReference` 和 `ManagedPluginPrivatePackage`；完整示例见部署文档。
 - 当前交付目标是 Windows x64；插件替换后必须完整重启 Host，不支持热更新。
 - 当前游戏开发阶段只要求 Debug 警告即错误和全量单元测试通过，不运行 Windows CI、Release 打包或发布门禁。
-- 修改任一游戏工作台命令、SDK 3.3 消费或真实插件包时，运行 G8 本地非发布门禁；其中 Release 只表示编译配置。
+- 修改任一游戏工作台命令、SDK 3.3 消费或真实插件包时，运行 G8 本地非发布门禁；跨仓封板时运行 G10
+  包装门禁。两者的 Release 都只表示编译配置。
 - Workflow Action Provider 与 Consumer 是两种互斥角色，选择前先阅读专项文档，不要在同一插件中同时注册。

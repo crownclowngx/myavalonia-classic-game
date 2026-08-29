@@ -132,6 +132,16 @@ pwsh -NoProfile -File .\scripts\Test-ClassicGameWorkbenchCommandG8.ps1 -Configur
 Host 的 `scripts/Test-WorkbenchCommandG8.ps1`。Release 仅表示本地编译配置；该入口不运行 Windows CI/Smoke、
 Release Acceptance 或发布门禁，不上传、不签名、不打 tag。
 
+## Workbench Command G10 本地封板
+
+```powershell
+pwsh -NoProfile -File .\scripts\Test-ClassicGameWorkbenchCommandG10.ps1 -Configuration Release
+```
+
+本入口让 G8 继续拥有十三游戏、覆盖率、确定性 ZIP 与 manifest 规则，只复核摘要和非发布边界。Host G10
+会在两个独立工作树副本中调用它，并把本包与 WorkflowStudio 同时加载。它不调用 AIFLOW、Windows CI/Smoke、
+Release Acceptance 或发布门禁，`publishable=false`。
+
 ## 常见注意事项
 
 - Standalone 正常不代表 Host 一定能加载，优先检查正式 manifest、依赖边界和 SDK 区间。

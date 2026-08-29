@@ -653,6 +653,13 @@ public sealed class PluginCompositionTests
         Assert.Same(expectedDataContext, wrapper.DataContext);
         var host = Assert.IsType<ContentControl>(wrapper.FindControl<ContentControl>("ViewModelHost"));
         Assert.NotNull(BindingOperations.GetBindingExpressionBase(host, ContentControl.ContentProperty));
+
+        // 普通 xUnit Fact 不拥有 Avalonia UI Dispatcher；强行 RunJobs 会让测试线程与首次
+        // 初始化 Dispatcher 的线程竞争，并在全量门禁中产生跨线程异常。这里验证 XAML 已经
+        // 安装单向绑定后立即清除它，避免未挂窗的异步绑定在后续随机测试中迟到执行、污染
+        // Cobertura。具体游戏 ViewModel 的传递继续由每个调用方显式构造 gameView 并断言，
+        // 因而没有用手工 Content 赋值冒充真正绑定，也没有增加测试专用生产接口。
+        host.ClearValue(ContentControl.ContentProperty);
     }
 
     public static TheoryData<Key, int> Game2048MovementKeys => new()

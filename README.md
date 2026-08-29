@@ -8,7 +8,9 @@
 
 13 个游戏的 22 条“重新开始 / 已有撤销”Workbench Command、多实例路由、SOLID 边界与本地非发布门禁见
 [ClassicGame Workbench Command 设计](docs/workbench-commands.md)和
-[G8 专用实施记录](docs/plan-history/workbench-command/g8-classic-game-multi-instance-commands.md)。
+[G8 专用实施记录](docs/plan-history/workbench-command/g8-classic-game-multi-instance-commands.md)。与 Host、
+WorkflowStudio 的单轮完整本地封板见
+[G10 专项记录](docs/plan-history/workbench-command/g10-classic-game-local-sealing.md)。
 
 扫雷的规则、SOLID 职责划分、设计选择与测试矩阵见
 [扫雷 Document 设计与开发说明](docs/minesweeper.md)。
