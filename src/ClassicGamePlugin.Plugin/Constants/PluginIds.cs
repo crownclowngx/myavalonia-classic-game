@@ -246,4 +246,16 @@ public static class PluginIds
     /// <summary>中国跳棋普通 Document 的稳定身份。</summary>
     public static readonly DocumentTypeId ChineseCheckersDocument =
         new("myavalonia.plugin.classic.game.document.chinese-checkers");
+
+    /// <summary>三阶魔方普通 Document 的稳定身份。</summary>
+    public static readonly DocumentTypeId RubiksCubeDocument =
+        new("myavalonia.plugin.classic.game.document.rubiks-cube");
+
+    /// <summary>重置当前魔方到已还原状态的同步工作台命令。</summary>
+    public static readonly CommandId RestartRubiksCube =
+        new("myavalonia.plugin.classic.game.command.rubiks-cube.restart");
+
+    /// <summary>三阶魔方重新开始命令的 Tools 菜单身份。</summary>
+    public static readonly CommandPlacementId RestartRubiksCubeMenu =
+        new("myavalonia.plugin.classic.game.command-placement.menu.tools.rubiks-cube.restart");
 }

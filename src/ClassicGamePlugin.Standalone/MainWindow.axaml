@@ -15,6 +15,7 @@
     xmlns:freecell="using:ClassicGamePlugin.Features.FreeCell.Views"
     xmlns:match3="using:ClassicGamePlugin.Features.Match3.Views"
     xmlns:chineseCheckers="using:ClassicGamePlugin.Features.ChineseCheckers.Views"
+    xmlns:rubiksCube="using:ClassicGamePlugin.Features.RubiksCube.Views"
     Width="1080"
     Height="760"
     Title="ClassicGamePlugin Standalone">
@@ -57,6 +58,9 @@
     </TabItem>
     <TabItem Header="中国跳棋">
       <chineseCheckers:ChineseCheckersDocumentView x:Name="ChineseCheckersHost" />
+    </TabItem>
+    <TabItem Header="三阶魔方">
+      <rubiksCube:RubiksCubeDocumentView x:Name="RubiksCubeHost" />
     </TabItem>
   </TabControl>
 </Window>

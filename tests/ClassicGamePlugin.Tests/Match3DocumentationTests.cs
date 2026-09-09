@@ -20,7 +20,7 @@ public sealed class Match3DocumentationTests
     }
 
     [Fact]
-    public void 根说明与文档索引包含消消乐且全局数量为十三个()
+    public void 根说明与文档索引包含消消乐且全局数量为十四个()
     {
         var root = TestRepository.Root;
         var readme = File.ReadAllText(Path.Combine(root, "README.md"));
@@ -29,9 +29,9 @@ public sealed class Match3DocumentationTests
             Path.Combine(root, "docs", "project-and-window-responsibilities.md"));
 
         Assert.Contains("docs/match3.md", readme, StringComparison.Ordinal);
-        Assert.Contains("十三个游戏", readme, StringComparison.Ordinal);
+        Assert.Contains("十四个游戏", readme, StringComparison.Ordinal);
         Assert.Contains("(match3.md)", index, StringComparison.Ordinal);
-        Assert.Contains("十三个标签页", responsibilities, StringComparison.Ordinal);
+        Assert.Contains("十四个标签页", responsibilities, StringComparison.Ordinal);
     }
 
 }

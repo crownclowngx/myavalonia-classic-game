@@ -28,6 +28,8 @@ using ClassicGamePlugin.Features.Match3;
 using ClassicGamePlugin.Features.Match3.Views;
 using ClassicGamePlugin.Features.ChineseCheckers;
 using ClassicGamePlugin.Features.ChineseCheckers.Views;
+using ClassicGamePlugin.Features.RubiksCube;
+using ClassicGamePlugin.Features.RubiksCube.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -117,6 +119,13 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 "六角星中国跳棋：稳定连续跳、本地双人、三级人机与轻量路径动画",
                 "经典游戏"));
 
+        registration.AddDocument<RubiksCubeDocument, RubiksCubeDocumentView>(
+            new DocumentDescriptor(
+                PluginIds.RubiksCubeDocument,
+                "三阶魔方",
+                "三阶魔方教学：真实三维转层、手动转面与按目标分组的层先法还原",
+                "经典游戏"));
+
         // G8 只提升每个游戏已经存在的“重新开始/重开同局”和“撤销”用户意图。没有撤销业务
         // 能力的 2048、扫雷、消消乐和俄罗斯方块只声明 Restart；不会为了表面对称伪造 Undo。
         // 注册表只保存不可变身份、文字和 DocumentTypeId，不捕获 Document、ViewModel 或 ICommand。
@@ -164,6 +173,9 @@ public sealed class ClassicGamePluginModule : IPluginModule
             PluginIds.ChineseCheckersDocument, PluginIds.RestartChineseCheckers, PluginIds.RestartChineseCheckersMenu);
         RegisterUndoCommand(registration, "chinese-checkers", "中国跳棋",
             PluginIds.ChineseCheckersDocument, PluginIds.UndoChineseCheckers, PluginIds.UndoChineseCheckersMenu);
+        // 魔方的回退包含逆序动画和教学游标，只作为页面用例；工作台复用已有的同步重置适配。
+        RegisterRestartCommand(registration, "rubiks-cube", "三阶魔方",
+            PluginIds.RubiksCubeDocument, PluginIds.RestartRubiksCube, PluginIds.RestartRubiksCubeMenu);
 
         // 快捷键使用 UI SDK 的强类型枚举，不解析字符串 Gesture。Ctrl+Shift+R 避免占用常见刷新键，
         // Ctrl+Z 延续桌面应用的撤销习惯；发生 Host 保留项或跨插件冲突时仍由 Host 统一治理。

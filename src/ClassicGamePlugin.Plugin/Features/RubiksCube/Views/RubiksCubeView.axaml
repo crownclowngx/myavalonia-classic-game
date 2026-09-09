@@ -1,0 +1,165 @@
+<UserControl
+    x:Class="ClassicGamePlugin.Features.RubiksCube.Views.RubiksCubeView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ClassicGamePlugin.Features.RubiksCube.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.RubiksCube.Views"
+    x:DataType="vm:RubiksCubeViewModel"
+    Background="#0C1424" Foreground="#E7EDF7">
+  <UserControl.Styles>
+    <Style Selector="TextBlock"><Setter Property="TextWrapping" Value="Wrap" /></Style>
+    <Style Selector="TextBlock.muted"><Setter Property="Foreground" Value="#A7B6CD" /></Style>
+    <Style Selector="TextBlock.section"><Setter Property="FontSize" Value="16" /><Setter Property="FontWeight" Value="SemiBold" /></Style>
+    <Style Selector="Border.panel"><Setter Property="Background" Value="#152239" /><Setter Property="CornerRadius" Value="12" /><Setter Property="Padding" Value="16" /></Style>
+    <Style Selector="Button"><Setter Property="Background" Value="#263953" /><Setter Property="Foreground" Value="#EEF4FF" /><Setter Property="CornerRadius" Value="6" /><Setter Property="Padding" Value="12,8" /><Setter Property="Margin" Value="0,0,8,8" /></Style>
+    <Style Selector="Button.primary"><Setter Property="Background" Value="#2B73DC" /><Setter Property="FontWeight" Value="SemiBold" /></Style>
+    <Style Selector="Border.action"><Setter Property="Background" Value="#243650" /><Setter Property="CornerRadius" Value="5" /><Setter Property="Padding" Value="8,5" /><Setter Property="Margin" Value="0,0,5,5" /></Style>
+    <Style Selector="Border.action.current"><Setter Property="Background" Value="#F8C66A" /></Style>
+    <Style Selector="Border.action.current TextBlock"><Setter Property="Foreground" Value="#152033" /></Style>
+    <Style Selector="Border.action.complete"><Setter Property="Opacity" Value="0.45" /></Style>
+    <Style Selector="Expander"><Setter Property="Foreground" Value="#E7EDF7" /><Setter Property="HorizontalAlignment" Value="Stretch" /></Style>
+    <Style Selector="ComboBox"><Setter Property="Background" Value="#263953" /><Setter Property="Foreground" Value="#EEF4FF" /></Style>
+  </UserControl.Styles>
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="20" Spacing="14">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="4">
+          <TextBlock Text="三阶魔方" FontSize="26" FontWeight="Bold" />
+          <TextBlock Classes="muted" Text="层先法教学 · 每次完成一个小目标" />
+        </StackPanel>
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="#82B6FF" Text="{Binding PlaybackText}" />
+      </Grid>
+      <WrapPanel>
+        <Button Content="打乱" Command="{Binding ScrambleCommand}" />
+        <Button Classes="primary" Content="按照规则下一步" Command="{Binding NextGroupCommand}" />
+        <Button Content="连续还原" Command="{Binding PlayAllCommand}" />
+        <Button Content="暂停" Command="{Binding PauseCommand}" />
+        <Button Content="继续" Command="{Binding ResumeCommand}" />
+        <Button Content="退回上一组" Command="{Binding PreviousGroupCommand}" />
+        <Button Content="重置魔方" Command="{Binding RestartCommand}" />
+        <TextBlock Margin="2,8,8,0" Text="速度" />
+        <ComboBox Width="86" VerticalAlignment="Top" ItemsSource="{Binding SpeedOptions}" SelectedIndex="{Binding SelectedSpeed}" />
+      </WrapPanel>
+      <Border Classes="panel">
+        <StackPanel Spacing="5">
+          <TextBlock Text="{Binding Message}" FontWeight="SemiBold" />
+          <TextBlock Classes="muted" Text="{Binding ProgressText}" />
+          <TextBlock Foreground="#A5CCFF" Text="{Binding NextPreview}" />
+        </StackPanel>
+      </Border>
+      <Grid x:Name="LayoutRoot" ColumnDefinitions="1.2*,*" RowDefinitions="Auto" ColumnSpacing="16" RowSpacing="16">
+        <StackPanel x:Name="ScenePanel" Spacing="12">
+          <views:RubiksCubeControl x:Name="CubeViewport" Height="450" Game="{Binding}" />
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Classes="muted" Text="拖动观察 · 滚轮缩放 · 金框标出本组目标块" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Content="恢复视角" Click="OnResetView" Margin="8,0,0,0" />
+          </Grid>
+          <Border Classes="panel">
+            <StackPanel Spacing="8">
+              <TextBlock Classes="section" Text="手动转面" />
+              <TextBlock Classes="muted" Text="U 上黄 · R 右橙 · F 前绿 · D 下白 · L 左红 · B 后蓝" />
+              <WrapPanel>
+                <Button Content="U ↻" Command="{Binding TurnCommand}" CommandParameter="U" ToolTip.Tip="上面顺时针 90°" />
+                <Button Content="U' ↺" Command="{Binding TurnCommand}" CommandParameter="U'" ToolTip.Tip="上面逆时针 90°" />
+                <Button Content="U2" Command="{Binding TurnCommand}" CommandParameter="U2" ToolTip.Tip="上面转 180°" />
+                <Button Content="R ↻" Command="{Binding TurnCommand}" CommandParameter="R" ToolTip.Tip="右面顺时针 90°" />
+                <Button Content="R' ↺" Command="{Binding TurnCommand}" CommandParameter="R'" ToolTip.Tip="右面逆时针 90°" />
+                <Button Content="R2" Command="{Binding TurnCommand}" CommandParameter="R2" ToolTip.Tip="右面转 180°" />
+                <Button Content="F ↻" Command="{Binding TurnCommand}" CommandParameter="F" ToolTip.Tip="前面顺时针 90°" />
+                <Button Content="F' ↺" Command="{Binding TurnCommand}" CommandParameter="F'" ToolTip.Tip="前面逆时针 90°" />
+                <Button Content="F2" Command="{Binding TurnCommand}" CommandParameter="F2" ToolTip.Tip="前面转 180°" />
+                <Button Content="D ↻" Command="{Binding TurnCommand}" CommandParameter="D" ToolTip.Tip="下面顺时针 90°" />
+                <Button Content="D' ↺" Command="{Binding TurnCommand}" CommandParameter="D'" ToolTip.Tip="下面逆时针 90°" />
+                <Button Content="D2" Command="{Binding TurnCommand}" CommandParameter="D2" ToolTip.Tip="下面转 180°" />
+                <Button Content="L ↻" Command="{Binding TurnCommand}" CommandParameter="L" ToolTip.Tip="左面顺时针 90°" />
+                <Button Content="L' ↺" Command="{Binding TurnCommand}" CommandParameter="L'" ToolTip.Tip="左面逆时针 90°" />
+                <Button Content="L2" Command="{Binding TurnCommand}" CommandParameter="L2" ToolTip.Tip="左面转 180°" />
+                <Button Content="B ↻" Command="{Binding TurnCommand}" CommandParameter="B" ToolTip.Tip="后面顺时针 90°" />
+                <Button Content="B' ↺" Command="{Binding TurnCommand}" CommandParameter="B'" ToolTip.Tip="后面逆时针 90°" />
+                <Button Content="B2" Command="{Binding TurnCommand}" CommandParameter="B2" ToolTip.Tip="后面转 180°" />
+              </WrapPanel>
+              <TextBlock Classes="muted" Text="顺时针以该面的外侧正视为准；撇号 ' 表示逆时针，2 表示两次 90°。观察视角不会改变字母指向的面。" />
+            </StackPanel>
+          </Border>
+          <Border Classes="panel">
+            <StackPanel Spacing="6">
+              <TextBlock Classes="section" Text="打乱序列" />
+              <TextBlock Text="{Binding ScrambleText}" FontFamily="Consolas" />
+              <TextBlock Classes="muted" Text="打乱在当前状态上继续转动；需要从还原状态开始时先点击重置。" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+        <StackPanel x:Name="TeachingPanel" Grid.Column="1" Spacing="12">
+          <Border Classes="panel">
+            <StackPanel Spacing="10">
+              <TextBlock Classes="section" Text="当前教学组" />
+              <ContentControl Content="{Binding CurrentStep}">
+                <ContentControl.ContentTemplate>
+                  <DataTemplate x:DataType="vm:CubeStepItem">
+                    <StackPanel Spacing="8">
+                      <TextBlock Foreground="#82B6FF" Text="{Binding Title}" FontWeight="SemiBold" />
+                      <TextBlock Text="{Binding Purpose}" FontSize="17" FontWeight="SemiBold" />
+                      <TextBlock Classes="muted" Text="{Binding Situation}" />
+                      <TextBlock Text="{Binding Formula}" FontFamily="Consolas" FontSize="16" />
+                      <TextBlock Classes="muted" Text="{Binding FormulaSummary}" />
+                      <TextBlock Text="操作流程（按顺序完整执行）" FontWeight="SemiBold" />
+                      <TextBlock Text="{Binding Recipe}" />
+                      <TextBlock Classes="muted" Text="{Binding Preparation}" />
+                      <TextBlock Text="预期结果" FontWeight="SemiBold" />
+                      <TextBlock Classes="muted" Text="{Binding ExpectedResult}" />
+                      <TextBlock Foreground="#75DFB6" Text="{Binding ActualResult}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ContentControl.ContentTemplate>
+              </ContentControl>
+              <TextBlock Foreground="#F8C66A" Text="{Binding CurrentMoveText}" FontWeight="SemiBold" />
+              <ItemsControl ItemsSource="{Binding Actions}">
+                <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:CubeActionItem">
+                    <Border Classes="action" Classes.current="{Binding IsCurrent}" Classes.complete="{Binding IsComplete}" ToolTip.Tip="{Binding Description}">
+                      <TextBlock Text="{Binding Symbol}" FontFamily="Consolas" FontSize="15" />
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+          <Border Classes="panel">
+            <StackPanel Spacing="8">
+              <TextBlock Classes="section" Text="完整还原步骤" />
+              <TextBlock Classes="muted" Text="白色十字 → 底角 → 中层 → 黄色十字 → 黄色面 → 顶角换位 → 顶棱换位" />
+              <ScrollViewer MaxHeight="420">
+                <ItemsControl ItemsSource="{Binding Steps}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:CubeStepItem">
+                      <Expander Header="{Binding Title}">
+                        <StackPanel Spacing="5">
+                          <TextBlock Foreground="#82B6FF" Text="{Binding Status}" />
+                          <TextBlock Text="{Binding Purpose}" />
+                          <TextBlock Classes="muted" Text="{Binding Situation}" />
+                          <TextBlock Text="{Binding Formula}" FontFamily="Consolas" />
+                          <TextBlock Classes="muted" Text="{Binding ExpectedResult}" />
+                          <TextBlock Foreground="#75DFB6" Text="{Binding ActualResult}" />
+                        </StackPanel>
+                      </Expander>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </StackPanel>
+          </Border>
+          <Border Classes="panel">
+            <Expander Header="操作记录">
+              <ScrollViewer MaxHeight="260">
+                <ItemsControl ItemsSource="{Binding HistoryItems}">
+                  <ItemsControl.ItemTemplate><DataTemplate><TextBlock Margin="0,0,0,8" Text="{Binding}" /></DataTemplate></ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Expander>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

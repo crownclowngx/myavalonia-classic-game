@@ -1,0 +1,12 @@
+<UserControl x:Class="ClassicGamePlugin.Features.RubiksCube.Views.RubiksCubeDocumentView"
+    xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:feature="using:ClassicGamePlugin.Features.RubiksCube"
+    xmlns:vm="using:ClassicGamePlugin.Features.RubiksCube.ViewModels"
+    xmlns:views="using:ClassicGamePlugin.Features.RubiksCube.Views"
+    x:DataType="feature:RubiksCubeDocument">
+  <ContentControl x:Name="ViewModelHost" Content="{Binding ViewModel}">
+    <ContentControl.ContentTemplate>
+      <DataTemplate x:DataType="vm:RubiksCubeViewModel"><views:RubiksCubeView /></DataTemplate>
+    </ContentControl.ContentTemplate>
+  </ContentControl>
+</UserControl>

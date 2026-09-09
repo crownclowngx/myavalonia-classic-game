@@ -20,10 +20,15 @@
 | 空当接龙 | 是，重开同一牌局 | 是 | Hide | — |
 | 消消乐 | 是 | 无此业务能力 | Hide | — |
 | 中国跳棋 | 是 | 是 | Hide | — |
+| 三阶魔方 | 是，重置为已还原状态 | 页面提供逆序动画回退，不投影同步 Undo | Hide | — |
 
 命名统一为 `myavalonia.plugin.classic.game.command.<game>.restart|undo`，菜单 Placement 统一为
-`myavalonia.plugin.classic.game.command-placement.menu.tools.<game>.restart|undo`。共注册 22 条 Command 和
-22 条 Tools 菜单：13 条 Restart、9 条 Undo。未支持撤销的四个游戏不注册占位命令。
+`myavalonia.plugin.classic.game.command-placement.menu.tools.<game>.restart|undo`。共注册 23 条 Command 和
+23 条 Tools 菜单：14 条 Restart、9 条 Undo。魔方的教学播放和逆序回退保留在页面内；未支持撤销的四个游戏不注册占位命令。
+
+三阶魔方新增命令为 `myavalonia.plugin.classic.game.command.rubiks-cube.restart`，目标 Document 为
+`myavalonia.plugin.classic.game.document.rubiks-cube`，使用同一个同步 `RestartCommand`。其本次开发只执行
+Debug 检查；历史 G8/G10 实体包记录仍描述当时的 13 个游戏和 22 条命令，不代表新功能已完成真实包验收。
 
 Host 3.3 冻结契约要求一条 CommandId 只绑定一个 DocumentTypeId，并拒绝同一插件内重复 Gesture。G8 因此
 保留五子棋作为 `Ctrl+Shift+R` / `Ctrl+Z` 的快捷键端到端样本；其余游戏通过 Catalog/Menu 接入，后续 G9
@@ -43,7 +48,7 @@ Host MenuItem / Gomoku KeyBinding
 Catalog → Context → Executor（执行前重查）
               │ 当前活动 Document Scope
               ▼
-13 个 Game Document : IWorkbenchDocumentCommandTarget
+14 个 Game Document : IWorkbenchDocumentCommandTarget
               │
 WorkbenchDocumentCommandAdapter
       ├─ Restart → 既有 Restart / ReplaySameDeal Command
@@ -63,7 +68,7 @@ View 内按钮与工作台入口调用同一个命令对象，不产生第二套
 | 原则 | 落地方式 |
 | --- | --- |
 | SRP | `PluginIds` 只管身份，Module 只声明 Descriptor，Document 选择用例，内部 Adapter 只管协议分派 |
-| OCP | 13 个 Document 通过同一公开 Target 契约扩展，Host Executor、SDK 与 schema 均不修改 |
+| OCP | 14 个 Document 通过同一公开 Target 契约扩展，Host Executor、SDK 与 schema 均不修改 |
 | LSP | 所有 Target 对未知、禁用、预取消和释放状态遵守相同失败语义 |
 | ISP | Target 只暴露查询、可等待执行和定向事件，不取得 Provider、Dock、Control 或 Registry |
 | DIP | ClassicGame 精确依赖公开 NuGet；Host 只消费真实 ZIP，双方没有源码 ProjectReference |
@@ -78,7 +83,7 @@ dotnet run --project tools/MyAvaloniaManagement.Gate -- verify --scope workbench
 ```
 
 入口由主仓 Gate 完成 locked restore、零警告构建、全量单测、Standalone 构建、manifest/共享 SDK 边界和 Markdown 链接检查。Host 侧通过生产 Loader、独立 ALC、
-13 个真实 Document Scope、五子棋双实例、Host-owned 菜单/快捷键和窗口释放复核整条链。
+14 个真实 Document Scope、五子棋双实例、Host-owned 菜单/快捷键和窗口释放复核整条链。
 覆盖率阈值、双包确定性和窗口 Smoke 由干净主仓上的 `seal` 执行。
 
 ```text

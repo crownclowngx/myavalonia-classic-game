@@ -22,7 +22,7 @@ public sealed class ChineseCheckersDocumentationTests
     }
 
     [Fact]
-    public void 根说明索引与窗口职责包含中国跳棋且总数为十三个()
+    public void 根说明索引与窗口职责包含中国跳棋且总数为十四个()
     {
         var root = TestRepository.Root;
         var readme = File.ReadAllText(Path.Combine(root, "README.md"));
@@ -31,9 +31,9 @@ public sealed class ChineseCheckersDocumentationTests
             Path.Combine(root, "docs", "project-and-window-responsibilities.md"));
 
         Assert.Contains("docs/chinese-checkers.md", readme, StringComparison.Ordinal);
-        Assert.Contains("十三个游戏", readme, StringComparison.Ordinal);
+        Assert.Contains("十四个游戏", readme, StringComparison.Ordinal);
         Assert.Contains("(chinese-checkers.md)", index, StringComparison.Ordinal);
-        Assert.Contains("十三个标签页", responsibilities, StringComparison.Ordinal);
+        Assert.Contains("十四个标签页", responsibilities, StringComparison.Ordinal);
     }
 
 }

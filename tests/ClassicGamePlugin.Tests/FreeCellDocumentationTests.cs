@@ -20,7 +20,7 @@ public sealed class FreeCellDocumentationTests
     }
 
     [Fact]
-    public void 根说明与文档索引链接空当接龙专项文档并更新为十三个游戏()
+    public void 根说明与文档索引链接空当接龙专项文档并更新为十四个游戏()
     {
         var root = TestRepository.Root;
         var readme = File.ReadAllText(Path.Combine(root, "README.md"));
@@ -28,9 +28,9 @@ public sealed class FreeCellDocumentationTests
         var responsibilities = File.ReadAllText(Path.Combine(root, "docs", "project-and-window-responsibilities.md"));
 
         Assert.Contains("docs/freecell.md", readme, StringComparison.Ordinal);
-        Assert.Contains("十三个游戏", readme, StringComparison.Ordinal);
+        Assert.Contains("十四个游戏", readme, StringComparison.Ordinal);
         Assert.Contains("(freecell.md)", index, StringComparison.Ordinal);
-        Assert.Contains("十三个标签页", responsibilities, StringComparison.Ordinal);
+        Assert.Contains("十四个标签页", responsibilities, StringComparison.Ordinal);
     }
 
     [Fact]

@@ -1,5 +1,6 @@
 using ClassicGamePlugin.Constants;
 using ClassicGamePlugin.Features.ChineseCheckers;
+using ClassicGamePlugin.Features.RubiksCube;
 using ClassicGamePlugin.Features.FreeCell;
 using ClassicGamePlugin.Features.Game2048;
 using ClassicGamePlugin.Features.Go;
@@ -25,7 +26,7 @@ public sealed class WorkbenchDocumentCommandTests
 {
     [Theory]
     [MemberData(nameof(AllGames))]
-    public async Task 十三个游戏均暴露已有Restart且不会伪造不存在的Undo(
+    public async Task 十四个游戏均暴露已有Restart且仅同步撤销投影到工作台(
         Func<IPluginDocument> factory,
         CommandId restartCommandId,
         CommandId? undoCommandId)
@@ -108,6 +109,7 @@ public sealed class WorkbenchDocumentCommandTests
         { () => new FreeCellDocument(), PluginIds.RestartFreeCell, PluginIds.UndoFreeCell },
         { () => new Match3Document(), PluginIds.RestartMatch3, null },
         { () => new ChineseCheckersDocument(), PluginIds.RestartChineseCheckers, PluginIds.UndoChineseCheckers },
+        { () => new RubiksCubeDocument(), PluginIds.RestartRubiksCube, null },
     };
 
     public static TheoryData<Func<IPluginDocument>, CommandId> GamesWithUndo => new()

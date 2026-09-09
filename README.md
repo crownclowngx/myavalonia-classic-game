@@ -1,12 +1,12 @@
 # ClassicGamePlugin
 
-这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐和中国跳棋 Document。真实交付物是
+这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋和三阶魔方 Document。真实交付物是
 `src/ClassicGamePlugin.Plugin`；`Standalone` 只负责快速预览 Plugin 中同一份 View、ViewModel、Document 与领域代码。
 
 > 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了三个子项目和
 > Standalone 窗口的职责、接入真实 Host 的边界，以及临时部署和正式 ZIP 发布流程。
 
-13 个游戏的 22 条“重新开始 / 已有撤销”Workbench Command、多实例路由、SOLID 边界与本地非发布门禁见
+14 个游戏的 23 条“重新开始 / 同步撤销”Workbench Command、多实例路由、SOLID 边界见
 [ClassicGame Workbench Command 设计](docs/workbench-commands.md)和
 [G8 专用实施记录](docs/plan-history/workbench-command/g8-classic-game-multi-instance-commands.md)。与 Host、
 WorkflowStudio 的单轮完整本地封板见
@@ -51,6 +51,9 @@ WorkflowStudio 的单轮完整本地封板见
 中国跳棋的 121 孔六角星棋盘、稳定最短连跳、强制撤营、双人/三级人机、路径动画和测试矩阵见
 [中国跳棋 Document 设计与开发说明](docs/chinese-checkers.md)。
 
+三阶魔方的 3D 转层、手动操作、按目标分组的层先法还原、完整公式动画、回退与测试矩阵见
+[三阶魔方 Document 设计与开发说明](docs/rubiks-cube.md)。本功能仅使用 Debug 开发检查，不调用含 Release 和真实打包的统一 Gate。
+
 ```powershell
 dotnet restore
 dotnet build
@@ -66,7 +69,7 @@ dotnet msbuild src/ClassicGamePlugin.Plugin/ClassicGamePlugin.Plugin.csproj `
   -p:ManagedPluginDeployRoot=C:\Path\To\Host\Controls
 ```
 
-Standalone 只能验证十三个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
+Standalone 只能验证十四个游戏的界面和插件自身对象图；manifest、加载上下文、Document Scope、Dock、Tool 和
 生命周期必须使用真实 Host 做最终验收。
 
 ## 统一跨仓门禁

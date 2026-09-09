@@ -39,6 +39,8 @@ using ClassicGamePlugin.Features.Match3.Views;
 using ClassicGamePlugin.Features.ChineseCheckers;
 using ClassicGamePlugin.Features.ChineseCheckers.ViewModels;
 using ClassicGamePlugin.Features.ChineseCheckers.Views;
+using ClassicGamePlugin.Features.RubiksCube;
+using ClassicGamePlugin.Features.RubiksCube.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -50,7 +52,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册十三个独立游戏的普通Document()
+    public void Module注册十四个独立游戏的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -185,12 +187,20 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", chineseCheckers.Descriptor.MenuCategory);
                 Assert.Equal(typeof(ChineseCheckersDocument), chineseCheckers.Model);
                 Assert.Equal(typeof(ChineseCheckersDocumentView), chineseCheckers.View);
+            },
+            rubiksCube =>
+            {
+                Assert.Equal(PluginIds.RubiksCubeDocument, rubiksCube.Descriptor.DocumentTypeId);
+                Assert.Equal("三阶魔方", rubiksCube.Descriptor.DisplayName);
+                Assert.Equal("经典游戏", rubiksCube.Descriptor.MenuCategory);
+                Assert.Equal(typeof(RubiksCubeDocument), rubiksCube.Model);
+                Assert.Equal(typeof(RubiksCubeDocumentView), rubiksCube.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }
 
     [Fact]
-    public void Module为十三个游戏声明二十二条适用命令且只保留一组无冲突快捷键()
+    public void Module为十四个游戏声明二十三条适用命令且只保留一组无冲突快捷键()
     {
         var registration = new CapturingRegistration();
 
@@ -211,12 +221,13 @@ public sealed class PluginCompositionTests
             ("freecell", PluginIds.FreeCellDocument, true),
             ("match3", PluginIds.Match3Document, false),
             ("chinese-checkers", PluginIds.ChineseCheckersDocument, true),
+            ("rubiks-cube", PluginIds.RubiksCubeDocument, false),
         };
 
-        Assert.Equal(22, registration.Commands.Count);
-        Assert.Equal(22, registration.MenuContributions.Count);
-        Assert.Equal(22, registration.Commands.Select(item => item.Descriptor.CommandId).Distinct().Count());
-        Assert.Equal(22, registration.MenuContributions.Select(item => item.PlacementId).Distinct().Count());
+        Assert.Equal(23, registration.Commands.Count);
+        Assert.Equal(23, registration.MenuContributions.Count);
+        Assert.Equal(23, registration.Commands.Select(item => item.Descriptor.CommandId).Distinct().Count());
+        Assert.Equal(23, registration.MenuContributions.Select(item => item.PlacementId).Distinct().Count());
         foreach (var (gameKey, documentTypeId, hasUndo) in expected)
         {
             var restartId = new CommandId($"myavalonia.plugin.classic.game.command.{gameKey}.restart");
@@ -263,7 +274,7 @@ public sealed class PluginCompositionTests
     }
 
     [Fact]
-    public void 稳定Plugin与十三个Document身份保持冻结值()
+    public void 稳定Plugin与十四个Document身份保持冻结值()
     {
         Assert.Equal("myavalonia.plugin.classic.game", PluginIds.Plugin.Value);
         Assert.Equal(
@@ -306,6 +317,9 @@ public sealed class PluginCompositionTests
             "myavalonia.plugin.classic.game.document.chinese-checkers",
             PluginIds.ChineseCheckersDocument.Value);
         Assert.Equal(
+            "myavalonia.plugin.classic.game.document.rubiks-cube",
+            PluginIds.RubiksCubeDocument.Value);
+        Assert.Equal(
             "myavalonia.plugin.classic.game.command.gomoku.restart",
             PluginIds.RestartGomoku.Value);
         Assert.Equal(
@@ -334,8 +348,8 @@ public sealed class PluginCompositionTests
             .Where(field => field.FieldType == typeof(CommandPlacementId))
             .Select(field => Assert.IsType<CommandPlacementId>(field.GetValue(null)))
             .ToArray();
-        Assert.Equal(22, commandIds.Length);
-        Assert.Equal(24, placementIds.Length);
+        Assert.Equal(23, commandIds.Length);
+        Assert.Equal(25, placementIds.Length);
         Assert.Equal(commandIds.Length, commandIds.Distinct().Count());
         Assert.Equal(placementIds.Length, placementIds.Distinct().Count());
         Assert.All(commandIds, id => Assert.StartsWith(
