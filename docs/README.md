@@ -1,5 +1,7 @@
 # ClassicGamePlugin 开发快速开始
 
+- [V6.1 图标同步升级](plan-history/v6.1-plugin-icons.md)：入口映射、依赖边界和验证结果。
+
 本解决方案用于开发 `myavalonia.plugin.classic.game` Managed Plugin，当前由独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋与三阶魔方功能域
 分别提供普通 Document。它把真实插件、独立 Avalonia 开发窗口和自动化测试放在同一个解决方案中，使界面与业务代码既能
 快速预览，也能由 MyAvaloniaManagement Host 按正式插件协议加载。

@@ -39,92 +39,108 @@ public sealed class ClassicGamePluginModule : IPluginModule
     {
         ArgumentNullException.ThrowIfNull(registration);
 
+        // 图形只在模块组合阶段声明；引用由当前注册上下文绑定所有者，业务入口不手写 plugin: 身份。
+        var minesweeperIcon = registration.AddIcon("minesweeper", PluginIcons.Minesweeper);
+        var spiderCardsIcon = registration.AddIcon("spider-cards", PluginIcons.SpiderCards);
+        var reversiIcon = registration.AddIcon("reversi", PluginIcons.Reversi);
+        var gomokuIcon = registration.AddIcon("gomoku", PluginIcons.Gomoku);
+        var goIcon = registration.AddIcon("go", PluginIcons.Go);
+        var xiangqiIcon = registration.AddIcon("xiangqi", PluginIcons.Xiangqi);
+        var mergeTilesIcon = registration.AddIcon("merge-tiles", PluginIcons.MergeTiles);
+        var sudokuIcon = registration.AddIcon("sudoku", PluginIcons.Sudoku);
+        var sokobanIcon = registration.AddIcon("sokoban", PluginIcons.Sokoban);
+        var tetrisIcon = registration.AddIcon("tetris", PluginIcons.Tetris);
+        var freecellIcon = registration.AddIcon("freecell", PluginIcons.Freecell);
+        var matchThreeIcon = registration.AddIcon("match-three", PluginIcons.MatchThree);
+        var chineseCheckersIcon = registration.AddIcon("chinese-checkers", PluginIcons.ChineseCheckers);
+        var rubiksCubeIcon = registration.AddIcon("rubiks-cube", PluginIcons.RubiksCube);
+
         registration.Services.AddClassicGamePluginServices();
         registration.AddDocument<MinesweeperDocument, MinesweeperDocumentView>(
             new DocumentDescriptor(
                 PluginIds.MinesweeperDocument,
                 "扫雷",
                 "经典扫雷游戏：翻开安全格、标记地雷并完成整张棋盘",
-                "经典游戏"));
+                "经典游戏", iconPath: minesweeperIcon));
         registration.AddDocument<SpiderSolitaireDocument, SpiderSolitaireDocumentView>(
             new DocumentDescriptor(
                 PluginIds.SpiderSolitaireDocument,
                 "蜘蛛纸牌",
                 "经典蜘蛛纸牌：整理同花色连续牌组并完成八组 K 到 A",
-                "经典游戏"));
+                "经典游戏", iconPath: spiderCardsIcon));
         registration.AddDocument<ReversiDocument, ReversiDocumentView>(
             new DocumentDescriptor(
                 PluginIds.ReversiDocument,
                 "黑白棋",
                 "经典黑白棋：夹住并翻转对方棋子，占据更多棋盘位置",
-                "经典游戏"));
+                "经典游戏", iconPath: reversiIcon));
         registration.AddDocument<GomokuDocument, GomokuDocumentView>(
             new DocumentDescriptor(
                 PluginIds.GomokuDocument,
                 "五子棋",
                 "经典五子棋：自由或禁手规则下连成五子，支持双人与三级人机",
-                "经典游戏"));
+                "经典游戏", iconPath: gomokuIcon));
         registration.AddDocument<GoDocument, GoDocumentView>(
             new DocumentDescriptor(
                 PluginIds.GoDocument,
                 "围棋",
                 "标准 19 路围棋：本地双人、提子、全局同形禁着与中国数子",
-                "经典游戏"));
+                "经典游戏", iconPath: goIcon));
         registration.AddDocument<XiangqiDocument, XiangqiDocumentView>(
             new DocumentDescriptor(
                 PluginIds.XiangqiDocument,
                 "中国象棋",
                 "经典中国象棋：标准休闲规则、中文棋谱、决策点撤销与三级人机",
-                "经典游戏"));
+                "经典游戏", iconPath: xiangqiIcon));
         registration.AddDocument<Game2048Document, Game2048DocumentView>(
             new DocumentDescriptor(
                 PluginIds.Game2048Document,
                 "2048",
                 "经典数字合并游戏：移动方块、合并同值数字并挑战 2048",
-                "经典游戏"));
+                "经典游戏", iconPath: mergeTilesIcon));
         registration.AddDocument<SudokuDocument, SudokuDocumentView>(
             new DocumentDescriptor(
                 PluginIds.SudokuDocument,
                 "数独",
                 "经典 9×9 数独：三级难度、候选笔记、提示与唯一解题目生成",
-                "经典游戏"));
+                "经典游戏", iconPath: sudokuIcon));
         registration.AddDocument<SokobanDocument, SokobanDocumentView>(
             new DocumentDescriptor(
                 PluginIds.SokobanDocument,
                 "推箱子",
                 "经典推箱子：递进地图、键盘移动、不限次数撤销与轻量动画",
-                "经典游戏"));
+                "经典游戏", iconPath: sokobanIcon));
         registration.AddDocument<TetrisDocument, TetrisDocumentView>(
             new DocumentDescriptor(
                 PluginIds.TetrisDocument,
                 "俄罗斯方块",
                 "现代俄罗斯方块：SRS 旋转、暂存、幽灵块、完整计分与逐级加速",
-                "经典游戏"));
+                "经典游戏", iconPath: tetrisIcon));
         registration.AddDocument<FreeCellDocument, FreeCellDocumentView>(
             new DocumentDescriptor(
                 PluginIds.FreeCellDocument,
                 "空当接龙",
                 "经典空当接龙：可解编号牌局、拖放纸牌、求解提示与安全自动收牌",
-                "经典游戏"));
+                "经典游戏", iconPath: freecellIcon));
         registration.AddDocument<Match3Document, Match3DocumentView>(
             new DocumentDescriptor(
                 PluginIds.Match3Document,
                 "消消乐",
                 "经典消消乐：完整特殊组合、连锁消除、提示与轻量动画",
-                "经典游戏"));
+                "经典游戏", iconPath: matchThreeIcon));
         registration.AddDocument<ChineseCheckersDocument, ChineseCheckersDocumentView>(
             new DocumentDescriptor(
                 PluginIds.ChineseCheckersDocument,
                 "中国跳棋",
                 "六角星中国跳棋：稳定连续跳、本地双人、三级人机与轻量路径动画",
-                "经典游戏"));
+                "经典游戏", iconPath: chineseCheckersIcon));
 
         registration.AddDocument<RubiksCubeDocument, RubiksCubeDocumentView>(
             new DocumentDescriptor(
                 PluginIds.RubiksCubeDocument,
                 "三阶魔方",
                 "三阶魔方教学：真实三维转层、手动转面与按目标分组的层先法还原",
-                "经典游戏"));
+                "经典游戏", iconPath: rubiksCubeIcon));
 
         // G8 只提升每个游戏已经存在的“重新开始/重开同局”和“撤销”用户意图。没有撤销业务
         // 能力的 2048、扫雷、消消乐和俄罗斯方块只声明 Restart；不会为了表面对称伪造 Undo。

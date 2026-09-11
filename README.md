@@ -1,5 +1,8 @@
 # ClassicGamePlugin
 
+> V6.1 图标同步升级：插件 `1.1.1`，Core/UI SDK `3.4.0`，Build `1.1.3`。
+> 图标映射、兼容边界与验证命令见 [专用说明](docs/plan-history/v6.1-plugin-icons.md)。
+
 这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋和三阶魔方 Document。真实交付物是
 `src/ClassicGamePlugin.Plugin`；`Standalone` 只负责快速预览 Plugin 中同一份 View、ViewModel、Document 与领域代码。
 
