@@ -2,6 +2,9 @@
 
 日期：2026-09-18。分支：`codex/rich-town-stride`。前置开发提交：`1668ac9`。
 
+本地发布与桌面部署已完成。发布代码提交：`c3fca3fdb7ab`；主仓构建策略提交：`58d7bee`。
+以下部署结果为实际执行记录，文档补记提交不改变已验证的发布包。
+
 用户在 G4/G5 开发后明确要求提交、部署到桌面 Controls，并进一步要求“解决这个部署问题，然后重新进行发布”。
 因此本记录启用本地 Release 构建、测试、标准 ZIP 和指定目录部署；日常开发脚本仍默认 Debug。
 没有使用 AIFLOW、Windows CI、统一 verify/seal、远端上传、签名或 tag。
@@ -72,6 +75,9 @@ pwsh -NoProfile -File scripts/Test-RichTownPackage.ps1 `
 | 发布包结构 | 462 文件、406 个内容/许可证文件（含 400 个着色器）；42 私有包与 7 原生文件均与锁定 NuGet 源摘要一致 |
 | 原桌面 Host 的隔离副本 | 从功能中心打开小镇，棋盘就绪；实际点击掷骰得到 3 点、汽车到 03 休息区；结束回合后两名电脑继续 |
 | 原生真实路径 | `desktop-host-sdl/loaded-modules.json`：SDL2、libstrideaudio、插件使用的 d3dcompiler 从本插件 RID 目录加载 |
+| 最终提交后的 ZIP 复核 | `final-package-check/package-check.json`：462 文件全部摘要一致；最终 ZIP 与下面实际安装目录逐文件一致 |
+| 最终 ZIP 真实 Host 实测 | `desktop-host-final/host-check.json`：打开棋盘、掷出 5 点到 05 街区、购买并升级（现金 1500 → 1300、房屋显示），结束回合后两名电脑继续行动；同目录保留原生加载路径 |
+| 桌面部署 | 2026-09-18 18:13:18 +08:00 完成；462 文件安装成功，旧版 4 文件完整备份，宿主根文件与其他插件共 532 文件摘要未变 |
 
 完整本机证据根：`artifacts/rich-town-release/`。该目录不入 Git；复现命令和结论入 Git。
 临时诊断工具与进程转储仅用于本机定位，不进入发布 ZIP。
@@ -83,6 +89,12 @@ pwsh -NoProfile -File scripts/Test-RichTownPackage.ps1 `
 新目录整体替换，禁止把新旧文件合并，禁止清空 Controls 或留下两份相同插件 ID。
 替换后逐文件核对发布清单，并核对其他插件与 Host 主程序摘要未变。
 备份、替换前后摘要和实际版本由本次 `desktop-deployment/deployment-result.json` 记录。
+
+实际旧版备份：`C:\Users\admin\Desktop\工作台\PluginBackups\ClassicGamePlugin-20260918-181314\ClassicGamePlugin-1.1.1`。
+最终 ZIP：`artifacts/rich-town-release/final-package/ClassicGamePlugin.Plugin-1.2.0-win-x64.zip`。
+ZIP SHA-256：`536E88693A9FAD79AD99B07DE180420345D6056F413F48379647366470572C15`。
+外置清单记录 `sourceRevision=c3fca3fdb7ab`，桌面安装的内容逐项符合该清单。
+桌面 Host 可执行文件保持原字节；启动工作台后，从“开始使用 → 经典游戏 → 富翁小镇 3D（开发版）”进入。
 
 回滚时先退出工作台，将当前 ClassicGamePlugin 移到 Controls 之外，再将报告指定的旧目录完整复制回
 `Controls\ClassicGamePlugin`。旧版 1.1.1 不包含小镇，回滚后不要用旧版打开小镇存档。
