@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- 本程序集仅属于富翁小镇子领域，不是通用游戏引擎服务，也不是第二个插件。 -->
+    <StrideGraphicsApi>Direct3D11</StrideGraphicsApi>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Stride.Engine" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="ClassicGamePlugin.RichTown.Tests" />
+    <Content Include="Assets/Compiled/*" CopyToOutputDirectory="PreserveNewest" Link="Assets/RichTown/%(Filename)%(Extension)" />
+    <Content Include="Assets/Source/License.txt" CopyToOutputDirectory="PreserveNewest" Link="Licenses/RichTown/Kenney.txt" />
+    <Content Include="Licenses/Stride.txt" CopyToOutputDirectory="PreserveNewest" Link="Licenses/RichTown/Stride.txt" />
+    <Content Include="Assets/asset-manifest.json" CopyToOutputDirectory="PreserveNewest" Link="Licenses/RichTown/asset-manifest.json" />
+    <!-- 纯代码场景仍需要 Stride 着色器源；显式随小镇携带，不在玩家机器依赖 NuGet 缓存。 -->
+    <Content Include="$(NuGetPackageRoot)stride.graphics/$(RichTownStrideVersion)/stride/**/*.sdsl;$(NuGetPackageRoot)stride.rendering/$(RichTownStrideVersion)/stride/**/*.sdsl"
+             CopyToOutputDirectory="PreserveNewest" Link="Assets/RichTown/Shaders/%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

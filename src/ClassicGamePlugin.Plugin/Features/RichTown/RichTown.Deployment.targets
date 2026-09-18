@@ -1,0 +1,19 @@
+<Project>
+  <!-- 来自 net10.0 project.assets.json 的运行时闭包，不包含 Host 已拥有的 Avalonia/SDK/UI 依赖。
+       G1 保留完整声明；若 Build 协议拒绝某一传递包，应报告兼容阻塞，不静默删 DLL 绕过检查。 -->
+  <ItemGroup>
+    <ManagedPluginPrivatePackage Include="K4os.Compression.LZ4;K4os.Compression.LZ4.Legacy;Microsoft.DotNet.PlatformAbstractions;Microsoft.Extensions.DependencyModel;Microsoft.Win32.SystemEvents;ServiceWire;System.Drawing.Common" />
+    <ManagedPluginPrivatePackage Include="SharpDX;SharpDX.D3DCompiler;SharpDX.Direct3D11;SharpDX.Direct3D12;SharpDX.DXGI" />
+    <ManagedPluginPrivatePackage Include="Silk.NET.Core;Silk.NET.Maths;Silk.NET.OpenGL;Silk.NET.OpenGLES;Silk.NET.OpenGLES.Extensions.EXT;Silk.NET.OpenXR;Silk.NET.OpenXR.Extensions.FB;Silk.NET.SDL;Ultz.Native.SDL;Vortice.Vulkan" />
+    <ManagedPluginPrivatePackage Include="Stride;Stride.Audio;Stride.Core;Stride.Core.IO;Stride.Core.Mathematics;Stride.Core.MicroThreading;Stride.Core.Serialization;Stride.Core.Shaders;Stride.Engine;Stride.Games;Stride.Graphics;Stride.Input;Stride.Irony;Stride.Native;Stride.Rendering;Stride.Shaders;Stride.Shaders.Compiler;Stride.Shaders.Parser;Stride.SharpFont;Stride.VirtualReality" />
+  </ItemGroup>
+  <!-- TargetDir 及内容文件只有在构建完成后才确定，因此在部署前展开显式资源。 -->
+  <Target Name="CollectRichTownAssets" BeforeTargets="DeployManagedPlugin">
+    <ItemGroup>
+      <ManagedPluginAsset Include="$(TargetDir)ClassicGamePlugin.RichTown.Stride.dll" TargetPath="ClassicGamePlugin.RichTown.Stride.dll" />
+      <ManagedPluginAsset Include="$(TargetDir)ClassicGamePlugin.RichTown.Stride.pdb" TargetPath="ClassicGamePlugin.RichTown.Stride.pdb" />
+      <ManagedPluginAsset Include="$(TargetDir)Assets/RichTown/**/*" TargetPath="Assets/RichTown/%(RecursiveDir)%(Filename)%(Extension)" />
+      <ManagedPluginAsset Include="$(TargetDir)Licenses/RichTown/**/*" TargetPath="Licenses/RichTown/%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+  </Target>
+</Project>

@@ -1,0 +1,17 @@
+{
+  "asset": "Kenney City Kit (Suburban) 2.0 / building-type-a",
+  "author": "Kenney",
+  "source": "https://kenney.nl/assets/city-kit-suburban",
+  "download": "https://kenney.nl/media/pages/assets/city-kit-suburban/2c871b7af2-1745479373/kenney_city-kit-suburban_20.zip",
+  "downloadedOn": "2026-09-18",
+  "license": "CC0-1.0",
+  "archiveSha256": "5869C35CF30B1C87BDB2D197B6D325EEBADD2EF08EA27F04797E8E08D77A9A39",
+  "files": {
+    "Source/building-type-a.mtl": "45A6736AA344A0C7E286B9C43C6A48F25B6A2F78D8C5949E430C3B4A93B4E060",
+    "Source/building-type-a.obj": "7027F546FBE1568C014C97D52D8CE49F41E34B5120FDE12DDC4843A6BE531C0D",
+    "Source/colormap.png": "9B5DE86078C25EF02351A80D35FF3C978693A1044565B73EEDD9AE9B5B80665D",
+    "Source/License.txt": "D778FA769A89A7D9F167BC337FDF8FC2144E47D9ABB0C35EB6AD897C0EE24D0A",
+    "Compiled/house.mesh": "EE0C0986FE057A6A9FA89F8E590ED0528106820CF57695CADD8E3AE56BA649FF",
+    "Compiled/palette.rgba": "EC0905CC1AF9AFBAD4247B051A103EE63D31F2CF993ABACFD6DB08FC1342D63F"
+  }
+}

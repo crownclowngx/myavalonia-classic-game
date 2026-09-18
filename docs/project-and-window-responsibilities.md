@@ -1,14 +1,16 @@
 # 项目、Host 与 Standalone 窗口职责
 
-## 三个项目如何分工
+## 三个基础项目与小镇专用项目如何分工
 
 | 项目 | 应当负责 | 不应负责 |
 | --- | --- | --- |
 | `ClassicGamePlugin.Plugin` | `IPluginModule`、View、Document/Tool Model、业务服务和插件私有资源 | 启动独立桌面程序、引用 Host 内部实现 |
 | `ClassicGamePlugin.Standalone` | 启动 Avalonia、承载 Plugin 中的真实界面、提供开发期 Stub | 成为第二套插件实现或模拟完整 Host |
 | `ClassicGamePlugin.Tests` | 验证业务、初始化、状态隔离、注册和生命周期约定 | 代替真实 Host 的最终加载验收 |
+| `ClassicGamePlugin.RichTown.Stride` | 仅供小镇使用的原生表面、Stride 场景、内容与资源释放 | 引用其他游戏、SDK、Dock 或承载经济规则 |
+| `ClassicGamePlugin.RichTown.Tests` | 小镇资产校验、子领域边界、原生边界替身及生命周期 | 借用其他游戏的状态或假装执行真实 GPU/Host 验收 |
 
-只有 `.Plugin` 进入正式插件目录和 ZIP。Standalone 可执行程序、开发 Stub 与 Tests 均不得随插件发布。
+只有 `.Plugin` 提供插件入口；它的显式私有运行依赖可以随插件交付。Standalone 可执行程序、开发 Stub 与 Tests 不随插件发布。
 
 ## 插件如何融入主项目
 
@@ -48,6 +50,18 @@ SDK 边界包装 View。十四个包装 View 都通过单向绑定把 Document �
 
 这些行为必须在真实 Host 中验收。不要为了让 Standalone 看起来像 Host 而复制 Host 源码或维护第二份
 贡献清单。
+
+## 富翁小镇 3D 的 G1 原型（集成阻塞）
+
+[富翁小镇专用方案](rich-town.md)已实现原型 Document 和私有 `ClassicGamePlugin.RichTown.Stride` 类库。
+新增内容全部归小镇子领域，渲染库单向被 Plugin 引用，不引用 Plugin 或任何其他游戏；没有通用游戏引擎服务。
+现有十四个可玩游戏保持独立，Module 另登记一个小镇原型。尚未实现正式规则、存档或命令。
+
+当前 Document 负责视口最终释放，View 中的 NativeControlHost 负责临时解绑/重建；UI 线程上的帧源驱动 SDL 外部消息循环。
+私有控制器处理失败和单表面租约。Standalone 的 `--rich-town-probe` 包装 Plugin 中同一个 View/Document，不复制适配器。
+独立窗口已显示房屋并能重建；部署被构建协议阻止，页面叠层也失败，真实 Host/Dock/DPI 的完整矩阵未通过。
+详见 [G1 集成记录](plan-history/rich-town/g1-stride-integration.md)。不能把当前表面租约当作 G4 正式对局实例管理已完成。
+当前不运行 Windows CI、统一 Gate、Release 构建、正式 ZIP 或发布门禁；不使用 AIFLOW。
 
 ## 项目原则
 

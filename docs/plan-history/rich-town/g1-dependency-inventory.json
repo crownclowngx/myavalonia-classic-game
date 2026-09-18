@@ -1,0 +1,523 @@
+{
+  "phase": "G1",
+  "status": "inventory only; deployment blocked",
+  "target": "net10.0",
+  "rid": "win-x64",
+  "packages": [
+    {
+      "package": "K4os.Compression.LZ4",
+      "version": "1.3.6",
+      "declaredLicense": "",
+      "licenseUrl": "https://raw.githubusercontent.com/MiloszKrajewski/K4os.Compression.LZ4/master/LICENSE",
+      "runtime": [
+        "lib/net6.0/K4os.Compression.LZ4.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "RxGhoJBjZCgGeZgDqOP4Krs1cR9PHInbz6d2N19Dic0Y6ZACzVKbR3uSpqfEZf4RiUbHk9aiog2eS22nQPTc2A==",
+      "licenseKind": "legacy URL; review required"
+    },
+    {
+      "package": "K4os.Compression.LZ4.Legacy",
+      "version": "1.3.6",
+      "declaredLicense": "",
+      "licenseUrl": "https://raw.githubusercontent.com/MiloszKrajewski/K4os.Compression.LZ4/master/LICENSE",
+      "runtime": [
+        "lib/net5.0/K4os.Compression.LZ4.Legacy.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "xRwevzdEPnhtKrURA5c0HHSQqnzCaiCOM6GTawkZjs4L15IkdsOLwPB0d0J0Z7MTHxZFF/d0ddCqGUJNTiZffw==",
+      "licenseKind": "legacy URL; review required"
+    },
+    {
+      "package": "Microsoft.DotNet.PlatformAbstractions",
+      "version": "3.1.6",
+      "declaredLicense": "LICENSE.TXT",
+      "licenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "runtime": [
+        "lib/netstandard2.0/Microsoft.DotNet.PlatformAbstractions.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "jek4XYaQ/PGUwDKKhwR8K47Uh1189PFzMeLqO83mXrXQVIpARZCcfuDedH50YDTepBkfijCZN5U/vZi++erxtg==",
+      "licenseKind": "file"
+    },
+    {
+      "package": "Microsoft.Extensions.DependencyModel",
+      "version": "8.0.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net8.0/Microsoft.Extensions.DependencyModel.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "NSmDw3K0ozNDgShSIpsZcbFIzBX4w28nDag+TfaQujkXGazBm+lid5onlWoCBy4VsLxqnnKjEBbGSJVWJMf43g==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Microsoft.Win32.SystemEvents",
+      "version": "8.0.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net8.0/Microsoft.Win32.SystemEvents.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "ServiceWire",
+      "version": "5.5.4",
+      "declaredLicense": "License.txt",
+      "licenseUrl": "https://aka.ms/deprecateLicenseUrl",
+      "runtime": [
+        "lib/netstandard2.0/ServiceWire.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "shX+apJwyK1vBZRo6ayhVmrAOYa1BQtab3YHAbr89AZsUPwo35ra3v7EYz/squ2Bba3m6JLHnwA3euCTj6vqaw==",
+      "licenseKind": "file"
+    },
+    {
+      "package": "SharpDX",
+      "version": "4.2.0",
+      "declaredLicense": "",
+      "licenseUrl": "http://sharpdx.org/License.txt",
+      "runtime": [
+        "lib/netstandard1.1/SharpDX.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "3pv0LFMvfK/dv1qISJnn8xBeeT6R/FRvr0EV4KI2DGsL84Qlv6P7isWqxGyU0LCwlSVCJN3jgHJ4Bl0KI2PJww==",
+      "licenseKind": "legacy URL; review required"
+    },
+    {
+      "package": "SharpDX.D3DCompiler",
+      "version": "4.2.0",
+      "declaredLicense": "",
+      "licenseUrl": "http://sharpdx.org/License.txt",
+      "runtime": [
+        "lib/netstandard1.1/SharpDX.D3DCompiler.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "Rnsd6Ilp127xbXqhTit8WKFQUrXwWxqVGpglyWDNkIBCk0tWXNQEjrJpsl0KAObzyZaa33+EXAikLVt5fnd3GA==",
+      "licenseKind": "legacy URL; review required"
+    },
+    {
+      "package": "SharpDX.Direct3D11",
+      "version": "4.2.0",
+      "declaredLicense": "",
+      "licenseUrl": "http://sharpdx.org/License.txt",
+      "runtime": [
+        "lib/netstandard1.1/SharpDX.Direct3D11.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "oTm/iT5X/IIuJ8kNYP+DTC/MhBhqtRF5dbgPPFgLBdQv0BKzNTzXQQXd7SveBFjQg6hXEAJ2jGCAzNYvGFc9LA==",
+      "licenseKind": "legacy URL; review required"
+    },
+    {
+      "package": "SharpDX.Direct3D12",
+      "version": "4.2.0",
+      "declaredLicense": "",
+      "licenseUrl": "http://sharpdx.org/License.txt",
+      "runtime": [
+        "lib/netstandard1.1/SharpDX.Direct3D12.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "OU4/cKRcAbGe8ZJ4oTUCDKsL5mCoy6aLJ2axYlwjyB8h/Z1OR38vSeGpbPB3ZKPumIuuYrANIBWnJ8xfUK7RQw==",
+      "licenseKind": "legacy URL; review required"
+    },
+    {
+      "package": "SharpDX.DXGI",
+      "version": "4.2.0",
+      "declaredLicense": "",
+      "licenseUrl": "http://sharpdx.org/License.txt",
+      "runtime": [
+        "lib/netstandard1.1/SharpDX.DXGI.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "UjKqkgWc8U+SP+j3LBzFP6OB6Ntapjih7Xo+g1rLcsGbIb5KwewBrBChaUu7sil8rWoeVU/k0EJd3SMN4VqNZw==",
+      "licenseKind": "legacy URL; review required"
+    },
+    {
+      "package": "Silk.NET.Core",
+      "version": "2.22.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net6.0/Silk.NET.Core.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "XbDilPmvsQIrvxZkeVCNNX3LyRtA3hN6UykAiyZjlu/JkYh68U3WQummpP+j7jsxlX8s/pOrrU3vbN8LnMl0VA==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Silk.NET.Maths",
+      "version": "2.22.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net5.0/Silk.NET.Maths.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "W9b5UlUGCu5Ywb5f8ZyIWJ475ucY+mT/nEiSTo3JH098VxHaZS/02bYr9f29VWBaJhh3DwMkfxQvgTyXzTrHyw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Silk.NET.OpenGL",
+      "version": "2.22.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net5.0/Silk.NET.OpenGL.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "AmbtflPvaGWw7fHEHrcFTd54OTAj0bemzx4WV2ELJdW2NBPSvtyz31nhyuBVTml20+NtW4Z3yhDGUpM6uouVDQ==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Silk.NET.OpenGLES",
+      "version": "2.22.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net5.0/Silk.NET.OpenGLES.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "BB/kdhQyZ0l6O5Cw9e1OV8uZN1vibz8GdiLx0nx+bd9BrRxu8f2XIRnqmlPcsNw2/0J9Z6jgkDwL1iqaii0dTw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Silk.NET.OpenGLES.Extensions.EXT",
+      "version": "2.22.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net5.0/Silk.NET.OpenGLES.Extensions.EXT.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "vvnUYR5IvZr/C74ano9WhsWSkziQoOHRgCWQS1KHiCmyL4mJsLVyTUgSEqN0p/hYff7kiHZQxz4oLinZmj7geg==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Silk.NET.OpenXR",
+      "version": "2.22.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net5.0/Silk.NET.OpenXR.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "2/+jpcJdUGAXFnUBTcVZTl6Q0NRCCrYuLH9cykezcxPvC+VumhrwsTd68d3KYh/9g4/+NHjr74UCTNyJgbBNXQ==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Silk.NET.OpenXR.Extensions.FB",
+      "version": "2.22.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net5.0/Silk.NET.OpenXR.Extensions.FB.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "gkOOtB7ELzydRSm8fyuZG1vOS3+vtAoDMb5SzGmf+kwSMdKQOvR6erM7aaAvzrl1IfndpYSPCJDVb+LgNOfayg==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Silk.NET.SDL",
+      "version": "2.22.0",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net6.0/Silk.NET.SDL.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "t73lM7RnEX7otXOblQ38zjDbGfdEseJKHGgIaFien9lKjGp1jg28RLEY+toUXT5kH0DzgXGIoYAs7AkcCFyyyg==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "/koNlyrqCcf8b9v/cWWxdxvAvOxNqDY0ttchqFx+cU3J5C+nvBGLZf5PUe9mthrlrn6W2sq52k7rLlq8Xa/9iA==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Audio",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Audio.dll"
+      ],
+      "winX64Native": [
+        "runtimes/win-x64/native/libstrideaudio.dll"
+      ],
+      "nugetContentHash": "2NAT/I8xkAgsBM6Ci5hnz05ptG6PmS35zfGVly/Xbb1uHstRgpCZ/nc+oqzqwr7uKxi0HWVEI/XRUhLJk4mXxQ==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Core",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Core.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "TTUQ2aaK//vnN1yKqsLkRpjaDX0MU/Bs7SnTKz9tRzBuTHxKzUSy8jpU3ZnmPLZAEMS+Yo3iZgFnYKQZkZ2l+w==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Core.IO",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Core.IO.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "PAwUtV6qrOA5Vf4x2lk5KeGVUZbCpmgVKTq5XbfH8lUTaDuBcgB0RVk26MM9+OrULP9t2XkUvvzDri/maGcp5A==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Core.Mathematics",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Core.Mathematics.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "6eA15wpW8CAFjsfIoKsdNySbSv0Rg/88FAnt7pJRqOBwr1e3hUDrXpRxCbVY67uN//pAXPEc3oDdOWL+EuRlKA==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Core.MicroThreading",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Core.MicroThreading.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "joYhB6wnfSLQs9aDslm0novROpyTmzv/A2VMVg9KaSG1ey51NY8gZmJ0eS/B6sPhUfYV3TzO9zBmp4LOsoEy4w==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Core.Serialization",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Core.Serialization.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "7Ss14aq3AgqvKB0wpoCa7iMPFcT1FJpfVJ4o1YxiIQRYO1+o8VYOPQ/hnTVzFBGLg41iX/kYYFYcd8Z9kdXTSw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Core.Shaders",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/CppNet.dll",
+        "lib/net10.0/Stride.Core.Shaders.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "xzn8d4/wrzvfJtMlfL6s1d1mhLMIcHRuubycupATCySOlxjZzU3CF/XToGgrXSNUuZ7ZuYOoHuGatr79WwHPyw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Engine",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Engine.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "Gw1Sav8Su5VqWsFqX+L3RtPRUjgHTDFNEDntv+HGz6MtZjvVpV1gDCsupfMdZ49rkdGVUHHH7l4jzjZaqOnzSw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Games",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Games.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "N3VbyJONCfu0WrCTtX5VIlXNPGETAoI5Wk49mj66OXTH06JalgVzSNMerRrjhzzXZBsCYtwCjeANngZ8bLlMGw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Graphics",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Graphics.dll"
+      ],
+      "winX64Native": [
+        "runtimes/win-x64/native/freetype.dll"
+      ],
+      "nugetContentHash": "eOdPNVAy3+cZ3DXfMp4xhtkF8B6P1Q86I+qjTFIjA7dShCfRtbdzvLGssrOV/bBu6mpJyWo1ZxSGKiDWbQ+8Ng==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Input",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Input.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "ioDH6Dzeu0PHsHmJfPYjvqrYkfzIZ95ONxAkc97Rd93xReYsw/1Mecny13CeBcGwPtCkoH9ME/8/eJAOoNUWAA==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Irony",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Irony.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "jENBdEsZNJWJBekFaHwwDfISOu9sp++B4ZFgUNGxfZqxrZ3JKgt1JjpAxukKnX/5J0ZFGbZ/TbBmHD1K8b7WZw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Native",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Native.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "KYGx1Jv4pIiN1yFMN4M0r+a1TcB7yFMV9dJoFYaAtrpNIUB5pd31YZDOKqim3ZzYkqVj9LkSlqrAd1+wOTPXGQ==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Rendering",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Rendering.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "UtC/QLcLpY6k5BOmV6XGAS+ZkxgOXG/18xHPyUqB0ZLrXdLgmfBAa/eK4GPu14uSoOTEiqi4orq+M8/iP3GDNA==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Shaders",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Shaders.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "MHaX24XCtPCyE3Ws9cEreyCLcPX8yz+sOTAdCCRm97o53UGp2xZeFPMzbFZDKyA5RIIny0Pah5PpbcI6/IRKfw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Shaders.Compiler",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Shaders.Compiler.dll"
+      ],
+      "winX64Native": [
+        "runtimes/win-x64/native/d3dcompiler_47.dll"
+      ],
+      "nugetContentHash": "bP6We1U4G5FPmB5OXJ6MmtdkCvhklNlOwUhlAZOwaDB+PS7GLJLLjTzWTGwaEyAZK9ySQU4YeefG5qX7wZqBxg==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.Shaders.Parser",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.Shaders.Parser.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "2UTc3bA3Q/aWAVJRns4sWjDk2NUkfpPpzPDsq7758KYxt8L+X3zIZo9Gf7fxd/iBVxxzTKT6FTX4uweiAar9oA==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Stride.SharpFont",
+      "version": "1.0.1",
+      "declaredLicense": "",
+      "licenseUrl": "",
+      "runtime": [
+        "lib/net8.0/SharpFont.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "1jD06aJxJDwpGNChiLSnDYFYif9/P+23Xjpdhdwet5DcDCpvUNMo4s/QmFotmH09MoI/RC2JQl5/TtVeFMGdPQ==",
+      "licenseKind": "legacy URL; review required"
+    },
+    {
+      "package": "Stride.VirtualReality",
+      "version": "4.3.0.2507",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net10.0/Stride.VirtualReality.dll"
+      ],
+      "winX64Native": [
+        "runtimes/win-x64/native/libstridevr.dll",
+        "runtimes/win-x64/native/openvr_api.dll",
+        "runtimes/win-x64/native/openxr_loader.dll"
+      ],
+      "nugetContentHash": "0XLsbFKObxZt1A/KsQrpnNR7jYzPkYwchBy4O/IvQ9tOmQrqhZwIa+cKXeGGkyhT9VlFqKY7LxqpellMnRUUHw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "System.Drawing.Common",
+      "version": "8.0.1",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net8.0/System.Drawing.Common.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "x0rAZECxIGx/YVjN28YRdpqka0+H7YMN9741FUDzipXPDzesd60gef/LI0ZCOcYSDsacTLTHvMAvxHG+TjbNNQ==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Ultz.Native.SDL",
+      "version": "2.30.8",
+      "declaredLicense": "Zlib",
+      "licenseUrl": "https://licenses.nuget.org/Zlib",
+      "runtime": [],
+      "winX64Native": [
+        "runtimes/win-x64/native/SDL2.dll"
+      ],
+      "nugetContentHash": "akI6qe9zjA3T9Y5421cfHYKonIkV1rSr3Dgo5qOwxthXXRwTVsnJwb/Ap2x6/6BZcbhczeY+4aUw+2FYJF9LYw==",
+      "licenseKind": "expression"
+    },
+    {
+      "package": "Vortice.Vulkan",
+      "version": "2.1.2",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "runtime": [
+        "lib/net9.0/Vortice.Vulkan.dll"
+      ],
+      "winX64Native": [],
+      "nugetContentHash": "+FQellDgWFtw2sHE9IkO6PusEjTilk48VtyWyDM6iHnCZJDlYMgxvCeenUlu15KK1xWIeGRaDF2GMKOFc2mS8g==",
+      "licenseKind": "expression"
+    }
+  ]
+}

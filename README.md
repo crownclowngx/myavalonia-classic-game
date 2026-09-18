@@ -6,7 +6,7 @@
 这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋和三阶魔方 Document。真实交付物是
 `src/ClassicGamePlugin.Plugin`；`Standalone` 只负责快速预览 Plugin 中同一份 View、ViewModel、Document 与领域代码。
 
-> 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了三个子项目和
+> 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了基础项目、小镇专用项目和
 > Standalone 窗口的职责、接入真实 Host 的边界，以及临时部署和正式 ZIP 发布流程。
 
 14 个游戏的 23 条“重新开始 / 同步撤销”Workbench Command、多实例路由、SOLID 边界见
@@ -57,6 +57,19 @@ WorkflowStudio 的单轮完整本地封板见
 三阶魔方的 3D 转层、手动操作、按目标分组的层先法还原、完整公式动画、回退与测试矩阵见
 [三阶魔方 Document 设计与开发说明](docs/rubiks-cube.md)。本功能仅使用 Debug 开发检查，不调用含 Release 和真实打包的统一 Gate。
 
+富翁小镇 3D（Stride）已实现 **G1 房屋视口原型，集成尚未通过**，不计入现有十四个可玩游戏。
+Module 目前登记 15 个 Document 和 15 个图标；原有 23 条工作台命令不变。后续逐步开发遵循
+[专用设计与开发说明](docs/rich-town.md)及[专项阶段记录](docs/plan-history/rich-town/g0-design-and-development-plan.md)。
+已完成内容、Document 状态、后续 G1–G5 工作包与验收条件见[完整开发路线图](docs/rich-town-roadmap.md)。
+SOLID 为首要约束，使用朴素设计、详细中文注释和完整单测；仅执行专用 Debug 本地开发检查，不使用 AIFLOW、Windows CI、
+Release 构建、正式 ZIP 打包或发布门禁。下方通用打包命令和统一跨仓 Gate 不适用于该功能当前开发阶段。
+
+小镇开发入口：`pwsh -NoProfile -File scripts/Test-RichTownDevelopment.ps1`。
+预览：`dotnet run --project src/ClassicGamePlugin.Standalone -c Debug -p:SkipPluginDeploy=true -- --rich-town-probe`。
+该入口和插件登记共用同一页面；默认 Standalone 仍为原有十四个标签页。
+当前部署被 `Microsoft.Extensions.DependencyModel.dll` 的共享库禁带规则阻塞，原生视口也不能正确覆盖页面叠层；
+见 [G1 结果与下一步](docs/plan-history/rich-town/g1-stride-integration.md)，不要把此分支当作可发布插件。
+
 ```powershell
 dotnet restore
 dotnet build
@@ -76,6 +89,8 @@ Standalone 只能验证十四个游戏的界面和插件自身对象图；manife
 生命周期必须使用真实 Host 做最终验收。
 
 ## 统一跨仓门禁
+
+富翁小镇 3D 的 G0–G5 开发阶段不调用本节入口，具体检查与隔离 Debug Host 联调边界见[专用文档](docs/rich-town.md)。
 
 本仓不再维护 G8/G10 PowerShell 封板入口。请在 `avalonia_dock_simple_test` 主仓根目录运行：
 

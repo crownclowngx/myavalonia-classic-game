@@ -3,6 +3,14 @@
 > 当前跨仓验收统一由主仓 `tools/MyAvaloniaManagement.Gate` 执行。本文中的 `scripts/*.ps1` 命令是历史记录，
 > 已退役；使用方式见本仓 README。
 
+> **富翁小镇 3D 当前处于开发阶段。** 依照[专用方案](rich-town.md)和[专项记录](plan-history/rich-town/g0-design-and-development-plan.md)，
+> 不执行本文的 Release、正式 ZIP、历史 G8/G10 或统一 Gate/发布步骤，不使用 AIFLOW、Windows CI。
+> G1 起仅显式生成 Debug 暂存目录并在隔离开发 Host 验证私有依赖，不覆盖日常插件和用户数据；普通构建设置 `SkipPluginDeploy=true`。
+> Stride 完整运行时文件、原生二级依赖、内容数据库和 VC++ 运行库目前均待验证，不宣称已实现自包含。
+> G1 已声明 42 个私有运行依赖包和小镇资源，Debug 部署实测被 Build 1.1.3 的
+> `Microsoft.Extensions.DependencyModel.dll` 禁带规则阻止；尚未产生通过协议的暂存目录。
+> [G1 记录](plan-history/rich-town/g1-stride-integration.md)保留失败命令；[依赖说明](rich-town-assets-and-dependencies.md)列出文件与后续条件。
+
 部署分为开发期临时联调和正式 ZIP 发布。两者都必须使用 Build 包筛选出的干净插件目录，不能直接复制
 普通 `bin/Debug` 或 `bin/Release`，因为普通输出可能包含 Host 应当统一提供的共享程序集。
 

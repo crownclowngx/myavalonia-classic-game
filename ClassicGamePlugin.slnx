@@ -1,9 +1,11 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/ClassicGamePlugin.RichTown.Stride/ClassicGamePlugin.RichTown.Stride.csproj" />
     <Project Path="src/ClassicGamePlugin.Plugin/ClassicGamePlugin.Plugin.csproj" />
     <Project Path="src/ClassicGamePlugin.Standalone/ClassicGamePlugin.Standalone.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/ClassicGamePlugin.RichTown.Tests/ClassicGamePlugin.RichTown.Tests.csproj" />
     <Project Path="tests/ClassicGamePlugin.Tests/ClassicGamePlugin.Tests.csproj" />
   </Folder>
 </Solution>

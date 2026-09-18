@@ -14,10 +14,10 @@ public sealed class PluginIconContractTests
     {
         var registration = new Capture("first");
         new ClassicGamePlugin.Plugin.ClassicGamePluginModule().Configure(registration);
-        Assert.Equal(14, registration.Documents.Count);
+        Assert.Equal(15, registration.Documents.Count);
         Assert.Empty(registration.Tools);
         Assert.Equal(0, registration.Documents.Sum(d => d.CreationIntents.Count));
-        Assert.Equal(14, registration.Icons.Count);
+        Assert.Equal(15, registration.Icons.Count);
         Assert.All(registration.Documents, document =>
         {
             registration.AssertResolvable(document.IconPath);

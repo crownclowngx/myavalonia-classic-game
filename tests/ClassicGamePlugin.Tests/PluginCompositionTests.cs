@@ -41,6 +41,8 @@ using ClassicGamePlugin.Features.ChineseCheckers.ViewModels;
 using ClassicGamePlugin.Features.ChineseCheckers.Views;
 using ClassicGamePlugin.Features.RubiksCube;
 using ClassicGamePlugin.Features.RubiksCube.Views;
+using ClassicGamePlugin.Features.RichTown;
+using ClassicGamePlugin.Features.RichTown.Views;
 using ClassicGamePlugin.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
@@ -52,7 +54,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册十四个独立游戏的普通Document()
+    public void Module注册十四个独立游戏与一个小镇集成原型的普通Document()
     {
         var registration = new CapturingRegistration();
 
@@ -195,6 +197,14 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", rubiksCube.Descriptor.MenuCategory);
                 Assert.Equal(typeof(RubiksCubeDocument), rubiksCube.Model);
                 Assert.Equal(typeof(RubiksCubeDocumentView), rubiksCube.View);
+            },
+            richTown =>
+            {
+                Assert.Equal(RichTownDocument.TypeId, richTown.Descriptor.DocumentTypeId);
+                Assert.Equal("富翁小镇 3D（原型）", richTown.Descriptor.DisplayName);
+                Assert.Equal("经典游戏", richTown.Descriptor.MenuCategory);
+                Assert.Equal(typeof(RichTownDocument), richTown.Model);
+                Assert.Equal(typeof(RichTownDocumentView), richTown.View);
             });
         Assert.Empty(registration.PersistableDocuments);
     }

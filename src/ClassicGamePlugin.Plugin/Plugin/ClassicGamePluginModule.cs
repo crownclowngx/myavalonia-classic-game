@@ -30,6 +30,8 @@ using ClassicGamePlugin.Features.ChineseCheckers;
 using ClassicGamePlugin.Features.ChineseCheckers.Views;
 using ClassicGamePlugin.Features.RubiksCube;
 using ClassicGamePlugin.Features.RubiksCube.Views;
+using ClassicGamePlugin.Features.RichTown;
+using ClassicGamePlugin.Features.RichTown.Views;
 
 namespace ClassicGamePlugin.Plugin;
 
@@ -141,6 +143,13 @@ public sealed class ClassicGamePluginModule : IPluginModule
                 "三阶魔方",
                 "三阶魔方教学：真实三维转层、手动转面与按目标分组的层先法还原",
                 "经典游戏", iconPath: rubiksCubeIcon));
+
+        // 小镇只在组合根接入。稳定身份、页面、原生生命周期均归小镇，其他游戏不依赖 Stride。
+        var richTownIcon = registration.AddIcon("rich-town", new VectorIconDefinition(
+            "M1,9L10,1L19,9H16V19H4V9Z M8,12H12V19H8Z", 20, 20));
+        registration.AddDocument<RichTownDocument, RichTownDocumentView>(new DocumentDescriptor(
+            RichTownDocument.TypeId, "富翁小镇 3D（原型）", "Stride 原生视口集成检查，尚未提供对局玩法",
+            "经典游戏", iconPath: richTownIcon));
 
         // G8 只提升每个游戏已经存在的“重新开始/重开同局”和“撤销”用户意图。没有撤销业务
         // 能力的 2048、扫雷、消消乐和俄罗斯方块只声明 Restart；不会为了表面对称伪造 Undo。

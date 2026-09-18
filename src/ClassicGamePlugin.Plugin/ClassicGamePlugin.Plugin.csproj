@@ -20,6 +20,9 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="ClassicGamePlugin.Tests" />
+    <InternalsVisibleTo Include="ClassicGamePlugin.RichTown.Tests" />
+    <ProjectReference Include="..\ClassicGamePlugin.RichTown.Stride\ClassicGamePlugin.RichTown.Stride.csproj" />
   </ItemGroup>
 
+  <Import Project="Features/RichTown/RichTown.Deployment.targets" />
 </Project>

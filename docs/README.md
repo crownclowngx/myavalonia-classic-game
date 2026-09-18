@@ -1,6 +1,11 @@
 # ClassicGamePlugin 开发快速开始
 
 - [V6.1 图标同步升级](plan-history/v6.1-plugin-icons.md)：入口映射、依赖边界和验证结果。
+- [富翁小镇完整开发路线图](rich-town-roadmap.md)：本轮做了什么、Document 状态、后续任务顺序及逐阶段验收条件。
+- [富翁小镇 3D 专用方案](rich-town.md)：Stride 集成、SOLID 职责、规则与完整测试矩阵；**G1 原型已实现，集成阻塞**。
+- [富翁小镇专项开发记录](plan-history/rich-town/g0-design-and-development-plan.md)：G0–G5 顺序、完成条件、待验证问题与阶段证据。
+- [G1 集成结果](plan-history/rich-town/g1-stride-integration.md)：实现边界、实际失败、单测和下一步。
+- [小镇素材及依赖清单](rich-town-assets-and-dependencies.md)：Kenney 来源、摘要、私有包与自包含限制。
 
 本解决方案用于开发 `myavalonia.plugin.classic.game` Managed Plugin，当前由独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋与三阶魔方功能域
 分别提供普通 Document。它把真实插件、独立 Avalonia 开发窗口和自动化测试放在同一个解决方案中，使界面与业务代码既能
@@ -12,10 +17,12 @@
 ClassicGamePlugin/
 ├─ ClassicGamePlugin.slnx
 ├─ src/
-│  ├─ ClassicGamePlugin.Plugin/       # 唯一真实插件程序集和正式交付内容
-│  └─ ClassicGamePlugin.Standalone/   # 只供本地开发的 Avalonia 窗口
+│  ├─ ClassicGamePlugin.Plugin/          # 唯一插件入口；各游戏独立子领域
+│  ├─ ClassicGamePlugin.RichTown.Stride/ # 小镇专用渲染与资源，不依赖其他游戏
+│  └─ ClassicGamePlugin.Standalone/      # 只供本地开发的 Avalonia 窗口
 ├─ tests/
-│  └─ ClassicGamePlugin.Tests/        # 插件业务、状态和注册行为测试
+│  ├─ ClassicGamePlugin.Tests/           # 既有游戏及插件注册契约
+│  └─ ClassicGamePlugin.RichTown.Tests/  # 小镇独立测试
 └─ docs/                       # 当前项目随模板生成的开发说明
 ```
 
@@ -35,6 +42,10 @@ dotnet run --project src/ClassicGamePlugin.Standalone
 
 Standalone 适合快速检查 AXAML、编译绑定、命令和插件自身对象图。写到可以联调时，再把干净的插件目录
 部署到真实 Host；发布前则必须生成正式 ZIP。不要把 Standalone 能运行当成 Host 验收已经通过。
+
+富翁小镇当前只执行[专用方案](rich-town.md)中的 Debug 开发检查；普通构建显式设置 `SkipPluginDeploy=true`。
+G1 后仅在显式步骤中生成 Debug 暂存目录并使用隔离开发 Host，不覆盖日常 Host 和数据，不运行 Release/正式 ZIP、
+统一 `verify` / `seal`、Windows CI 或发布门禁，不使用 AIFLOW。G0 文档任务不执行构建、测试或部署。
 
 ## 接下来阅读
 
@@ -58,6 +69,9 @@ Standalone 适合快速检查 AXAML、编译绑定、命令和插件自身对象
 18. [ClassicGame Workbench Command 设计](workbench-commands.md)
 19. [Workbench Command G8 专用实施记录](plan-history/workbench-command/g8-classic-game-multi-instance-commands.md)
 20. [Workbench Command G10 本地封板记录](plan-history/workbench-command/g10-classic-game-local-sealing.md)
+21. [富翁小镇 3D：Stride Document 设计与分阶段开发说明](rich-town.md)
+22. [富翁小镇 3D 专项开发记录](plan-history/rich-town/g0-design-and-development-plan.md)
+23. [富翁小镇完整开发路线图](rich-town-roadmap.md)
 
 ## 开发前记住
 
@@ -69,6 +83,7 @@ Standalone 适合快速检查 AXAML、编译绑定、命令和插件自身对象
 - 当前交付目标是 Windows x64；插件替换后必须完整重启 Host，不支持热更新。
 - 当前游戏开发阶段只要求 Debug 警告即错误和全量单元测试通过，不运行 Windows CI、Release 打包或发布门禁。
 - 三阶魔方本次实施按其专用文档执行 Debug 单测、覆盖率与静态检查，不调用统一 `verify`/`seal`，不使用 AIFLOW。
-- 修改任一游戏工作台命令、SDK 3.3 消费或真实插件包时，运行 G8 本地非发布门禁；跨仓封板时运行 G10
-  包装门禁。两者的 Release 都只表示编译配置。
+- 富翁小镇按专用文档逐阶段执行 SOLID 审查、完整单测和本地检查，同阶段同步文档与证据；未执行项目不得记作通过。
+- G8/G10 历史脚本已退役，历史文档保留当时事实；统一跨仓入口见根 README。富翁小镇当前阶段不调用其中任何入口，
+  即使涉及工作台命令或依赖调整，也只执行其专用 Debug 开发检查。
 - Workflow Action Provider 与 Consumer 是两种互斥角色，选择前先阅读专项文档，不要在同一插件中同时注册。
