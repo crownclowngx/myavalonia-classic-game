@@ -51,18 +51,22 @@ SDK 边界包装 View。十四个包装 View 都通过单向绑定把 Document �
 这些行为必须在真实 Host 中验收。不要为了让 Standalone 看起来像 Host 而复制 Host 源码或维护第二份
 贡献清单。
 
-## 富翁小镇 3D 的 G1 原型（集成阻塞）
+## 富翁小镇 3D 的 G3 本地可玩版本（G1 集成仍阻塞）
 
 G2 已在 Plugin 的 `Features/RichTown/Domain` 与 `Application` 实现纯规则和串行会话，见[G2 专项记录](plan-history/rich-town/g2-deterministic-rules.md)。
-规则不依赖 UI/引擎/SDK，也未连接当前原型 Document；正式会话所有权与保存仍在 G4 接入，不新增项目或共享游戏服务。
+规则不依赖 UI/引擎/SDK。G3 已由 Document 拥有 `Presentation/RichTownPlayController`，组合会话、事件回放、电脑延迟和中文投影。
+View 只负责控件和订阅；渲染类库只接收不可变画面 DTO，不能反向执行经济规则。详见[G3 专项记录](plan-history/rich-town/g3-playable-scene.md)。
 
 [富翁小镇专用方案](rich-town.md)已实现原型 Document 和私有 `ClassicGamePlugin.RichTown.Stride` 类库。
 新增内容全部归小镇子领域，渲染库单向被 Plugin 引用，不引用 Plugin 或任何其他游戏；没有通用游戏引擎服务。
-现有十四个可玩游戏保持独立，Module 另登记一个小镇原型。尚未实现正式规则、存档或命令。
+现有十四个游戏保持独立，Module 登记同一个小镇开发版 Document；15 个 Document/图标、23 条工作台命令不变。
+SDK 存档、工作台 Restart 与正式单会话激活仍待 G4，不把页面“新对局”算作工作台命令。
 
-当前 Document 负责视口最终释放，View 中的 NativeControlHost 负责临时解绑/重建；UI 线程上的帧源驱动 SDL 外部消息循环。
-私有控制器处理失败和单表面租约。Standalone 的 `--rich-town-probe` 包装 Plugin 中同一个 View/Document，不复制适配器。
-独立窗口已显示房屋并能重建；部署被构建协议阻止，页面叠层也失败，真实 Host/Dock/DPI 的完整矩阵未通过。
+当前 Document 先停止展示会话，再负责视口最终释放；View 中的 NativeControlHost 负责临时解绑/重建，解绑保留 Document 对局。
+UI 线程帧源顺序驱动可控时间回放和 SDL 消息循环，隐藏/零尺寸/最小化暂停，恢复需要明确继续。
+私有表面控制器处理失败和租约。Standalone 的 `--rich-town-play` 承载 Plugin 同一游戏 View/Document；`--rich-town-probe` 承载专用诊断 View，共用适配器。
+显式 `--rich-town-play-check <报告路径>` 只供本机开发窗口检查，操作同一页面按钮，不复制规则；默认预览不会自动运行。
+独立窗口已完成一真人两电脑整局；部署仍被构建协议阻止，页面叠层历史失败保留，真实 Host/Dock/DPI 的完整矩阵未通过。
 详见 [G1 集成记录](plan-history/rich-town/g1-stride-integration.md)。不能把当前表面租约当作 G4 正式对局实例管理已完成。
 当前不运行 Windows CI、统一 Gate、Release 构建、正式 ZIP 或发布门禁；不使用 AIFLOW。
 

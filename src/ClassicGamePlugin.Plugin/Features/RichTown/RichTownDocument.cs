@@ -1,17 +1,25 @@
 using MyAvaloniaManagement.PluginSdk;
+using ClassicGamePlugin.Features.RichTown.Domain;
+using ClassicGamePlugin.Features.RichTown.Presentation;
+using System.Security.Cryptography;
 
 namespace ClassicGamePlugin.Features.RichTown;
 
 /// <summary>
-/// 小镇独立子领域的 SDK 入口。G1 仅提供集成原型，不声明尚未实现的存档、重新开始或撤销能力。
+/// 小镇独立子领域的 SDK 入口。G3 拥有展示会话及视口；SDK 存档和工作台 Restart 仍由 G4 接入。
 /// Document 拥有当前视口的最终释放；临时从视觉树解绑由视口自行处理，不能误判为关闭对局。
 /// </summary>
 public sealed class RichTownDocument : IPluginDocument, IDisposable
 {
     public static DocumentTypeId TypeId { get; } = new("myavalonia.plugin.classic.game.document.rich-town");
-    private DocumentPresentationState _presentation = new("富翁小镇 3D（原型）");
+    private DocumentPresentationState _presentation = new("富翁小镇 3D（开发版）");
     private IDisposable? _surface;
     private bool _disposed;
+    internal RichTownPlayController Play { get; }
+    public RichTownDocument() : this(RichTownSnapshot.Create(NewSeed())) { }
+    internal RichTownDocument(RichTownSnapshot snapshot) { Play = new(snapshot); }
+    private static ulong NewSeed() => BitConverter.ToUInt64(RandomNumberGenerator.GetBytes(sizeof(ulong)));
+    internal void NewGame() { if (!_disposed) Play.Restart(RichTownSnapshot.Create(NewSeed())); }
     public DocumentPresentationState Presentation => _presentation;
     public event EventHandler? PresentationChanged;
 
@@ -42,6 +50,7 @@ public sealed class RichTownDocument : IPluginDocument, IDisposable
     {
         if (_disposed) return;
         _disposed = true;
+        Play.Dispose();
         _surface?.Dispose();
         _surface = null;
         PresentationChanged = null;

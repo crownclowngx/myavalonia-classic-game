@@ -8,6 +8,16 @@ internal interface IRichTownSurface : IDisposable
     void Rotate(float radians);
 }
 
+/// <summary>G3 独有的呈现/镜头边界；G1 生命周期替身无需实现这些能力，避免把诊断与游戏操作塞入万能接口。</summary>
+internal interface IRichTownPlayableSurface
+{
+    event Action<int>? CellSelected;
+    void Present(RichTownSceneFrame frame);
+    void SetInputEnabled(bool enabled);
+    void ResetCamera();
+    void Zoom(float steps);
+}
+
 /// <summary>
 /// 一个插件加载上下文内的小镇只允许一个原生表面。租约不存放棋盘、玩家或其他游戏状态。
 /// 原子获取保证两个同时到达的打开请求不会启动两个 SDL 消息泵；实例化的租约也方便独立测试。
@@ -31,6 +41,7 @@ internal sealed class RichTownSurfaceController(Func<IRichTownSurface> factory, 
     private bool _disposed;
     internal bool IsRunning => _surface is not null;
     internal string? Error { get; private set; }
+    internal event Action<int>? CellSelected;
 
     internal void Start(nint handle)
     {
@@ -43,6 +54,7 @@ internal sealed class RichTownSurfaceController(Func<IRichTownSurface> factory, 
         {
             // 先保存对象再启动，确保中途失败也能够释放已经分配的设备与缓存。
             _surface = factory();
+            if (_surface is IRichTownPlayableSurface playable) playable.CellSelected += ForwardSelection;
             _surface.Start(handle);
         }
         catch (Exception exception) { Fail(exception); }
@@ -62,6 +74,24 @@ internal sealed class RichTownSurfaceController(Func<IRichTownSurface> factory, 
         catch (Exception exception) { Fail(exception); }
     }
 
+    private void ForwardSelection(int index) => CellSelected?.Invoke(index);
+    internal void Present(RichTownSceneFrame frame, bool inputEnabled) => UsePlayable(surface => { surface.Present(frame); surface.SetInputEnabled(inputEnabled); });
+    internal void ResetCamera() => UsePlayable(surface => surface.ResetCamera());
+    internal void Zoom(float steps)
+    {
+        if (float.IsFinite(steps)) UsePlayable(surface => surface.Zoom(steps));
+    }
+    private void UsePlayable(Action<IRichTownPlayableSurface> action)
+    {
+        if (_disposed || _surface is null) return;
+        try
+        {
+            if (_surface is not IRichTownPlayableSurface playable) throw new InvalidOperationException("当前视口不支持可玩场景。");
+            action(playable);
+        }
+        catch (Exception exception) { Fail(exception); }
+    }
+
     private void Fail(Exception exception)
     {
         Error = exception.ToString();
@@ -72,6 +102,7 @@ internal sealed class RichTownSurfaceController(Func<IRichTownSurface> factory, 
     {
         var surface = _surface;
         _surface = null;
+        if (surface is IRichTownPlayableSurface playable) playable.CellSelected -= ForwardSelection;
         try { surface?.Dispose(); }
         catch (Exception exception) { Error = $"{Error}\n小镇释放失败：{exception}".Trim(); }
         finally
@@ -86,5 +117,6 @@ internal sealed class RichTownSurfaceController(Func<IRichTownSurface> factory, 
         if (_disposed) return;
         _disposed = true;
         Stop();
+        CellSelected = null;
     }
 }

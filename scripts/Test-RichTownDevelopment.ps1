@@ -1,6 +1,6 @@
 param(
-    [ValidateSet('G1', 'G2')]
-    [string]$Phase = 'G2'
+    [ValidateSet('G1', 'G2', 'G3')]
+    [string]$Phase = 'G3'
 )
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
@@ -73,6 +73,26 @@ try {
     }
     $coverageResults | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $evidence 'rules-coverage.json') -Encoding utf8
 
+    # G3 将可控时间的展示编排与 GPU 绘制分开。前者逐类型检查，不用驱动代码的低覆盖率稀释业务要求。
+    # 拾取包含相机矩阵不可逆、射线平行等防御分支，几何按 90% 检查；窗口输入另有显式本机检查。
+    $presentationTypes = @(
+        @{ Name = 'ClassicGamePlugin.Features.RichTown.Presentation.RichTownPlayController'; Minimum = 0.95 },
+        @{ Name = 'ClassicGamePlugin.Features.RichTown.Presentation.RichTownPlayback'; Minimum = 0.95 },
+        @{ Name = 'ClassicGamePlugin.Features.RichTown.Presentation.RichTownPresentation'; Minimum = 0.95 },
+        @{ Name = 'ClassicGamePlugin.Features.RichTown.Rendering.RichTownBoardLayout'; Minimum = 0.90 },
+        @{ Name = 'ClassicGamePlugin.Features.RichTown.Rendering.RichTownCamera'; Minimum = 0.95 }
+    )
+    $presentationCoverage = @()
+    foreach ($type in $presentationTypes) {
+        $classes = @($coverage.coverage.packages.package.classes.class | Where-Object { $_.name -eq $type.Name })
+        if ($classes.Count -ne 1) { throw "覆盖率缺少或重复 G3 类型：$($type.Name)" }
+        $line = [double]::Parse($classes[0].'line-rate', [Globalization.CultureInfo]::InvariantCulture)
+        $branch = [double]::Parse($classes[0].'branch-rate', [Globalization.CultureInfo]::InvariantCulture)
+        if ($line -lt $type.Minimum -or $branch -lt $type.Minimum) { throw "$($type.Name) 行/分支覆盖率未达到 $($type.Minimum)：$line / $branch" }
+        $presentationCoverage += [ordered]@{ type = $type.Name; lineRate = $line; branchRate = $branch; minimum = $type.Minimum }
+    }
+    $presentationCoverage | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $evidence 'presentation-coverage.json') -Encoding utf8
+
     # 在证据目录重新转换，不覆盖仓库中已经审查过的二进制文件。
     $converted = Join-Path $evidence 'converted'
     & "$PSScriptRoot/Convert-RichTownPrototypeAsset.ps1" -OutputDirectory $converted
@@ -88,7 +108,7 @@ try {
     $documents = @('README.md', 'docs/README.md', 'docs/rich-town.md', 'docs/rich-town-roadmap.md', 'docs/rich-town-assets-and-dependencies.md',
         'docs/project-and-window-responsibilities.md', 'docs/deployment-and-release.md',
         'docs/plan-history/rich-town/g0-design-and-development-plan.md', 'docs/plan-history/rich-town/g1-stride-integration.md',
-        'docs/plan-history/rich-town/g2-deterministic-rules.md')
+        'docs/plan-history/rich-town/g2-deterministic-rules.md', 'docs/plan-history/rich-town/g3-playable-scene.md')
     $links = 0
     foreach ($document in $documents) {
         $fullPath = Join-Path $repo $document
@@ -113,9 +133,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw '已暂存第一方差异检查失败。' }
     [ordered]@{ phase = $Phase; configuration = 'Debug'; testSuites = $results; localLinks = $links;
         deterministicRules = 'passed'; simulation = $simulation; rulesCoverage = $coverageResults;
+        presentationCoverage = $presentationCoverage; playableWindow = 'separate opt-in: Test-RichTownPlayableWindow.ps1';
         assetConversion = 'matching SHA-256'; integration = 'NOT SIGNED: see g1-stride-integration.md'; release = 'not executed' } |
         ConvertTo-Json -Depth 6 | Set-Content (Join-Path $evidence 'summary.json') -Encoding utf8
-    Write-Output "Debug 开发检查及 G2 规则门禁通过；G1 集成结论单独记录，不能据此签署 G1。证据：$evidence"
+    Write-Output "Debug 开发检查、G2 规则及 G3 展示门禁通过；真实窗口需单独检查，不能据此签署 G1。证据：$evidence"
 }
 finally {
     $env:RICH_TOWN_SIMULATION_REPORT = $previousSimulationReport

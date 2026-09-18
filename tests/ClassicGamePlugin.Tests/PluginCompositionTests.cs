@@ -201,7 +201,7 @@ public sealed class PluginCompositionTests
             richTown =>
             {
                 Assert.Equal(RichTownDocument.TypeId, richTown.Descriptor.DocumentTypeId);
-                Assert.Equal("富翁小镇 3D（原型）", richTown.Descriptor.DisplayName);
+                Assert.Equal("富翁小镇 3D（开发版）", richTown.Descriptor.DisplayName);
                 Assert.Equal("经典游戏", richTown.Descriptor.MenuCategory);
                 Assert.Equal(typeof(RichTownDocument), richTown.Model);
                 Assert.Equal(typeof(RichTownDocumentView), richTown.View);

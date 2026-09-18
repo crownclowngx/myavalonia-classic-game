@@ -147,7 +147,7 @@ public sealed class RichTownLifecycleTests
     {
         using var document = new RichTownDocument();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await document.InitializeAsync(new NewDocumentActivation("不采用"), new CancellationToken(true)));
-        Assert.Equal("富翁小镇 3D（原型）", document.Presentation.Title);
+        Assert.Equal("富翁小镇 3D（开发版）", document.Presentation.Title);
         Assert.False(typeof(IPersistablePluginDocument).IsAssignableFrom(typeof(RichTownDocument)));
     }
 

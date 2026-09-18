@@ -4,9 +4,9 @@ using SdlWindow = Stride.Graphics.SDL.Window;
 namespace ClassicGamePlugin.Features.RichTown.Rendering;
 
 /// <summary>小镇专用 Stride 适配器。外部消息循环逐帧驱动，不创建线程，也不启动嵌套的 Run 循环。</summary>
-internal sealed class RichTownStrideSurface : IRichTownSurface
+internal sealed class RichTownStrideSurface(bool playable = false) : IRichTownSurface, IRichTownPlayableSurface
 {
-    private RichTownPrototypeGame? _game;
+    private RichTownStrideGame? _game;
     private GameContextSDL? _context;
     private SdlWindow? _window;
     private IMessageLoop? _messages;
@@ -15,9 +15,10 @@ internal sealed class RichTownStrideSurface : IRichTownSurface
 
     public void Start(nint handle)
     {
-        _game = new RichTownPrototypeGame();
+        _game = new RichTownStrideGame(playable);
+        _game.CellSelected += ForwardSelection;
         // SDL_CreateWindowFrom 包装的是 Avalonia 拥有的子 HWND。SDL 释放包装，Avalonia 最后销毁 HWND。
-        _window = new SdlWindow("富翁小镇 G1", handle);
+        _window = new SdlWindow("富翁小镇", handle);
         _context = new GameContextSDL(_window, 640, 480, true);
         _game.Run(_context);
         _messages = _game.Window.CreateUserManagedMessageLoop();
@@ -39,6 +40,12 @@ internal sealed class RichTownStrideSurface : IRichTownSurface
     }
 
     public void Rotate(float radians) => _game?.RotateHouse(radians);
+    public event Action<int>? CellSelected;
+    private void ForwardSelection(int index) => CellSelected?.Invoke(index);
+    public void Present(RichTownSceneFrame frame) => _game?.Present(frame);
+    public void SetInputEnabled(bool enabled) { if (_game is not null) _game.InputEnabled = enabled; }
+    public void ResetCamera() => _game?.ResetCamera();
+    public void Zoom(float steps) => _game?.Zoom(steps);
 
     public void Dispose()
     {
@@ -54,6 +61,7 @@ internal sealed class RichTownStrideSurface : IRichTownSurface
         _game = null;
         _context = null;
         _window = null;
+        CellSelected = null;
         if (errors.Count != 0) throw new AggregateException("小镇原生资源释放失败。", errors);
     }
 }

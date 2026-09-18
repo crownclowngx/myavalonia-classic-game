@@ -8,7 +8,7 @@ internal enum RichTownRejection { WrongRevision, WrongPlayer, WrongPhase, Invali
 /// <summary>真人与电脑共用的命令值；只有 Upgrade/Sell 携带地块索引，其他命令不得夹带多余参数。</summary>
 internal sealed record RichTownCommand(RichTownCommandKind Kind, int? PropertyIndex = null);
 
-/// <summary>以修订和玩家身份防止重复点击及旧状态提交；重开会话代数由未来的 Document 适配层负责。</summary>
+/// <summary>以修订和玩家身份防止重复点击及旧状态提交；重开会话代数由 Document 拥有的展示控制器负责。</summary>
 internal sealed record RichTownRequest(long ExpectedRevision, int PlayerId, RichTownCommand Command);
 
 /// <summary>拒绝时返回原快照引用和空事件；调用方不需要通过比较差异猜测是否成功。</summary>

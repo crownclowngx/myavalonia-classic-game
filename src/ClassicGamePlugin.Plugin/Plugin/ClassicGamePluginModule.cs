@@ -148,7 +148,7 @@ public sealed class ClassicGamePluginModule : IPluginModule
         var richTownIcon = registration.AddIcon("rich-town", new VectorIconDefinition(
             "M1,9L10,1L19,9H16V19H4V9Z M8,12H12V19H8Z", 20, 20));
         registration.AddDocument<RichTownDocument, RichTownDocumentView>(new DocumentDescriptor(
-            RichTownDocument.TypeId, "富翁小镇 3D（原型）", "Stride 原生视口集成检查，尚未提供对局玩法",
+            RichTownDocument.TypeId, "富翁小镇 3D（开发版）", "三人小镇地产游戏：掷骰、购买、升级与偿债；真实 Host 集成尚待验证",
             "经典游戏", iconPath: richTownIcon));
 
         // G8 只提升每个游戏已经存在的“重新开始/重开同局”和“撤销”用户意图。没有撤销业务

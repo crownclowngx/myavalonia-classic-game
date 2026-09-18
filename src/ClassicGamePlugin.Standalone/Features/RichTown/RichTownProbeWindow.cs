@@ -13,7 +13,7 @@ internal sealed class RichTownProbeWindow : Window
         Width = 1050;
         Height = 740;
         var document = new RichTownDocument();
-        Content = new RichTownDocumentView { DataContext = document };
+        Content = new RichTownProbeView { DataContext = document };
         Closed += (_, _) => document.Dispose();
     }
 }

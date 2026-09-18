@@ -1,6 +1,6 @@
 # 富翁小镇：素材与依赖清单
 
-日期：2026-09-18。当前为开发原型，**部署阻塞，未证明自包含**。
+日期：2026-09-18。当前为 G3 本地可玩开发版，**部署阻塞，未证明自包含**。
 关联：[设计方案](rich-town.md)、[G1 集成记录](plan-history/rich-town/g1-stride-integration.md)。
 
 ## 已纳入的一栋房屋
@@ -42,6 +42,12 @@ Stride MIT 原文来自锁定源码修订 [e023d874… 的 LICENSE.md](https://g
 随运行内容保留。G2 的 SplitMix64 改编自 [Sebastiano Vigna 的公开参考实现](https://prng.di.unimi.it/splitmix64.c)，
 保留[原始许可声明与改编说明](../src/ClassicGamePlugin.Plugin/Features/RichTown/Domain/Random-LICENSE.txt)，通过现有小镇部署声明复制到许可证目录。
 G2 未新增 NuGet、原生库或模型，G1 机器依赖清单保持历史内容。其他传递包和原生组件的许可仍需逐项完成最终分发审查。
+
+G3 未新增下载或依赖，继续复用同一房屋与调色板：一级一栋、二级两栋。棋盘、七段编号、骰子/骰点、汽车/车号和树木由
+[小镇场景代码](../src/ClassicGamePlugin.RichTown.Stride/RichTownBoardScene.cs)生成，没有引入 Car Kit/Roads 或新的外部许可。
+场景共用基础立方体缓冲和按颜色缓存的模型，产权模型组合只随规则修订更新；资源仍由当前表面的 Stride Game 统一释放。
+Standalone 的 `app.manifest` 仅补充原生子窗口所需的 Windows 兼容性声明，不增加管理员权限，不改变插件资产路径或 Host 策略。
+真实窗口结果见[G3 专项记录](plan-history/rich-town/g3-playable-scene.md)；不改变下文的依赖交付阻塞与离线验证范围。
 
 第一次运行曾因缺少 `LightDirectionalGroup.sdsl` 失败，已修正为显式携带 400 个同版着色器源。
 程序为当前表面创建 `%TEMP%/ClassicGamePlugin/RichTown/<随机目录>` 的独立 ObjectDatabase，
