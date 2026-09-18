@@ -1,8 +1,11 @@
-param()
+param(
+    [ValidateSet('G1', 'G2')]
+    [string]$Phase = 'G2'
+)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$evidence = Join-Path $repo ('artifacts/rich-town-tests/G1/development-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff'))
+$evidence = Join-Path $repo ('artifacts/rich-town-tests/' + $Phase + '/development-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff'))
 New-Item -ItemType Directory -Path $evidence | Out-Null
 
 # 此入口只执行 Debug 开发检查，没有发布配置、部署参数、Host 启动或统一 Gate 调用。
@@ -12,6 +15,8 @@ function Invoke-Dotnet([string[]]$Command, [string]$Log) {
     if ($LASTEXITCODE -ne 0) { throw "dotnet $($Command -join ' ') 失败，退出码 $LASTEXITCODE；证据：$evidence" }
 }
 
+$previousSimulationReport = $env:RICH_TOWN_SIMULATION_REPORT
+$env:RICH_TOWN_SIMULATION_REPORT = Join-Path $evidence 'simulation.json'
 Push-Location $repo
 try {
     Invoke-Dotnet -Command @('restore', 'ClassicGamePlugin.slnx', '--locked-mode', '-p:SkipPluginDeploy=true') -Log 'restore.log'
@@ -40,6 +45,34 @@ try {
         $results += [ordered]@{ suite = $suite.Name; passed = [int]$counts.passed; failed = [int]$counts.failed; trx = "$($suite.Name)/results.trx" }
     }
 
+    # G2 必须实际运行完整模拟，不能只有一个名称相似的空测试；报告在全部断言成功后才会写入。
+    $simulation = Get-Content (Join-Path $evidence 'simulation.json') -Raw | ConvertFrom-Json
+    if ($simulation.games -ne 1000 -or $simulation.seedStart -ne 0 -or $simulation.seedEnd -ne 999 -or
+        $simulation.commandLimit -ne 2000 -or $simulation.maxCommands -gt $simulation.commandLimit -or
+        $simulation.commands -lt 1000 -or $simulation.restoredCommands -le 0 -or
+        ($simulation.roundLimitGames + $simulation.lastSurvivorGames) -ne 1000 -or
+        $simulation.finalSnapshotsSha256 -notmatch '^[0-9A-F]{64}$') { throw 'G2 完整对局/恢复证据缺失或不合格。' }
+
+    # 只约束本轮纯规则及会话，不用整个含 GPU 的插件覆盖率稀释规则缺口；类型缺失也必须失败。
+    $coverageFiles = @(Get-ChildItem (Join-Path $evidence 'rich-town') -Recurse -Filter 'coverage.cobertura.xml')
+    # VSTest 的 TRX 收集器可能把同一覆盖率附件复制到运行目录与 In 目录，允许字节完全相同的副本。
+    # 不合并不同报告或任取最大覆盖率；无报告或存在不同内容均拒绝。
+    $coverageHashes = @($coverageFiles | ForEach-Object { (Get-FileHash -LiteralPath $_.FullName).Hash } | Sort-Object -Unique)
+    if ($coverageFiles.Count -eq 0 -or $coverageHashes.Count -ne 1) { throw '小镇覆盖率缺失或包含不同内容的报告。' }
+    [xml]$coverage = Get-Content -LiteralPath $coverageFiles[0].FullName -Raw
+    $criticalTypes = @('Domain.RichTownBoard', 'Domain.RichTownSnapshot', 'Domain.RichTownSnapshotValidator',
+        'Domain.RichTownRandom', 'Domain.RichTownRules', 'Domain.RichTownRules/Turn', 'Domain.RichTownComputerPlayer', 'Application.RichTownSession')
+    $coverageResults = @()
+    foreach ($type in $criticalTypes) {
+        $classes = @($coverage.coverage.packages.package.classes.class | Where-Object { $_.name -eq "ClassicGamePlugin.Features.RichTown.$type" })
+        if ($classes.Count -ne 1) { throw "覆盖率缺少或重复关键类型：$type" }
+        $line = [double]::Parse($classes[0].'line-rate', [Globalization.CultureInfo]::InvariantCulture)
+        $branch = [double]::Parse($classes[0].'branch-rate', [Globalization.CultureInfo]::InvariantCulture)
+        if ($line -lt 0.95 -or $branch -lt 0.95) { throw "$type 行/分支覆盖率未达到 95%：$line / $branch" }
+        $coverageResults += [ordered]@{ type = $type; lineRate = $line; branchRate = $branch }
+    }
+    $coverageResults | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $evidence 'rules-coverage.json') -Encoding utf8
+
     # 在证据目录重新转换，不覆盖仓库中已经审查过的二进制文件。
     $converted = Join-Path $evidence 'converted'
     & "$PSScriptRoot/Convert-RichTownPrototypeAsset.ps1" -OutputDirectory $converted
@@ -54,11 +87,14 @@ try {
 
     $documents = @('README.md', 'docs/README.md', 'docs/rich-town.md', 'docs/rich-town-roadmap.md', 'docs/rich-town-assets-and-dependencies.md',
         'docs/project-and-window-responsibilities.md', 'docs/deployment-and-release.md',
-        'docs/plan-history/rich-town/g0-design-and-development-plan.md', 'docs/plan-history/rich-town/g1-stride-integration.md')
+        'docs/plan-history/rich-town/g0-design-and-development-plan.md', 'docs/plan-history/rich-town/g1-stride-integration.md',
+        'docs/plan-history/rich-town/g2-deterministic-rules.md')
     $links = 0
     foreach ($document in $documents) {
         $fullPath = Join-Path $repo $document
         $text = [IO.File]::ReadAllText($fullPath)
+        # 新专项文档可能尚未纳入 Git；直接检查行尾空白，避免只靠 git diff 漏过新文件。
+        if ([regex]::IsMatch($text, '(?m)[\t ]+\r?$')) { throw "$document 存在行尾空白。" }
         foreach ($match in [regex]::Matches($text, '\[[^\]]*\]\(([^)]+)\)')) {
             $link = $match.Groups[1].Value.Trim('<', '>')
             if ($link -match '^(https?://|#|mailto:)') { continue }
@@ -75,9 +111,13 @@ try {
     if ($LASTEXITCODE -ne 0) { throw '未暂存第一方差异检查失败。' }
     & git -c core.whitespace=cr-at-eol diff --cached --check -- @diffPaths
     if ($LASTEXITCODE -ne 0) { throw '已暂存第一方差异检查失败。' }
-    [ordered]@{ configuration = 'Debug'; testSuites = $results; localLinks = $links;
+    [ordered]@{ phase = $Phase; configuration = 'Debug'; testSuites = $results; localLinks = $links;
+        deterministicRules = 'passed'; simulation = $simulation; rulesCoverage = $coverageResults;
         assetConversion = 'matching SHA-256'; integration = 'NOT SIGNED: see g1-stride-integration.md'; release = 'not executed' } |
         ConvertTo-Json -Depth 6 | Set-Content (Join-Path $evidence 'summary.json') -Encoding utf8
-    Write-Output "Debug 开发检查通过；G1 集成结论单独记录，不能据此签署 G1。证据：$evidence"
+    Write-Output "Debug 开发检查及 G2 规则门禁通过；G1 集成结论单独记录，不能据此签署 G1。证据：$evidence"
 }
-finally { Pop-Location }
+finally {
+    $env:RICH_TOWN_SIMULATION_REPORT = $previousSimulationReport
+    Pop-Location
+}

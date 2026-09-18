@@ -57,14 +57,16 @@ WorkflowStudio 的单轮完整本地封板见
 三阶魔方的 3D 转层、手动操作、按目标分组的层先法还原、完整公式动画、回退与测试矩阵见
 [三阶魔方 Document 设计与开发说明](docs/rubiks-cube.md)。本功能仅使用 Debug 开发检查，不调用含 Release 和真实打包的统一 Gate。
 
-富翁小镇 3D（Stride）已实现 **G1 房屋视口原型，集成尚未通过**，不计入现有十四个可玩游戏。
+富翁小镇 3D（Stride）已实现 **G1 房屋视口原型及 G2 确定性规则；G1 集成仍阻塞**，不计入现有十四个可玩游戏。
 Module 目前登记 15 个 Document 和 15 个图标；原有 23 条工作台命令不变。后续逐步开发遵循
 [专用设计与开发说明](docs/rich-town.md)及[专项阶段记录](docs/plan-history/rich-town/g0-design-and-development-plan.md)。
 已完成内容、Document 状态、后续 G1–G5 工作包与验收条件见[完整开发路线图](docs/rich-town-roadmap.md)。
+G2 的规则、偿债/破产、串行会话、电脑策略、随机恢复及 1,000 种子模拟见[G2 专项记录](docs/plan-history/rich-town/g2-deterministic-rules.md)。
+按用户本轮要求，纯规则先独立完成；正式 3D 玩法接入仍以解决 G1 为前提，原型页面尚未接入 G2 会话。
 SOLID 为首要约束，使用朴素设计、详细中文注释和完整单测；仅执行专用 Debug 本地开发检查，不使用 AIFLOW、Windows CI、
 Release 构建、正式 ZIP 打包或发布门禁。下方通用打包命令和统一跨仓 Gate 不适用于该功能当前开发阶段。
 
-小镇开发入口：`pwsh -NoProfile -File scripts/Test-RichTownDevelopment.ps1`。
+小镇开发入口：`pwsh -NoProfile -File scripts/Test-RichTownDevelopment.ps1`（默认 G2 证据目录，含全量单测、1,000 对局及规则覆盖率门禁）。
 预览：`dotnet run --project src/ClassicGamePlugin.Standalone -c Debug -p:SkipPluginDeploy=true -- --rich-town-probe`。
 该入口和插件登记共用同一页面；默认 Standalone 仍为原有十四个标签页。
 当前部署被 `Microsoft.Extensions.DependencyModel.dll` 的共享库禁带规则阻塞，原生视口也不能正确覆盖页面叠层；

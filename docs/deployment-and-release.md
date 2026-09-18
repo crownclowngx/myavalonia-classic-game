@@ -10,6 +10,8 @@
 > G1 已声明 42 个私有运行依赖包和小镇资源，Debug 部署实测被 Build 1.1.3 的
 > `Microsoft.Extensions.DependencyModel.dll` 禁带规则阻止；尚未产生通过协议的暂存目录。
 > [G1 记录](plan-history/rich-town/g1-stride-integration.md)保留失败命令；[依赖说明](rich-town-assets-and-dependencies.md)列出文件与后续条件。
+> [G2 规则阶段](plan-history/rich-town/g2-deterministic-rules.md)已通过无窗口 Debug 开发门禁，未执行部署；未新增 NuGet 或非托管库。
+> 仅在现有小镇许可证路径增加 `SplitMix64.txt`，不改变 G1 的自包含待验证结论。
 
 部署分为开发期临时联调和正式 ZIP 发布。两者都必须使用 Build 包筛选出的干净插件目录，不能直接复制
 普通 `bin/Debug` 或 `bin/Release`，因为普通输出可能包含 Host 应当统一提供的共享程序集。

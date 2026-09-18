@@ -8,7 +8,7 @@
 | `ClassicGamePlugin.Standalone` | 启动 Avalonia、承载 Plugin 中的真实界面、提供开发期 Stub | 成为第二套插件实现或模拟完整 Host |
 | `ClassicGamePlugin.Tests` | 验证业务、初始化、状态隔离、注册和生命周期约定 | 代替真实 Host 的最终加载验收 |
 | `ClassicGamePlugin.RichTown.Stride` | 仅供小镇使用的原生表面、Stride 场景、内容与资源释放 | 引用其他游戏、SDK、Dock 或承载经济规则 |
-| `ClassicGamePlugin.RichTown.Tests` | 小镇资产校验、子领域边界、原生边界替身及生命周期 | 借用其他游戏的状态或假装执行真实 GPU/Host 验收 |
+| `ClassicGamePlugin.RichTown.Tests` | 小镇规则/债务/随机/会话/电脑、完整对局、资产校验、子领域边界和生命周期 | 借用其他游戏的状态或假装执行真实 GPU/Host 验收 |
 
 只有 `.Plugin` 提供插件入口；它的显式私有运行依赖可以随插件交付。Standalone 可执行程序、开发 Stub 与 Tests 不随插件发布。
 
@@ -52,6 +52,9 @@ SDK 边界包装 View。十四个包装 View 都通过单向绑定把 Document �
 贡献清单。
 
 ## 富翁小镇 3D 的 G1 原型（集成阻塞）
+
+G2 已在 Plugin 的 `Features/RichTown/Domain` 与 `Application` 实现纯规则和串行会话，见[G2 专项记录](plan-history/rich-town/g2-deterministic-rules.md)。
+规则不依赖 UI/引擎/SDK，也未连接当前原型 Document；正式会话所有权与保存仍在 G4 接入，不新增项目或共享游戏服务。
 
 [富翁小镇专用方案](rich-town.md)已实现原型 Document 和私有 `ClassicGamePlugin.RichTown.Stride` 类库。
 新增内容全部归小镇子领域，渲染库单向被 Plugin 引用，不引用 Plugin 或任何其他游戏；没有通用游戏引擎服务。

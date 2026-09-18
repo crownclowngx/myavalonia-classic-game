@@ -1,4 +1,4 @@
-# 富翁小镇 G1：素材与依赖清单
+# 富翁小镇：素材与依赖清单
 
 日期：2026-09-18。当前为开发原型，**部署阻塞，未证明自包含**。
 关联：[设计方案](rich-town.md)、[G1 集成记录](plan-history/rich-town/g1-stride-integration.md)。
@@ -35,10 +35,13 @@ Assets/RichTown/Shaders/*.sdsl      # 400 个，来自同版 Graphics 和 Render
 Licenses/RichTown/Kenney.txt
 Licenses/RichTown/Stride.txt
 Licenses/RichTown/asset-manifest.json
+Licenses/RichTown/SplitMix64.txt   # G2 纯托管随机算法来源许可
 ```
 
 Stride MIT 原文来自锁定源码修订 [e023d874… 的 LICENSE.md](https://github.com/stride3d/stride/blob/e023d874ba2985dbb132e9608f00d28d021b6f78/LICENSE.md)，
-随运行内容保留。其他传递包和原生组件的许可尚需逐项完成最终分发审查；上面的两份许可证不能覆盖所有第三方组件。
+随运行内容保留。G2 的 SplitMix64 改编自 [Sebastiano Vigna 的公开参考实现](https://prng.di.unimi.it/splitmix64.c)，
+保留[原始许可声明与改编说明](../src/ClassicGamePlugin.Plugin/Features/RichTown/Domain/Random-LICENSE.txt)，通过现有小镇部署声明复制到许可证目录。
+G2 未新增 NuGet、原生库或模型，G1 机器依赖清单保持历史内容。其他传递包和原生组件的许可仍需逐项完成最终分发审查。
 
 第一次运行曾因缺少 `LightDirectionalGroup.sdsl` 失败，已修正为显式携带 400 个同版着色器源。
 程序为当前表面创建 `%TEMP%/ClassicGamePlugin/RichTown/<随机目录>` 的独立 ObjectDatabase，

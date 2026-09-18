@@ -2,6 +2,8 @@
   <!-- 来自 net10.0 project.assets.json 的运行时闭包，不包含 Host 已拥有的 Avalonia/SDK/UI 依赖。
        G1 保留完整声明；若 Build 协议拒绝某一传递包，应报告兼容阻塞，不静默删 DLL 绕过检查。 -->
   <ItemGroup>
+    <!-- G2 的纯托管随机算法附带上游许可；沿用小镇许可证目录，不增加任何运行时依赖。 -->
+    <None Update="Features/RichTown/Domain/Random-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" TargetPath="Licenses/RichTown/SplitMix64.txt" />
     <ManagedPluginPrivatePackage Include="K4os.Compression.LZ4;K4os.Compression.LZ4.Legacy;Microsoft.DotNet.PlatformAbstractions;Microsoft.Extensions.DependencyModel;Microsoft.Win32.SystemEvents;ServiceWire;System.Drawing.Common" />
     <ManagedPluginPrivatePackage Include="SharpDX;SharpDX.D3DCompiler;SharpDX.Direct3D11;SharpDX.Direct3D12;SharpDX.DXGI" />
     <ManagedPluginPrivatePackage Include="Silk.NET.Core;Silk.NET.Maths;Silk.NET.OpenGL;Silk.NET.OpenGLES;Silk.NET.OpenGLES.Extensions.EXT;Silk.NET.OpenXR;Silk.NET.OpenXR.Extensions.FB;Silk.NET.SDL;Ultz.Native.SDL;Vortice.Vulkan" />

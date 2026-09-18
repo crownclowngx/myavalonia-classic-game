@@ -38,6 +38,23 @@ public sealed class RichTownBoundaryTests
     }
 
     [Fact]
+    public void 小镇规则和会话不依赖界面引擎文件时钟或其他子领域()
+    {
+        var feature = Path.Combine(RepositoryRoot(), "src/ClassicGamePlugin.Plugin/Features/RichTown");
+        var sources = Sources(Path.Combine(feature, "Domain")).Concat(Sources(Path.Combine(feature, "Application"))).ToArray();
+        Assert.NotEmpty(sources);
+        foreach (var path in sources)
+        {
+            var text = File.ReadAllText(path);
+            Assert.DoesNotMatch(@"\b(Avalonia|Stride|MyAvaloniaManagement|System\.IO|System\.Threading)\.", text);
+            Assert.DoesNotMatch(@"\b(File|Directory|DateTime|DateTimeOffset|Environment|Task|Thread)\.|Random\.Shared|new\s+Random\s*\(", text);
+            Assert.DoesNotMatch(@"ClassicGamePlugin\.Features\.(?!RichTown\b)\w+", text);
+        }
+        Assert.Equal(File.ReadAllText(Path.Combine(feature, "Domain/Random-LICENSE.txt")),
+            File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Licenses/RichTown/SplitMix64.txt")));
+    }
+
+    [Fact]
     public void 已下载素材及转换产物符合锁定摘要且可由运行时读取()
     {
         var root = Path.Combine(RepositoryRoot(), "src/ClassicGamePlugin.RichTown.Stride/Assets");
