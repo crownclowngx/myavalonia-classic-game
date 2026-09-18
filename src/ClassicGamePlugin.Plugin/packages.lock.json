@@ -10,9 +10,9 @@
       },
       "MyAvaloniaManagement.Plugin.Build": {
         "type": "Direct",
-        "requested": "[1.1.3, 1.1.3]",
-        "resolved": "1.1.3",
-        "contentHash": "EVItP+hU6s27EAXPnO5SZTAq6IgYge5ykdd/nlrbnHyPmqXSiBSd/BJfdqyTVANPdzzuP7r1Jf2yaJJ/FGZCAw=="
+        "requested": "[3.4.2-richtown.1, 3.4.2-richtown.1]",
+        "resolved": "3.4.2-richtown.1",
+        "contentHash": "f1ZHjHpJjk5Z9S4vuDcSCNCxuMw3NhxMHIdh2BKi37OI1lM0y02eQKlowpkkQvgjqHVpzCYzHNDIhEJy0e074g=="
       },
       "MyAvaloniaManagement.PluginSdk": {
         "type": "Direct",

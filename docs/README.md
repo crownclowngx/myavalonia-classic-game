@@ -1,5 +1,7 @@
 # ClassicGamePlugin 开发快速开始
 
+> 本次用户已单独授权本地发布与桌面部署；当前 1.2.0 的修复、验证和回滚见[部署修复记录](plan-history/rich-town/g5-deployment-repair.md)。下文 Debug 限制仍适用于日常开发入口。
+
 - [V6.1 图标同步升级](plan-history/v6.1-plugin-icons.md)：入口映射、依赖边界和验证结果。
 - [富翁小镇完整开发路线图](rich-town-roadmap.md)：本轮做了什么、Document 状态、后续任务顺序及逐阶段验收条件。
 - [富翁小镇 3D 专用方案](rich-town.md)：Stride 集成、SOLID 职责、规则与测试矩阵；**G2/G3/G4 已实现，G5 集成核验仍有阻塞**。

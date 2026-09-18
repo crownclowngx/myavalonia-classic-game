@@ -12,10 +12,14 @@
   <!-- TargetDir 及内容文件只有在构建完成后才确定，因此在部署前展开显式资源。 -->
   <Target Name="CollectRichTownAssets" BeforeTargets="DeployManagedPlugin">
     <ItemGroup>
+      <!-- 先收集到独立项，再使用带项名的元数据映射路径。未限定的 Filename/RecursiveDir
+           会在同一个 ItemGroup 内参与已有资产的批处理，造成着色器与许可证的笛卡尔积。 -->
+      <_RichTownContent Include="$(TargetDir)Assets/RichTown/**/*" />
+      <_RichTownLicense Include="$(TargetDir)Licenses/RichTown/**/*" />
       <ManagedPluginAsset Include="$(TargetDir)ClassicGamePlugin.RichTown.Stride.dll" TargetPath="ClassicGamePlugin.RichTown.Stride.dll" />
       <ManagedPluginAsset Include="$(TargetDir)ClassicGamePlugin.RichTown.Stride.pdb" TargetPath="ClassicGamePlugin.RichTown.Stride.pdb" />
-      <ManagedPluginAsset Include="$(TargetDir)Assets/RichTown/**/*" TargetPath="Assets/RichTown/%(RecursiveDir)%(Filename)%(Extension)" />
-      <ManagedPluginAsset Include="$(TargetDir)Licenses/RichTown/**/*" TargetPath="Licenses/RichTown/%(RecursiveDir)%(Filename)%(Extension)" />
+      <ManagedPluginAsset Include="@(_RichTownContent)" TargetPath="Assets/RichTown/%(_RichTownContent.RecursiveDir)%(_RichTownContent.Filename)%(_RichTownContent.Extension)" />
+      <ManagedPluginAsset Include="@(_RichTownLicense)" TargetPath="Licenses/RichTown/%(_RichTownLicense.RecursiveDir)%(_RichTownLicense.Filename)%(_RichTownLicense.Extension)" />
     </ItemGroup>
   </Target>
 </Project>

@@ -122,7 +122,8 @@ try {
         'docs/project-and-window-responsibilities.md', 'docs/deployment-and-release.md',
         'docs/plan-history/rich-town/g0-design-and-development-plan.md', 'docs/plan-history/rich-town/g1-stride-integration.md',
         'docs/plan-history/rich-town/g2-deterministic-rules.md', 'docs/plan-history/rich-town/g3-playable-scene.md',
-        'docs/plan-history/rich-town/g4-document-and-save.md', 'docs/plan-history/rich-town/g5-local-integration.md', 'docs/workbench-commands.md')
+        'docs/plan-history/rich-town/g4-document-and-save.md', 'docs/plan-history/rich-town/g5-local-integration.md',
+        'docs/plan-history/rich-town/g5-deployment-repair.md', 'build/feed/README.md', 'docs/workbench-commands.md')
     $links = 0
     foreach ($document in $documents) {
         $fullPath = Join-Path $repo $document

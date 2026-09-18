@@ -1,6 +1,6 @@
 # ClassicGamePlugin
 
-> V6.1 图标同步升级：插件 `1.1.1`，Core/UI SDK `3.4.0`，Build `1.1.3`。
+> 当前本地发布：插件 `1.2.0`，Core/UI SDK `3.4.0`，Build `3.4.2-richtown.1`（仓库固定候选包）。
 > 图标映射、兼容边界与验证命令见 [专用说明](docs/plan-history/v6.1-plugin-icons.md)。
 
 这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋和三阶魔方 Document。真实交付物是
@@ -64,15 +64,15 @@ Module 目前登记 14 个普通 Document + 1 个持久化小镇、15 个图标�
 G2 的规则、偿债/破产、串行会话、电脑策略、随机恢复及 1,000 种子模拟见[G2 专项记录](docs/plan-history/rich-town/g2-deterministic-rules.md)。
 按用户本轮要求，G3 已接入同一 Document：24 格、汽车、建筑、镜头、动画和中文操作，一真人两电脑可完成整局，见[G3 专项记录](docs/plan-history/rich-town/g3-playable-scene.md)。
 SDK schema 1、保存修订、工作台 Restart、关闭取消和单会话激活见[G4 专项记录](docs/plan-history/rich-town/g4-document-and-save.md)。
-依赖审计、20 次实际窗口循环、只读目录失败与资源曲线见[G5 专项记录](docs/plan-history/rich-town/g5-local-integration.md)，真实 Host 尚未验收。
-SOLID 为首要约束，使用朴素设计、详细中文注释和完整单测；仅执行专用 Debug 本地开发检查，不使用 AIFLOW、Windows CI、
-Release 构建、正式 ZIP 打包或发布门禁。下方通用打包命令和统一跨仓 Gate 不适用于该功能当前开发阶段。
+依赖审计与历史限制见[G5 专项记录](docs/plan-history/rich-town/g5-local-integration.md)；部署修复、真实 Host 棋盘与回合实测见[1.2.0 发布记录](docs/plan-history/rich-town/g5-deployment-repair.md)。
+SOLID 为首要约束，使用朴素设计、详细中文注释和完整单测；日常使用专用 Debug 本地开发检查。
+本次按用户明确授权执行 1.2.0 本地 Release 测试、标准 ZIP 和桌面部署；不使用 AIFLOW、Windows CI 或统一跨仓 verify/seal。
 
 小镇开发入口：`pwsh -NoProfile -File scripts/Test-RichTownDevelopment.ps1`（默认 G5 证据目录，含全量单测、1,000 对局、规则/展示/存档覆盖率及依赖审计）。
 可玩预览：`dotnet run --project src/ClassicGamePlugin.Standalone -c Debug -p:SkipPluginDeploy=true -- --rich-town-play`。
 该入口和插件登记共用同一游戏页面；`--rich-town-probe` 保留独立 G1 诊断页面；默认 Standalone 仍为原有十四个标签页。
 显式本机完整窗口检查：`pwsh -NoProfile -File scripts/Test-RichTownPlayableWindow.ps1`，需要本机桌面与 GPU，不属于 Windows CI。
-当前部署被 `Microsoft.Extensions.DependencyModel.dll` 的共享库禁带规则阻塞，原生视口也不能正确覆盖页面叠层；
+DependencyModel 禁带冲突、资源映射和 Host 中 SDL 查找已修复；原生视口叠层仍待完善；
 此外 Stride 在只读程序目录初始化失败，20 次循环后句柄增长仍待定位；见 [G5 结果与下一步](docs/plan-history/rich-town/g5-local-integration.md)。
 
 ```powershell

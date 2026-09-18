@@ -15,6 +15,7 @@ internal sealed class RichTownStrideSurface(bool playable = false) : IRichTownSu
 
     public void Start(nint handle)
     {
+        RichTownNativeLibraryPaths.EnsureConfigured();
         _game = new RichTownStrideGame(playable);
         _game.CellSelected += ForwardSelection;
         // SDL_CreateWindowFrom 包装的是 Avalonia 拥有的子 HWND。SDL 释放包装，Avalonia 最后销毁 HWND。

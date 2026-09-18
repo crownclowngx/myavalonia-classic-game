@@ -1,6 +1,7 @@
 # 富翁小镇：素材与依赖清单
 
-日期：2026-09-18。当前 G4 已实现、G5 已开展审计，**部署与只读环境阻塞，未证明自包含**。
+日期：2026-09-18。当前 G4 已实现、G5 已开展审计；**部署和 Host SDL 加载已修复，只读与完整自包含验收仍未通过**。
+1.2.0 发布包及真实 Host 棋盘/回合证据见[部署修复记录](plan-history/rich-town/g5-deployment-repair.md)。
 关联：[设计方案](rich-town.md)、[G1 集成记录](plan-history/rich-town/g1-stride-integration.md)。
 
 ## 已纳入的一栋房屋
@@ -47,7 +48,7 @@ G3 未新增下载或依赖，继续复用同一房屋与调色板：一级一�
 [小镇场景代码](../src/ClassicGamePlugin.RichTown.Stride/RichTownBoardScene.cs)生成，没有引入 Car Kit/Roads 或新的外部许可。
 场景共用基础立方体缓冲和按颜色缓存的模型，产权模型组合只随规则修订更新；资源仍由当前表面的 Stride Game 统一释放。
 Standalone 的 `app.manifest` 仅补充原生子窗口所需的 Windows 兼容性声明，不增加管理员权限，不改变插件资产路径或 Host 策略。
-真实窗口结果见[G3 专项记录](plan-history/rich-town/g3-playable-scene.md)；不改变下文的依赖交付阻塞与离线验证范围。
+真实窗口结果见[G3 专项记录](plan-history/rich-town/g3-playable-scene.md)；后续部署修复不代替离线与只读验证。
 
 第一次运行曾因缺少 `LightDirectionalGroup.sdsl` 失败，已修正为显式携带 400 个同版着色器源。
 程序为当前表面创建 `%TEMP%/ClassicGamePlugin/RichTown/<随机目录>` 的独立 ObjectDatabase，
@@ -77,12 +78,12 @@ libstrideaudio、freetype、libstridevr 依赖 VCRUNTIME140.dll；本机实际�
 新 [审计脚本](../scripts/Test-RichTownDependencies.ps1)从实际锁定图生成版本/摘要/导入与许可元数据，结果和边界见 [G5 记录](plan-history/rich-town/g5-local-integration.md)。
 不得将当前开发机上的运行成功表述为“无需任何外部依赖”。
 
-## 已证实的部署冲突
+## 历史部署冲突与本次修复
 
 依赖链之一为 `Stride.Engine → Stride.VirtualReality → Silk.NET.OpenXR → Silk.NET.Core → Microsoft.Extensions.DependencyModel`。
-当前 Build 1.1.3 拒绝任何 `Microsoft.Extensions.*` DLL 进入插件目录，目标 Host 的 Debug 输出中没有 DependencyModel。
-保持全部声明后执行隔离 Debug 部署，明确失败于 `Microsoft.Extensions.DependencyModel.dll`，尚未产生有效暂存目录。
-本轮没有删掉 DLL、修改 Build 的禁带规则、修改 Host 共享闭包或复制整个 bin 来绕过协议。
+此前 Build 1.1.3 拒绝任何 `Microsoft.Extensions.*` DLL 进入插件目录，目标 Host 共享闭包中没有 DependencyModel，导致隔离部署失败。
+本次通过主仓 RuntimeProfile 精确放行该私有程序集，并固定使用 `3.4.2-richtown.1` 构建候选包；没有扩大整个 Extensions 家族的许可或修改 Host 加载器。
+同时修正内容映射与 Silk SDL 路径解析，标准 ZIP 含 462 个文件；实际 Host 已从插件 RID 目录加载 SDL2、音频库和着色器编译库并推进人机回合。
 
-下一次 G1 应先确定公开受支持的依赖交付方案，随后重新核对托管闭包、原生导入表、实际加载路径、离线和只读路径。
+下一步继续完成原生二级依赖的净机/离线检查、只读路径与许可分发审查；正式 Build 包包含该修复后替换本地候选包。
 同进程的原生库可能驻留到进程退出；目前没有可卸载或多版本原生隔离的保证。

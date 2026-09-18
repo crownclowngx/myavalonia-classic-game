@@ -1,5 +1,7 @@
 # 临时部署、正式发布与验收
 
+> 2026-09-18 更新：用户已授权本地发布；1.2.0 已解决 DependencyModel 禁带、资源重复映射和单文件 Host 的 SDL 查找问题。当前步骤以[专项发布记录](plan-history/rich-town/g5-deployment-repair.md)为准。下方 G1–G5 失败段落为历史事实，不代表修复后的当前结果。
+
 > 当前跨仓验收统一由主仓 `tools/MyAvaloniaManagement.Gate` 执行。本文中的 `scripts/*.ps1` 命令是历史记录，
 > 已退役；使用方式见本仓 README。
 

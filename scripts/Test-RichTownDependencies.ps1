@@ -1,4 +1,7 @@
-param([string]$OutputDirectory)
+param(
+    [string]$OutputDirectory,
+    [string]$PluginDirectory
+)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
@@ -7,7 +10,8 @@ $evidence = [IO.Path]::GetFullPath($OutputDirectory)
 if (Test-Path -LiteralPath (Join-Path $evidence 'dependencies.json')) { throw '依赖报告已存在，请使用新目录。' }
 New-Item -ItemType Directory -Force -Path $evidence | Out-Null
 
-# 审计实际锁定依赖图与 Debug 输出，不复制 bin、不加载原生 DLL、不修改 PATH 或 NuGet 包缓存。
+# 默认审计 Debug 预览；显式 PluginDirectory 时审计真实包解压目录。
+# 两者都按锁定包源核对文件摘要，不复制 bin、不加载原生 DLL、不修改 PATH 或 NuGet 包缓存。
 if (-not ('ClassicGamePlugin.LocalChecks.RichTown.NativeImports' -as [type])) {
     Add-Type -Path (Join-Path $PSScriptRoot 'RichTown.NativeImports.cs')
 }
@@ -20,6 +24,10 @@ $packages = @()
 $native = @()
 $pinvoke = @()
 $output = Join-Path $repo 'src/ClassicGamePlugin.Standalone/bin/Debug/net10.0'
+if ($PluginDirectory) {
+    $output = [IO.Path]::GetFullPath($PluginDirectory)
+    if (-not (Test-Path -LiteralPath (Join-Path $output 'plugin.manifest.json'))) { throw '指定目录缺少插件清单。' }
+}
 foreach ($id in $privatePackages) {
     $key = @($target.Keys | Where-Object { $_.StartsWith($id + '/', [StringComparison]::OrdinalIgnoreCase) })
     if ($key.Count -ne 1) { throw "私有声明未在锁定图中唯一解析：$id" }
@@ -39,7 +47,7 @@ foreach ($id in $privatePackages) {
         $destination = if ($isNative) { $relative } else { [IO.Path]::GetFileName($relative) }
         $source = Join-Path $packagePath[0] $relative
         $built = Join-Path $output $destination
-        if (-not (Test-Path -LiteralPath $built)) { throw "Debug 输出缺文件：$destination" }
+        if (-not (Test-Path -LiteralPath $built)) { throw "被审计目录缺文件：$destination" }
         $hash = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash
         if ((Get-FileHash -LiteralPath $built -Algorithm SHA256).Hash -ne $hash) { throw "输出与包源不一致：$destination" }
         $files += [ordered]@{ path = $destination; bytes = (Get-Item -LiteralPath $built).Length; sha256 = $hash }
@@ -69,12 +77,11 @@ foreach ($entry in $native) {
     }
 }
 $vc = @($edges | Where-Object { $_.classification -eq 'VC++ runtime prerequisite' } | ForEach-Object { $_.to } | Sort-Object -Unique)
-[ordered]@{ platform = 'win-x64'; configuration = 'Debug'; packages = $packages; native = $native; nativeEdges = $edges;
+[ordered]@{ platform = 'win-x64'; sourceDirectory = $output; artifactKind = $(if ($PluginDirectory) { 'plugin-package' } else { 'Standalone-Debug' }); packages = $packages; native = $native; nativeEdges = $edges;
     platformInvokes = $pinvoke; vcRuntimePrerequisites = $vc;
     limitations = @('Static PE imports and DllImport metadata only; dynamic loads require runtime checks.',
         'System32 presence does not establish clean-machine or offline compatibility.',
-        'Hashes compare package files with Standalone Debug output, not a compliant plugin deployment.',
-        'Build 1.1.3 rejects Microsoft.Extensions.DependencyModel.dll; this is an audit, not a compliant deployment.',
+        'Hashes verify the selected directory against locked package sources; Host loading requires separate runtime checks.',
         'License declarations are inventory metadata, not proof all redistribution notices are delivered.') } |
     ConvertTo-Json -Depth 10 | Set-Content (Join-Path $evidence 'dependencies.json') -Encoding utf8
 if (@($edges | Where-Object { $_.classification -eq 'UNRESOLVED on this machine' }).Count -gt 0) {

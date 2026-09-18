@@ -4,7 +4,7 @@
     <ManagedPlugin>true</ManagedPlugin>
     <ManagedPluginId>myavalonia.plugin.classic.game</ManagedPluginId>
     <ManagedPluginDirectoryName>ClassicGamePlugin</ManagedPluginDirectoryName>
-    <PluginVersion>1.1.1</PluginVersion>
+    <PluginVersion>1.2.0</PluginVersion>
     <ManagedPluginRuntimeIdentifier>win-x64</ManagedPluginRuntimeIdentifier>
     <ManagedPluginEntryType>ClassicGamePlugin.Plugin.ClassicGamePluginModule</ManagedPluginEntryType>
     <ManagedPluginSdkMinInclusive>3.4.0</ManagedPluginSdkMinInclusive>
