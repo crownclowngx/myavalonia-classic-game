@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 if (-not $IsWindows) { throw '此入口需要本机 Windows 桌面与可用显卡；它不是无窗口单元测试。' }
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$evidence = Join-Path $repo ('artifacts/rich-town-tests/G3/window-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff'))
+$evidence = Join-Path $repo ('artifacts/rich-town-tests/G5/window-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff'))
 New-Item -ItemType Directory -Path $evidence | Out-Null
 Push-Location $repo
 try {

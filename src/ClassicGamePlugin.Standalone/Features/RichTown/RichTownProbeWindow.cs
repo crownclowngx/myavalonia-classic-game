@@ -13,6 +13,7 @@ internal sealed class RichTownProbeWindow : Window
         Width = 1050;
         Height = 740;
         var document = new RichTownDocument();
+        document.InitializeAsync(new MyAvaloniaManagement.PluginSdk.NewDocumentActivation(string.Empty), default).GetAwaiter().GetResult();
         Content = new RichTownProbeView { DataContext = document };
         Closed += (_, _) => document.Dispose();
     }

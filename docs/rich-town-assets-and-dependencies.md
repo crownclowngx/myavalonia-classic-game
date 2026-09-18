@@ -1,6 +1,6 @@
 # 富翁小镇：素材与依赖清单
 
-日期：2026-09-18。当前为 G3 本地可玩开发版，**部署阻塞，未证明自包含**。
+日期：2026-09-18。当前 G4 已实现、G5 已开展审计，**部署与只读环境阻塞，未证明自包含**。
 关联：[设计方案](rich-town.md)、[G1 集成记录](plan-history/rich-town/g1-stride-integration.md)。
 
 ## 已纳入的一栋房屋
@@ -52,7 +52,8 @@ Standalone 的 `app.manifest` 仅补充原生子窗口所需的 Windows 兼容�
 第一次运行曾因缺少 `LightDirectionalGroup.sdsl` 失败，已修正为显式携带 400 个同版着色器源。
 程序为当前表面创建 `%TEMP%/ClassicGamePlugin/RichTown/<随机目录>` 的独立 ObjectDatabase，
 将 shader 映射到 `shaders/文件名`；关闭时释放文件提供器并只清理本实例创建的目录。
-尚未执行安装目录只读、非 ASCII 路径或无开发环境的完整检查。
+G5 中文/空格可写目录 20 次窗口循环通过；只读程序目录因 Stride PlatformFolders 静态初始化创建 local/roaming/cache 失败。
+这与上述独立 ObjectDatabase 缓存不是同一职责；不能据 TEMP 缓存宣称安装目录无需写入。无开发环境的净机检查仍未通过。
 
 ## NuGet 与原生文件盘点
 
@@ -71,7 +72,9 @@ Standalone 的 `app.manifest` 仅补充原生子窗口所需的 Windows 兼容�
 | Stride.VirtualReality 4.3.0.2507 | libstridevr.dll、openvr_api.dll、openxr_loader.dll |
 
 这些文件在 NuGet 图中位于 `runtimes/win-x64/native`。未主动使用 VR/音频不等于可以删除它们；G1 保留完整声明。
-操作系统 Direct3D、显卡驱动、.NET 运行时属于平台前提；VC++ 运行库和原生导入表的二级依赖仍待验证。
+操作系统 Direct3D、显卡驱动、.NET 运行时属于平台前提。G5 已解析 7 个原生文件的普通/延迟导入，
+libstrideaudio、freetype、libstridevr 依赖 VCRUNTIME140.dll；本机实际从 System32 加载，尚未携带合法可再分发副本。
+新 [审计脚本](../scripts/Test-RichTownDependencies.ps1)从实际锁定图生成版本/摘要/导入与许可元数据，结果和边界见 [G5 记录](plan-history/rich-town/g5-local-integration.md)。
 不得将当前开发机上的运行成功表述为“无需任何外部依赖”。
 
 ## 已证实的部署冲突

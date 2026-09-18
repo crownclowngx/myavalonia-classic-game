@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><IsPackable>false</IsPackable></PropertyGroup>
   <ItemGroup>
+    <!-- 审计工具只在开发脚本与测试编译，绝不随插件发布。 -->
+    <Compile Include="../../scripts/RichTown.NativeImports.cs" Link="LocalChecks/NativeImports.cs" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="coverlet.collector" PrivateAssets="all" />
     <PackageReference Include="xunit" />

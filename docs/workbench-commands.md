@@ -1,7 +1,7 @@
 # ClassicGame Workbench Command 设计
 
-> 当前实现：Workbench Command G10 本地封板；ClassicGame `1.1.0`，Core/UI SDK `3.3.0`。
-> 当前验收统一从主仓运行 `dotnet run --project tools/MyAvaloniaManagement.Gate -- verify --scope workbench`；旧脚本命令已退役。
+> 既有 Workbench Command G10 历史封板见后文。当前 ClassicGame `1.1.1`，Core/UI SDK `3.4.0`。
+> 小镇 G4 新增独立 Restart，本阶段仅用 `scripts/Test-RichTownDevelopment.ps1`；后文历史统一 verify/seal 不适用于当前小镇开发。
 
 ## 1. 全游戏命令矩阵
 
@@ -21,10 +21,15 @@
 | 消消乐 | 是 | 无此业务能力 | Hide | — |
 | 中国跳棋 | 是 | 是 | Hide | — |
 | 三阶魔方 | 是，重置为已还原状态 | 页面提供逆序动画回退，不投影同步 Undo | Hide | — |
+| 富翁小镇 3D | 是，生成新种子并取消旧动画 | 无跨随机决策 Undo | Hide | — |
 
 命名统一为 `myavalonia.plugin.classic.game.command.<game>.restart|undo`，菜单 Placement 统一为
-`myavalonia.plugin.classic.game.command-placement.menu.tools.<game>.restart|undo`。共注册 23 条 Command 和
-23 条 Tools 菜单：14 条 Restart、9 条 Undo。魔方的教学播放和逆序回退保留在页面内；未支持撤销的四个游戏不注册占位命令。
+`myavalonia.plugin.classic.game.command-placement.menu.tools.<game>.restart|undo`。共注册 24 条 Command 和
+24 条 Tools 菜单：15 条 Restart、9 条 Undo。魔方的教学播放和逆序回退保留在页面内；未支持撤销的游戏不注册占位命令。
+
+小镇由自己的 `RichTownDocument` 适配 SDK，身份、会话与保存修订都在 RichTown 子领域，
+不引用其他游戏或共享 Workbench Adapter。页面新对局与工作台 Restart 走同一入口；没有新增快捷键。
+具体取消、通知、保存与真实 Host 尚未验证的边界见 [G4 记录](plan-history/rich-town/g4-document-and-save.md)。
 
 三阶魔方新增命令为 `myavalonia.plugin.classic.game.command.rubiks-cube.restart`，目标 Document 为
 `myavalonia.plugin.classic.game.document.rubiks-cube`，使用同一个同步 `RestartCommand`。其本次开发只执行
@@ -39,7 +44,7 @@ Host 3.3 冻结契约要求一条 CommandId 只绑定一个 DocumentTypeId，并
 - `myavalonia.plugin.classic.game.command.gomoku.restart`
 - `myavalonia.plugin.classic.game.command.gomoku.undo`
 
-## 2. 唯一执行链与实例所有权
+## 2. 既有十四游戏执行链与实例所有权
 
 ```text
 Host MenuItem / Gomoku KeyBinding

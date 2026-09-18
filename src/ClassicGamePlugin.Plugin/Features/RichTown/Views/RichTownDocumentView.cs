@@ -143,12 +143,12 @@ public sealed class RichTownDocumentView : UserControl
         _document = DataContext as RichTownDocument;
         _stage.Child = null;
         _viewport = null;
-        if (_document is not { } doc) return;
+        if (_document is not { IsInitialized: true } doc) return;
         var viewport = new RichTownViewport();
         _viewport = viewport;
         void Frame(TimeSpan elapsed, bool active)
         {
-            doc.Play.SetActive(active);
+            doc.Play.SetActive(active && !doc.IsClosing);
             doc.Play.Tick(elapsed);
             viewport.Present(doc.Play.Frame);
         }
@@ -203,7 +203,7 @@ public sealed class RichTownDocumentView : UserControl
             _pause.Content = play.IsPaused ? "继续游戏" : "暂停";
             _pause.IsEnabled = !play.IsDisposed && play.IsActive;
             _skip.IsEnabled = play.IsAnimating && !play.IsDisposed;
-            _newGame.IsEnabled = !play.IsDisposed;
+            _newGame.IsEnabled = doc.CanExecute(RichTownDocument.RestartCommandId);
             foreach (var (kind, button) in _actions)
             {
                 var command = new RichTownCommand(kind, kind is RichTownCommandKind.Upgrade or RichTownCommandKind.Sell ? play.SelectedCell : null);

@@ -14,8 +14,12 @@ public sealed partial class App : Application
         {
             var arguments = desktop.Args ?? [];
             var checkIndex = Array.IndexOf(arguments, "--rich-town-play-check");
+            var integrationIndex = Array.IndexOf(arguments, "--rich-town-integration-check");
+            if (integrationIndex >= 0 && integrationIndex + 1 >= arguments.Length) throw new ArgumentException("小镇集成检查需要显式报告路径。");
             if (checkIndex >= 0 && checkIndex + 1 >= arguments.Length) throw new ArgumentException("小镇窗口检查需要显式报告路径。");
-            desktop.MainWindow = checkIndex >= 0
+            desktop.MainWindow = integrationIndex >= 0
+                ? new Features.RichTown.RichTownIntegrationCheckWindow(arguments[integrationIndex + 1])
+                : checkIndex >= 0
                 ? new Features.RichTown.RichTownPlayWindow(arguments[checkIndex + 1])
                 : arguments.Contains("--rich-town-play", StringComparer.Ordinal)
                 ? new Features.RichTown.RichTownPlayWindow()

@@ -1,10 +1,11 @@
 # 富翁小镇 3D：Stride Document 设计与分阶段开发说明
 
-日期：2026-09-18。状态：**G2 规则及 G3 本地可玩 3D 已实现；G1 集成仍阻塞；G4–G5 未完成**。开发分支为 `codex/rich-town-stride`。
-当前有十四个既有游戏，以及一个“富翁小镇 3D（开发版）”Document（15 个 Document、15 个图标，工作台命令仍为 23 条）。
+日期：2026-09-18。状态：**G2/G3/G4 已实现；G5 已实施本地核验，集成出口仍阻塞**。开发分支为 `codex/rich-town-stride`。
+当前有十四个既有普通 Document，以及一个持久化“富翁小镇 3D（开发版）”（共 15 个 Document、15 个图标、24 条工作台命令）。
 小镇已接通 24 格棋盘、三辆汽车、建筑、镜头、事件动画和中文页面；一真人两电脑可完成 30 轮并展示排名。
 规则及电脑策略见[G2 专项记录](plan-history/rich-town/g2-deterministic-rules.md)，页面与实际窗口证据见[G3 专项记录](plan-history/rich-town/g3-playable-scene.md)。
-Document 现拥有展示控制器和规则会话；SDK 持久化、工作台 Restart 与正式单会话激活留待 G4。尚不能宣称真实 Host 集成或依赖自包含完成。
+Document 已实现 SDK 持久化、工作台 Restart、正式单会话激活及关闭取消，见 [G4 记录](plan-history/rich-town/g4-document-and-save.md)。
+G5 的依赖审计、20 次窗口循环、只读失败和资源增长见 [G5 记录](plan-history/rich-town/g5-local-integration.md)；尚不能宣称真实 Host 集成或自包含完成。
 实际证据和继续条件见 [G1 集成记录](plan-history/rich-town/g1-stride-integration.md)与[素材及依赖清单](rich-town-assets-and-dependencies.md)。
 
 进度、问题和阶段证据统一记录在 [专项开发记录](plan-history/rich-town/g0-design-and-development-plan.md)。
@@ -103,7 +104,7 @@ G2 使用 `SplitMix64-v1`，快照保存算法版本和当前 64 位内部状态
 | 可恢复随机源 | 有界取样和状态导出/恢复 | UI、系统时钟、全局共享状态 |
 | 存档编解码器 | DTO 校验、序列化和恢复前构造完整快照 | 写 Host 文件、保存 GPU 对象 |
 | `RichTownPlayController` / `RichTownPlayback` / `RichTownPresentation` | 会话代数、页面命令、电脑节奏、可控时间回放、中文展示与画面投影 | 经济公式、3D 资源创建、窗口重挂 |
-| `RichTownDocument` | SDK 激活、拥有展示控制器及最终释放；持久化/工作台命令在 G4 实现 | 游戏规则、资源搜索、渲染循环 |
+| `RichTownDocument` | SDK 激活/保存/关闭/Restart、拥有展示控制器与激活租约、最终释放 | 游戏规则、资源搜索、渲染循环 |
 | `IRichTownSurface` / `IRichTownPlayableSurface` | 原生表面及画面 DTO、镜头、帧循环的窄边界 | 收租、购买、调用 Host 内部服务 |
 | `RichTownViewport` | Avalonia 原生控件与表面生命周期适配 | 对局规则、存档和资产导入 |
 | 原生/内容路径适配器 | 显式根目录、依赖注册和错误诊断 | 修改进程工作目录、扫描其他插件 |
@@ -197,19 +198,19 @@ Document Scope 拥有会话、取消源和视口会话租约；View 拥有当前
 
 ## 6. 存档与工作台契约
 
-拟定 Document ID：`myavalonia.plugin.classic.game.document.rich-town`；
-拟定 Restart Command ID：`myavalonia.plugin.classic.game.command.rich-town.restart`。
-发布前稳定 ID 以实施记录确认；实现前不修改现有数量断言。仅新增重新开始的工作台命令，掷骰、购买、升级、出售、结束回合为页面操作，
+已实现 Document ID：`myavalonia.plugin.classic.game.document.rich-town`；
+Restart Command ID：`myavalonia.plugin.classic.game.command.rich-town.restart`。
+Module 已更新注册及数量断言。仅新增重新开始的工作台命令，掷骰、购买、升级、出售、结束回合为页面操作，
 不登记默认全局快捷键、不实现跨随机决策 Undo。Restart 在忙碌时仍走同一取消/重开路径，命令状态变化才通知 Host，不逐帧通知。
 
 存档使用既有 `IPersistablePluginDocument` 和 Host 修订快照/确认契约，不直接在 UI 中另写文件保存器。
-内容 schema 初始为 1，与 Host 信封、布局、SDK 和插件版本分开。拟保存：地图/规则版本、玩家与顺序、现金、位置、地产归属等级、
-当前阶段、待购买或待偿债内容、轮次、游戏结束结果、随机算法和状态、逻辑修订。可选镜头偏好与领域状态分开。
+内容 schema 为 1，与 Host 信封、布局、SDK 和插件版本分开。保存地图/规则版本、玩家顺序、现金、位置、地产归属等级、
+当前阶段、待偿债内容、轮次、终局原因、随机算法和完整状态、逻辑修订/事件序号、最后骰面；待购买由位置与阶段确定，排名由状态派生。
 不保存 GPU 句柄、线程、定时器、控件、Stride Entity、动画中间帧或任务引用。
 
-首版保存只在无活动动画/AI 的稳定边界开放，等待购买和等待偿债也是合法稳定阶段。
-隐藏时可显式跳过展示到已提交快照后保存，不再次结算。若 Host 仍请求忙碌会话保存，按公开契约返回可解释结果，不序列化半截状态。
-G4 核对真实 SDK 关闭/保存行为；不得杜撰 SDK 方法或在无法表达时绕过 Host。
+G4 根据 G3“规则先原子提交、动画只回放”的实际设计，允许动画中保存已提交的完整快照；等待购买和偿债也是合法阶段。
+保存不等待 GPU、不跳过动画、不重复结算；恢复保持暂停且不重播旧事件。G0 的“忙碌时不保存”计划据此调整，理由和测试见 G4 记录。
+已核对 SDK 3.4.0 CaptureSaveSnapshotAsync / AcceptChanges / ClosingToken；实际 Host 文件服务联调仍待合规部署后执行。
 恢复时先完整校验再替换会话：支持的 schema、地图版本、玩家身份、位置/金额范围、唯一归属、建筑等级、债权、阶段一致性和随机状态。
 坏存档不部分覆盖当前对局。旧修订保存完成不能把新修订标成干净；新建、恢复、关闭取消分别测试。
 
@@ -263,10 +264,10 @@ G1 生成初始依赖清单，G5 固定必要文件、RID、来源、许可证�
 | G5 本地集成收尾 | 完整 Debug 依赖暂存目录、离线/只读路径验证、性能资源记录与文档 | 全量开发检查通过；真实 Host 手工矩阵和环境限制如实记录；无持续资源增长；仍不构成发布资格 |
 
 G1 结果决定最终嵌入方案。失败时保留最小复现与测试，G3 可玩结果不用于签署 G1。
-当前按用户授权完成 G2 → G3 本地玩法；G1 作为独立集成阻塞继续保留，之后推进 G4，最终在 G5 合流验证。
+当前按用户授权完成 G2 → G3 → G4；G5 已开展实际核验，发现只读初始化和句柄增长问题，G1/G5 均未签署。
 G2/G3 若调整价格或动画，应更新配置和语义测试，不能回写已发生的测试记录。
 G1 提前登记的同一 Document 在 G3 已成为本地可玩开发版，不能将其当作第十五个完成 Host 验收的游戏。
-G3 已接入 Document 会话所有权与页面新对局；G4 仍需正式会话的单实例激活限制、持久化与工作台 Restart，当前租约仅保护原生表面。
+G4 已接入正式激活租约、持久化与工作台 Restart；激活租约与原生表面租约分责，临时隐藏保留对局所有权。
 
 ## 9. 单元测试、契约与真实窗口矩阵
 
@@ -289,6 +290,7 @@ G3 已接入 Document 会话所有权与页面新对局；G4 仍需正式会话�
 未覆盖的重要分支应补测；生成代码和 GPU 驱动部分说明原因并指向真实检查。
 G2 本地开发门禁对八个关键规则/会话类型分别要求行、分支覆盖率至少 95%，不排除业务代码美化比例；这不是发布门禁。
 G3 对展示控制器、回放、中文投影和相机分别要求至少 95%，棋盘几何至少 90%；覆盖率不足、报告缺失或重复不一致均失败。
+G4 对 Document、存档 Codec、SaveTracker、SessionLease 各自要求 95% 行/分支覆盖率。
 几何保留矩阵不可逆/射线平行等防御分支；GPU 绘制与真实鼠标输入另外验证，不能靠替身签署。
 
 ## 10. 本地开发门禁与证据
@@ -307,7 +309,7 @@ G1 添加/调整依赖时允许有意执行一次普通 restore 更新锁文件�
 省略号必须换成真实文件列表。脚本应逐命令检查退出码，任何一步失败立即停止。
 
 `scripts/Test-RichTownDevelopment.ps1` 已实现，只接受 Debug，不部署或启动窗口，不转调统一 Gate。
-默认把证据写到 G3 新目录；`-Phase` 只选择 G1/G2/G3 证据目录，不降低当前检查范围。额外生成 `simulation.json`、`rules-coverage.json` 和 `presentation-coverage.json`，
+默认把证据写到 G5 新目录；`-Phase` 只选择 G1–G5 证据目录，不降低当前检查范围。额外生成 `simulation.json`、规则/展示/存档覆盖率报告及依赖审计，
 检查 0–999 全部种子、每局最多 2,000 条命令、恢复续局证据和八个关键类型的覆盖率；报告缺失、零测试、失败或跳过都失败。
 它完整执行既有测试和小镇测试；现有魔方绑定用例因 Dispatcher 线程归属问题单独在测试进程运行，其原始断言不变。
 这不是跳过测试：其余既有用例、该单例、小镇专用用例均必须通过，TRX 必须无跳过，单例数量必须精确为 1。
@@ -337,6 +339,8 @@ G1/G5 的资源检查至少连续 20 次打开/关闭，并额外覆盖初始化
 - [根说明](../README.md) 与 [文档索引](README.md)：区分可玩游戏、已登记的原型和后续计划，数量及使用说明反映实际代码。
 - [项目职责](project-and-window-responsibilities.md)：若新增私有类库或改变释放所有权，更新实际项目分工。
 - [工作台命令](workbench-commands.md)：G4 落地时更新 Restart、实际计数和路由事实。
+- [G4 SDK 与存档](plan-history/rich-town/g4-document-and-save.md)：实际 schema、保存握手、租约、取消、SOLID 与测试。
+- [G5 本地集成](plan-history/rich-town/g5-local-integration.md)：可复现实验、资源曲线、四项阻塞和后续路线。
 - [部署说明](deployment-and-release.md)：G1/G5 更新实际依赖清单、Debug 暂存方式与限制，不提前启动发布流程。
 - 资产来源/许可清单：G1/G3 导入资源时创建，未下载素材不能预填摘要或许可文件名。
 

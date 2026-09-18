@@ -13,6 +13,9 @@
 > [G2 规则阶段](plan-history/rich-town/g2-deterministic-rules.md)已通过无窗口 Debug 开发门禁，未执行部署；未新增 NuGet 或非托管库。
 > 仅在现有小镇许可证路径增加 `SplitMix64.txt`，不改变 G1 的自包含待验证结论。
 > [G3 可玩阶段](plan-history/rich-town/g3-playable-scene.md)接通同一 Document 和真实 Standalone 完整对局，没有新增包/非托管依赖或执行部署。
+> G4 已接通 SDK 持久化与 Restart；G5 重新尝试隔离 Debug 部署，仍失败于同一 DependencyModel 禁带冲突。
+> G5 原生导入审计、中文路径窗口循环、只读目录失败及句柄增长见 [专用记录](plan-history/rich-town/g5-local-integration.md)。
+> 本轮没有合规插件目录，Standalone 测试副本不是部署产物，不执行下文发布步骤。
 > 新增窗口检查脚本只运行本机 Debug，不是 Windows CI 或发布门禁；Windows manifest 仅属于开发程序，不修改 Host。
 
 部署分为开发期临时联调和正式 ZIP 发布。两者都必须使用 Build 包筛选出的干净插件目录，不能直接复制

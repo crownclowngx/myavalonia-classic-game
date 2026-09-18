@@ -147,7 +147,7 @@ public sealed class ClassicGamePluginModule : IPluginModule
         // 小镇只在组合根接入。稳定身份、页面、原生生命周期均归小镇，其他游戏不依赖 Stride。
         var richTownIcon = registration.AddIcon("rich-town", new VectorIconDefinition(
             "M1,9L10,1L19,9H16V19H4V9Z M8,12H12V19H8Z", 20, 20));
-        registration.AddDocument<RichTownDocument, RichTownDocumentView>(new DocumentDescriptor(
+        registration.AddPersistableDocument<RichTownDocument, RichTownDocumentView>(new DocumentDescriptor(
             RichTownDocument.TypeId, "富翁小镇 3D（开发版）", "三人小镇地产游戏：掷骰、购买、升级与偿债；真实 Host 集成尚待验证",
             "经典游戏", iconPath: richTownIcon));
 
@@ -201,6 +201,10 @@ public sealed class ClassicGamePluginModule : IPluginModule
         // 魔方的回退包含逆序动画和教学游标，只作为页面用例；工作台复用已有的同步重置适配。
         RegisterRestartCommand(registration, "rubiks-cube", "三阶魔方",
             PluginIds.RubiksCubeDocument, PluginIds.RestartRubiksCube, PluginIds.RestartRubiksCubeMenu);
+        // 小镇命令身份由自己的子领域拥有；组合根仅声明菜单，不借用其他游戏的命令适配器或状态。
+        RegisterRestartCommand(registration, "rich-town", "富翁小镇",
+            RichTownDocument.TypeId, RichTownDocument.RestartCommandId,
+            new CommandPlacementId("myavalonia.plugin.classic.game.command-placement.menu.tools.rich-town.restart"));
 
         // 快捷键使用 UI SDK 的强类型枚举，不解析字符串 Gesture。Ctrl+Shift+R 避免占用常见刷新键，
         // Ctrl+Z 延续桌面应用的撤销习惯；发生 Host 保留项或跨插件冲突时仍由 Host 统一治理。

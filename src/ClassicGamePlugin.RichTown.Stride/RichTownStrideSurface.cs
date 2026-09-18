@@ -53,7 +53,8 @@ internal sealed class RichTownStrideSurface(bool playable = false) : IRichTownSu
         var errors = new List<Exception>();
         void Attempt(Action action) { try { action(); } catch (Exception error) { errors.Add(error); } }
         Attempt(() => _messages?.Dispose());
-        Attempt(() => _game?.Exit());
+        // Run 中途失败时尚未建立平台消息循环，直接 Exit 会在 Stride 内部触发空引用；仍必须 Dispose 游戏。
+        Attempt(() => { if (_messages is not null) _game?.Exit(); });
         Attempt(() => _context?.ExitCallback?.Invoke());
         Attempt(() => _game?.Dispose());
         Attempt(() => _window?.Dispose()); // Stride 可能尚未接管窗口；SDL 的 Dispose 本身幂等。

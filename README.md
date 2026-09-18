@@ -9,7 +9,7 @@
 > 第一次开始开发前，请先阅读 [项目文档与快速开始](docs/README.md)。其中说明了基础项目、小镇专用项目和
 > Standalone 窗口的职责、接入真实 Host 的边界，以及临时部署和正式 ZIP 发布流程。
 
-14 个游戏的 23 条“重新开始 / 同步撤销”Workbench Command、多实例路由、SOLID 边界见
+现有十四游戏的命令加上小镇 Restart，现为 24 条 Workbench Command；路由和 SOLID 边界见
 [ClassicGame Workbench Command 设计](docs/workbench-commands.md)和
 [G8 专用实施记录](docs/plan-history/workbench-command/g8-classic-game-multi-instance-commands.md)。与 Host、
 WorkflowStudio 的单轮完整本地封板见
@@ -57,22 +57,23 @@ WorkflowStudio 的单轮完整本地封板见
 三阶魔方的 3D 转层、手动操作、按目标分组的层先法还原、完整公式动画、回退与测试矩阵见
 [三阶魔方 Document 设计与开发说明](docs/rubiks-cube.md)。本功能仅使用 Debug 开发检查，不调用含 Release 和真实打包的统一 Gate。
 
-富翁小镇 3D（Stride）已实现 **G2 确定性规则及 G3 本地可玩开发版；G1 集成仍阻塞**，与现有十四个游戏保持子领域独立。
-Module 目前登记 15 个 Document 和 15 个图标；原有 23 条工作台命令不变。后续逐步开发遵循
+富翁小镇 3D（Stride）已实现 **G2 规则、G3 可玩和 G4 SDK 存档；G5 已开展核验，尚有集成阻塞**，与现有十四个游戏保持子领域独立。
+Module 目前登记 14 个普通 Document + 1 个持久化小镇、15 个图标、24 条工作台命令。后续开发遵循
 [专用设计与开发说明](docs/rich-town.md)及[专项阶段记录](docs/plan-history/rich-town/g0-design-and-development-plan.md)。
 已完成内容、Document 状态、后续 G1–G5 工作包与验收条件见[完整开发路线图](docs/rich-town-roadmap.md)。
 G2 的规则、偿债/破产、串行会话、电脑策略、随机恢复及 1,000 种子模拟见[G2 专项记录](docs/plan-history/rich-town/g2-deterministic-rules.md)。
 按用户本轮要求，G3 已接入同一 Document：24 格、汽车、建筑、镜头、动画和中文操作，一真人两电脑可完成整局，见[G3 专项记录](docs/plan-history/rich-town/g3-playable-scene.md)。
-SDK 存档、工作台 Restart 和正式单会话激活仍在 G4；G3 本地可玩不代表 G1/真实 Host 验收通过。
+SDK schema 1、保存修订、工作台 Restart、关闭取消和单会话激活见[G4 专项记录](docs/plan-history/rich-town/g4-document-and-save.md)。
+依赖审计、20 次实际窗口循环、只读目录失败与资源曲线见[G5 专项记录](docs/plan-history/rich-town/g5-local-integration.md)，真实 Host 尚未验收。
 SOLID 为首要约束，使用朴素设计、详细中文注释和完整单测；仅执行专用 Debug 本地开发检查，不使用 AIFLOW、Windows CI、
 Release 构建、正式 ZIP 打包或发布门禁。下方通用打包命令和统一跨仓 Gate 不适用于该功能当前开发阶段。
 
-小镇开发入口：`pwsh -NoProfile -File scripts/Test-RichTownDevelopment.ps1`（默认 G3 证据目录，含全量单测、1,000 对局及规则/展示覆盖率门禁）。
+小镇开发入口：`pwsh -NoProfile -File scripts/Test-RichTownDevelopment.ps1`（默认 G5 证据目录，含全量单测、1,000 对局、规则/展示/存档覆盖率及依赖审计）。
 可玩预览：`dotnet run --project src/ClassicGamePlugin.Standalone -c Debug -p:SkipPluginDeploy=true -- --rich-town-play`。
 该入口和插件登记共用同一游戏页面；`--rich-town-probe` 保留独立 G1 诊断页面；默认 Standalone 仍为原有十四个标签页。
 显式本机完整窗口检查：`pwsh -NoProfile -File scripts/Test-RichTownPlayableWindow.ps1`，需要本机桌面与 GPU，不属于 Windows CI。
 当前部署被 `Microsoft.Extensions.DependencyModel.dll` 的共享库禁带规则阻塞，原生视口也不能正确覆盖页面叠层；
-见 [G1 结果与下一步](docs/plan-history/rich-town/g1-stride-integration.md)，不要把此分支当作可发布插件。
+此外 Stride 在只读程序目录初始化失败，20 次循环后句柄增长仍待定位；见 [G5 结果与下一步](docs/plan-history/rich-town/g5-local-integration.md)。
 
 ```powershell
 dotnet restore

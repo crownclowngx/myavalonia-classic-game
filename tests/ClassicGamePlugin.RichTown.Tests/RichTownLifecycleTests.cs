@@ -1,4 +1,5 @@
 using ClassicGamePlugin.Features.RichTown;
+using ClassicGamePlugin.Features.RichTown.Domain;
 using ClassicGamePlugin.Features.RichTown.Rendering;
 using MyAvaloniaManagement.PluginSdk;
 using Xunit;
@@ -121,12 +122,12 @@ public sealed class RichTownLifecycleTests
         var first = new FakeSurface();
         var replacement = new FakeSurface();
         var late = new FakeSurface();
-        using var document = new RichTownDocument();
+        using var document = new RichTownDocument(RichTownSnapshot.Create(19), new());
         var changes = 0;
         document.PresentationChanged += (_, _) => changes++;
         await document.InitializeAsync(new NewDocumentActivation("小镇检查"), CancellationToken.None);
-        await document.InitializeAsync(new NewDocumentActivation("小镇检查"), CancellationToken.None);
-        await document.InitializeAsync(new NewDocumentActivation(" "), CancellationToken.None);
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await document.InitializeAsync(new NewDocumentActivation("小镇检查"), CancellationToken.None));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await document.InitializeAsync(new NewDocumentActivation(" "), CancellationToken.None));
         Assert.Equal(1, changes);
         Assert.Equal("小镇检查", document.Presentation.Title);
         document.AttachSurface(first);
@@ -148,7 +149,7 @@ public sealed class RichTownLifecycleTests
         using var document = new RichTownDocument();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await document.InitializeAsync(new NewDocumentActivation("不采用"), new CancellationToken(true)));
         Assert.Equal("富翁小镇 3D（开发版）", document.Presentation.Title);
-        Assert.False(typeof(IPersistablePluginDocument).IsAssignableFrom(typeof(RichTownDocument)));
+        Assert.True(typeof(IPersistablePluginDocument).IsAssignableFrom(typeof(RichTownDocument)));
     }
 
     private sealed class FakeSurface : IRichTownSurface

@@ -12,11 +12,13 @@ namespace ClassicGamePlugin.RichTown.Tests;
 public sealed class RichTownViewTests
 {
     [Fact]
-    public void 页面按钮走同一会话并在更换绑定重开关闭后隔离旧状态()
+    public async Task 页面按钮走同一会话并在更换绑定重开关闭后隔离旧状态()
     {
         // 不挂入真实 Window，因此不创建 HWND/GPU。所有 UI 操作在本例同一线程，不排空全局 Dispatcher。
-        using var first = new RichTownDocument(RichTownSnapshot.Create(19));
-        using var next = new RichTownDocument(RichTownSnapshot.Create(0));
+        using var first = new RichTownDocument(RichTownSnapshot.Create(19), new());
+        using var next = new RichTownDocument(RichTownSnapshot.Create(0), new());
+        await first.InitializeAsync(new MyAvaloniaManagement.PluginSdk.NewDocumentActivation(string.Empty), default);
+        await next.InitializeAsync(new MyAvaloniaManagement.PluginSdk.NewDocumentActivation(string.Empty), default);
         var view = new RichTownDocumentView { DataContext = first };
         var buttons = view.GetLogicalDescendants().OfType<Button>().ToDictionary(button => button.Name!);
         void Click(string name) => buttons[name].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));

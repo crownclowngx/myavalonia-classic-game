@@ -1,6 +1,6 @@
 param(
-    [ValidateSet('G1', 'G2', 'G3')]
-    [string]$Phase = 'G3'
+    [ValidateSet('G1', 'G2', 'G3', 'G4', 'G5')]
+    [string]$Phase = 'G5'
 )
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
@@ -93,6 +93,19 @@ try {
     }
     $presentationCoverage | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $evidence 'presentation-coverage.json') -Encoding utf8
 
+    # G4 内容协议/修订握手/激活租约逐类型守住 95%，不能用大量纯规则用例遮住存档失败路径。
+    $persistenceCoverage = @()
+    foreach ($type in @('RichTownDocument', 'RichTownSessionLease', 'Persistence.RichTownContentCodec', 'Persistence.RichTownSaveTracker')) {
+        $classes = @($coverage.coverage.packages.package.classes.class | Where-Object { $_.name -eq "ClassicGamePlugin.Features.RichTown.$type" })
+        if ($classes.Count -ne 1) { throw "覆盖率缺少或重复 G4 类型：$type" }
+        $line = [double]::Parse($classes[0].'line-rate', [Globalization.CultureInfo]::InvariantCulture)
+        $branch = [double]::Parse($classes[0].'branch-rate', [Globalization.CultureInfo]::InvariantCulture)
+        if ($line -lt 0.95 -or $branch -lt 0.95) { throw "$type 行/分支覆盖率未达到 95%：$line / $branch" }
+        $persistenceCoverage += [ordered]@{ type = $type; lineRate = $line; branchRate = $branch }
+    }
+    $persistenceCoverage | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $evidence 'persistence-coverage.json') -Encoding utf8
+    & "$PSScriptRoot/Test-RichTownDependencies.ps1" -OutputDirectory (Join-Path $evidence 'dependency-audit')
+
     # 在证据目录重新转换，不覆盖仓库中已经审查过的二进制文件。
     $converted = Join-Path $evidence 'converted'
     & "$PSScriptRoot/Convert-RichTownPrototypeAsset.ps1" -OutputDirectory $converted
@@ -102,13 +115,14 @@ try {
     }
 
     $sourcePaths = @('src/ClassicGamePlugin.RichTown.Stride', 'src/ClassicGamePlugin.Plugin/Features/RichTown',
-        'src/ClassicGamePlugin.Standalone/Features/RichTown', 'tests/ClassicGamePlugin.RichTown.Tests')
+        'src/ClassicGamePlugin.Standalone/Features/RichTown', 'tests/ClassicGamePlugin.RichTown.Tests', 'scripts/RichTown.NativeImports.cs')
     Invoke-Dotnet -Command (@('format', 'whitespace', 'ClassicGamePlugin.slnx', '--no-restore', '--verify-no-changes', '--include') + $sourcePaths) -Log 'format.log'
 
     $documents = @('README.md', 'docs/README.md', 'docs/rich-town.md', 'docs/rich-town-roadmap.md', 'docs/rich-town-assets-and-dependencies.md',
         'docs/project-and-window-responsibilities.md', 'docs/deployment-and-release.md',
         'docs/plan-history/rich-town/g0-design-and-development-plan.md', 'docs/plan-history/rich-town/g1-stride-integration.md',
-        'docs/plan-history/rich-town/g2-deterministic-rules.md', 'docs/plan-history/rich-town/g3-playable-scene.md')
+        'docs/plan-history/rich-town/g2-deterministic-rules.md', 'docs/plan-history/rich-town/g3-playable-scene.md',
+        'docs/plan-history/rich-town/g4-document-and-save.md', 'docs/plan-history/rich-town/g5-local-integration.md', 'docs/workbench-commands.md')
     $links = 0
     foreach ($document in $documents) {
         $fullPath = Join-Path $repo $document
@@ -133,10 +147,11 @@ try {
     if ($LASTEXITCODE -ne 0) { throw '已暂存第一方差异检查失败。' }
     [ordered]@{ phase = $Phase; configuration = 'Debug'; testSuites = $results; localLinks = $links;
         deterministicRules = 'passed'; simulation = $simulation; rulesCoverage = $coverageResults;
-        presentationCoverage = $presentationCoverage; playableWindow = 'separate opt-in: Test-RichTownPlayableWindow.ps1';
-        assetConversion = 'matching SHA-256'; integration = 'NOT SIGNED: see g1-stride-integration.md'; release = 'not executed' } |
+        presentationCoverage = $presentationCoverage; persistenceCoverage = $persistenceCoverage;
+        playableWindow = 'separate opt-in: Test-RichTownPlayableWindow.ps1'; localIntegration = 'separate opt-in: Test-RichTownLocalIntegration.ps1';
+        assetConversion = 'matching SHA-256'; integration = 'NOT SIGNED: see g5-local-integration.md'; release = 'not executed' } |
         ConvertTo-Json -Depth 6 | Set-Content (Join-Path $evidence 'summary.json') -Encoding utf8
-    Write-Output "Debug 开发检查、G2 规则及 G3 展示门禁通过；真实窗口需单独检查，不能据此签署 G1。证据：$evidence"
+    Write-Output "Debug 开发检查、G2/G3/G4 覆盖率与 G5 静态依赖审计通过；真实窗口需单独检查，不能据此签署 G1/G5。证据：$evidence"
 }
 finally {
     $env:RICH_TOWN_SIMULATION_REPORT = $previousSimulationReport

@@ -36,6 +36,8 @@ public class RichTownViewport : NativeControlHost, IDisposable
     public event Action<int>? CellSelected;
     public bool IsRunning => _controller.IsRunning;
     public string? Error => _controller.Error;
+    /// <summary>有效可见尺寸下提交绘制的次数，仅用于本机资源检查；不是 GPU 帧率或已呈现帧数。</summary>
+    public long RenderSubmissions { get; private set; }
 
     protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
     {
@@ -72,6 +74,7 @@ public class RichTownViewport : NativeControlHost, IDisposable
         FrameElapsed?.Invoke(elapsed, visible && _controller.IsRunning);
         if (!_diagnostic && _sceneFrame is { } frame) _controller.Present(frame, visible && (top is not Window active || active.IsActive));
         _controller.Render(visible, (int)Math.Ceiling(Bounds.Width * scaling), (int)Math.Ceiling(Bounds.Height * scaling));
+        if (visible && _controller.IsRunning) RenderSubmissions++;
         ReportStatus();
     }
 

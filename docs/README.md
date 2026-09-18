@@ -2,11 +2,13 @@
 
 - [V6.1 图标同步升级](plan-history/v6.1-plugin-icons.md)：入口映射、依赖边界和验证结果。
 - [富翁小镇完整开发路线图](rich-town-roadmap.md)：本轮做了什么、Document 状态、后续任务顺序及逐阶段验收条件。
-- [富翁小镇 3D 专用方案](rich-town.md)：Stride 集成、SOLID 职责、规则与完整测试矩阵；**G2 规则及 G3 本地可玩已实现，G1 集成仍阻塞**。
+- [富翁小镇 3D 专用方案](rich-town.md)：Stride 集成、SOLID 职责、规则与测试矩阵；**G2/G3/G4 已实现，G5 集成核验仍有阻塞**。
 - [富翁小镇专项开发记录](plan-history/rich-town/g0-design-and-development-plan.md)：G0–G5 顺序、完成条件、待验证问题与阶段证据。
 - [G1 集成结果](plan-history/rich-town/g1-stride-integration.md)：实现边界、实际失败、单测和下一步。
 - [G2 确定性规则](plan-history/rich-town/g2-deterministic-rules.md)：纯规则、随机恢复、会话/电脑、债务终局、1,000 种子模拟及开发门禁。
 - [G3 可玩 3D](plan-history/rich-town/g3-playable-scene.md)：棋盘、汽车、房屋、镜头、事件回放、中文操作、真实窗口完整对局及 G4 后续边界。
+- [G4 SDK 与存档](plan-history/rich-town/g4-document-and-save.md)：持久化协议、保存修订、关闭取消、Restart 与激活租约。
+- [G5 本地集成](plan-history/rich-town/g5-local-integration.md)：原生审计、实际窗口循环、只读失败、资源曲线与剩余路线。
 - [小镇素材及依赖清单](rich-town-assets-and-dependencies.md)：Kenney 来源、摘要、私有包与自包含限制。
 
 本解决方案用于开发 `myavalonia.plugin.classic.game` Managed Plugin，当前由独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋与三阶魔方功能域

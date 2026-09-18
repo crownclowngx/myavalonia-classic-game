@@ -54,7 +54,7 @@ namespace ClassicGamePlugin.Tests;
 public sealed class PluginCompositionTests
 {
     [Fact]
-    public void Module注册十四个独立游戏与一个小镇集成原型的普通Document()
+    public void Module注册十四个普通游戏和一个可持久化小镇Document()
     {
         var registration = new CapturingRegistration();
 
@@ -197,20 +197,17 @@ public sealed class PluginCompositionTests
                 Assert.Equal("经典游戏", rubiksCube.Descriptor.MenuCategory);
                 Assert.Equal(typeof(RubiksCubeDocument), rubiksCube.Model);
                 Assert.Equal(typeof(RubiksCubeDocumentView), rubiksCube.View);
-            },
-            richTown =>
-            {
-                Assert.Equal(RichTownDocument.TypeId, richTown.Descriptor.DocumentTypeId);
-                Assert.Equal("富翁小镇 3D（开发版）", richTown.Descriptor.DisplayName);
-                Assert.Equal("经典游戏", richTown.Descriptor.MenuCategory);
-                Assert.Equal(typeof(RichTownDocument), richTown.Model);
-                Assert.Equal(typeof(RichTownDocumentView), richTown.View);
             });
-        Assert.Empty(registration.PersistableDocuments);
+        var richTown = Assert.Single(registration.PersistableDocuments);
+        Assert.Equal(RichTownDocument.TypeId, richTown.Descriptor.DocumentTypeId);
+        Assert.Equal("富翁小镇 3D（开发版）", richTown.Descriptor.DisplayName);
+        Assert.Equal("经典游戏", richTown.Descriptor.MenuCategory);
+        Assert.Equal(typeof(RichTownDocument), richTown.Model);
+        Assert.Equal(typeof(RichTownDocumentView), richTown.View);
     }
 
     [Fact]
-    public void Module为十四个游戏声明二十三条适用命令且只保留一组无冲突快捷键()
+    public void Module为十五个游戏声明二十四条适用命令且只保留一组无冲突快捷键()
     {
         var registration = new CapturingRegistration();
 
@@ -232,12 +229,13 @@ public sealed class PluginCompositionTests
             ("match3", PluginIds.Match3Document, false),
             ("chinese-checkers", PluginIds.ChineseCheckersDocument, true),
             ("rubiks-cube", PluginIds.RubiksCubeDocument, false),
+            ("rich-town", RichTownDocument.TypeId, false),
         };
 
-        Assert.Equal(23, registration.Commands.Count);
-        Assert.Equal(23, registration.MenuContributions.Count);
-        Assert.Equal(23, registration.Commands.Select(item => item.Descriptor.CommandId).Distinct().Count());
-        Assert.Equal(23, registration.MenuContributions.Select(item => item.PlacementId).Distinct().Count());
+        Assert.Equal(24, registration.Commands.Count);
+        Assert.Equal(24, registration.MenuContributions.Count);
+        Assert.Equal(24, registration.Commands.Select(item => item.Descriptor.CommandId).Distinct().Count());
+        Assert.Equal(24, registration.MenuContributions.Select(item => item.PlacementId).Distinct().Count());
         foreach (var (gameKey, documentTypeId, hasUndo) in expected)
         {
             var restartId = new CommandId($"myavalonia.plugin.classic.game.command.{gameKey}.restart");

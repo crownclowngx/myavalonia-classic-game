@@ -128,8 +128,13 @@ internal sealed class RichTownPlayController : IDisposable
         Changed?.Invoke();
     }
 
-    /// <summary>页面的新对局动作，不是 SDK Restart 工作台贡献；先验证新状态，再替换并使旧请求/动画失效。</summary>
-    public void Restart(RichTownSnapshot initial)
+    /// <summary>页面和 SDK Restart 共用此替换路径；先验证新状态，再使旧请求/动画失效。</summary>
+    public void Restart(RichTownSnapshot initial) => Replace(initial, 1, false, false);
+
+    /// <summary>恢复只显示已提交快照并保持暂停；不重播保存前事件，不补跑保存期间的时间。</summary>
+    public void Restore(RichTownSnapshot snapshot, int lastDie, bool hasRolled) => Replace(snapshot, lastDie, hasRolled, true);
+
+    private void Replace(RichTownSnapshot initial, int lastDie, bool hasRolled, bool paused)
     {
         if (IsDisposed) return;
         var next = new RichTownSession(initial);
@@ -138,10 +143,10 @@ internal sealed class RichTownPlayController : IDisposable
         _playback = null;
         _computerDelay = 0;
         _log.Clear();
-        SelectedCell = 0;
-        LastDie = 1;
-        HasRolled = false;
-        IsPaused = false;
+        SelectedCell = initial.Players[initial.CurrentPlayerId].Position;
+        LastDie = lastDie;
+        HasRolled = hasRolled;
+        IsPaused = paused;
         Changed?.Invoke();
     }
 
