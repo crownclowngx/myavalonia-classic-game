@@ -1,7 +1,6 @@
 using System.Numerics;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Threading;
 using ClassicGamePlugin.Constants;
 using ClassicGamePlugin.Features.RubiksCube;
 using ClassicGamePlugin.Features.RubiksCube.Domain;
@@ -76,8 +75,7 @@ public sealed class RubiksCubeGeometryAndDocumentTests
         Assert.Equal("myavalonia.plugin.classic.game.document.rubiks-cube", PluginIds.RubiksCubeDocument.Value);
         var wrapper = new RubiksCubeDocumentView { DataContext = first };
         var view = new RubiksCubeView { DataContext = first.ViewModel };
-        Dispatcher.UIThread.RunJobs();
-        Assert.Same(first.ViewModel, wrapper.HostedViewModel);
+        PluginCompositionTests.AssertDocumentWrapperBinding(wrapper, first);
         Assert.Same(first.ViewModel, view.HostedViewModel);
         first.ViewModel.TurnCommand.Execute("R");
         second.ViewModel.TurnCommand.Execute("F");

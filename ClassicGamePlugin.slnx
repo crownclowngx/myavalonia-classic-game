@@ -7,5 +7,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/ClassicGamePlugin.RichTown.Tests/ClassicGamePlugin.RichTown.Tests.csproj" />
     <Project Path="tests/ClassicGamePlugin.Tests/ClassicGamePlugin.Tests.csproj" />
+    <Project Path="tests/ClassicGamePlugin.UiTests/ClassicGamePlugin.UiTests.csproj" />
   </Folder>
 </Solution>

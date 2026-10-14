@@ -25,6 +25,14 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     private int _elapsedSeconds;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AutoFlagStatusText))]
+    private bool _isAutoFlagEnabled;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AutoFlagStatusText))]
+    private int _lastAutoFlagCount;
+
     /// <summary>使用真实随机策略和系统时间创建生产环境 ViewModel。</summary>
     public MinesweeperViewModel()
         : this(new RandomMinePlacementStrategy(), TimeProvider.System, enableDisplayRefreshTimer: true)
@@ -106,6 +114,16 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
     /// <summary>获取内部计时状态，供生命周期测试验证释放行为。</summary>
     internal bool IsTimerRunning => _gameTimer.IsRunning;
 
+    /// <summary>展示自动插旗的结果，并明确安全格仍由玩家打开。</summary>
+    public string AutoFlagStatusText => !IsAutoFlagEnabled
+        ? "仅自动插旗，安全格由你打开"
+        : _game.State switch
+        {
+            MinesweeperGameState.Ready => "翻开方格后自动标记确定的雷",
+            MinesweeperGameState.Won or MinesweeperGameState.Lost => "对局已结束",
+            _ => LastAutoFlagCount > 0 ? $"本次自动插旗 {LastAutoFlagCount} 格" : "暂无可确定的雷",
+        };
+
     /// <summary>处理格子的主要操作：覆盖格翻开，已翻开的数字格尝试快速展开。</summary>
     public void RevealCell(MinesweeperCellViewModel cell)
     {
@@ -128,6 +146,7 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
         }
 
         StopTimerAfterTerminalState();
+        ApplyAutoFlags();
         RefreshProjection();
     }
 
@@ -141,6 +160,23 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
         }
 
         RefreshProjection();
+    }
+
+    partial void OnIsAutoFlagEnabledChanged(bool value)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        ClearChordPreview();
+        ApplyAutoFlags();
+        RefreshProjection();
+    }
+
+    private void ApplyAutoFlags()
+    {
+        LastAutoFlagCount = IsAutoFlagEnabled ? _game.AutoFlagCertainMines() : 0;
     }
 
     /// <summary>
@@ -239,6 +275,7 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
         _displayRefreshTimer?.Stop();
         _gameTimer.Reset();
         ElapsedSeconds = 0;
+        LastAutoFlagCount = 0;
         _game.StartNewGame(difficulty);
         RebuildBoardProjection();
         RefreshSummaryProperties();
@@ -275,6 +312,7 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(RemainingMineCount));
         OnPropertyChanged(nameof(StatusText));
         OnPropertyChanged(nameof(RestartSymbol));
+        OnPropertyChanged(nameof(AutoFlagStatusText));
     }
 
     private void StopTimerAfterTerminalState()

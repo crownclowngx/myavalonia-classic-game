@@ -104,6 +104,32 @@ internal sealed class MinesweeperGame
         return true;
     }
 
+    /// <summary>根据公开数字和现有旗帜推理并幂等插旗，返回本次新增旗帜数量。</summary>
+    internal int AutoFlagCertainMines()
+    {
+        if (State != MinesweeperGameState.Running)
+        {
+            return 0;
+        }
+
+        var visibleCells = _cells.Select(cell => new MinesweeperVisibleCell(
+            cell.State == MinesweeperCellState.Revealed ? cell.AdjacentMineCount : null,
+            cell.State == MinesweeperCellState.Flagged)).ToArray();
+        var certainMines = MinesweeperDeduction.FindCertainMines(Difficulty.Rows, Difficulty.Columns, visibleCells);
+        var addedFlags = 0;
+        foreach (var coordinate in certainMines)
+        {
+            var cell = GetCell(coordinate.Row, coordinate.Column);
+            if (cell.State == MinesweeperCellState.Covered)
+            {
+                cell.State = MinesweeperCellState.Flagged;
+                addedFlags++;
+            }
+        }
+
+        return addedFlags;
+    }
+
     /// <summary>获取指定坐标的格子，并统一执行越界检查。</summary>
     internal MinesweeperCell GetCell(int row, int column)
     {

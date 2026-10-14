@@ -670,7 +670,7 @@ public sealed class PluginCompositionTests
     /// 无窗口单元测试没有 Avalonia UI 消息循环，因此不等待绑定结果值；这里直接验证包装层的
     /// Content 属性已经安装编译绑定，同时验证 Host 传入的 Document 未被 View 改写。
     /// </summary>
-    private static void AssertDocumentWrapperBinding(Control wrapper, object expectedDataContext)
+    internal static void AssertDocumentWrapperBinding(Control wrapper, object expectedDataContext)
     {
         Assert.Same(expectedDataContext, wrapper.DataContext);
         var host = Assert.IsType<ContentControl>(wrapper.FindControl<ContentControl>("ViewModelHost"));

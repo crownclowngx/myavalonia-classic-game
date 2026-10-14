@@ -28,7 +28,8 @@ ClassicGamePlugin/
 │  └─ ClassicGamePlugin.Standalone/      # 只供本地开发的 Avalonia 窗口
 ├─ tests/
 │  ├─ ClassicGamePlugin.Tests/           # 既有游戏及插件注册契约
-│  └─ ClassicGamePlugin.RichTown.Tests/  # 小镇独立测试
+│  ├─ ClassicGamePlugin.RichTown.Tests/  # 小镇独立测试
+│  └─ ClassicGamePlugin.UiTests/         # 独立 UI 消息循环、绑定与主题渲染测试
 └─ docs/                       # 当前项目随模板生成的开发说明
 ```
 

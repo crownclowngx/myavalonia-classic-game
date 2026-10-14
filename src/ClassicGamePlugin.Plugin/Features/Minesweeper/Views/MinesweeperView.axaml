@@ -61,55 +61,70 @@
         BorderBrush="{DynamicResource MinesweeperPanelBorderBrush}"
         BorderThickness="1"
         CornerRadius="6">
-      <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto" ColumnSpacing="16">
-        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-          <TextBlock Text="难度" VerticalAlignment="Center" />
-          <ComboBox
-              MinWidth="96"
-              ItemsSource="{Binding DifficultyOptions}"
-              SelectedItem="{Binding SelectedDifficulty}">
-            <ComboBox.ItemTemplate>
-              <DataTemplate x:DataType="vm:MinesweeperDifficultyOption">
-                <TextBlock Text="{Binding DisplayName}" />
-              </DataTemplate>
-            </ComboBox.ItemTemplate>
-          </ComboBox>
-        </StackPanel>
+      <StackPanel Spacing="8">
+        <WrapPanel>
+          <StackPanel Margin="0,0,16,8" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+            <TextBlock Text="难度" VerticalAlignment="Center" />
+            <ComboBox
+                MinWidth="96"
+                ItemsSource="{Binding DifficultyOptions}"
+                SelectedItem="{Binding SelectedDifficulty}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:MinesweeperDifficultyOption">
+                  <TextBlock Text="{Binding DisplayName}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </StackPanel>
 
-        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-          <TextBlock Text="剩余雷数" />
-          <TextBlock FontWeight="Bold" Text="{Binding RemainingMineCount}" />
-        </StackPanel>
+          <StackPanel Margin="0,0,16,8" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <TextBlock Text="剩余雷数" />
+            <TextBlock FontWeight="Bold" Text="{Binding RemainingMineCount}" />
+          </StackPanel>
 
+          <TextBlock
+              x:Name="GameStatus"
+              Margin="0,0,16,8"
+              HorizontalAlignment="Center"
+              FontSize="16"
+              FontWeight="SemiBold"
+              Text="{Binding StatusText}"
+              VerticalAlignment="Center" />
+
+          <Button
+              Margin="0,0,16,8"
+              MinWidth="52"
+              Command="{Binding RestartCommand}"
+              Content="{Binding RestartSymbol}"
+              FontSize="20"
+              ToolTip.Tip="重新开始" />
+
+          <StackPanel Margin="0,0,16,8" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <TextBlock Text="用时" />
+            <TextBlock FontWeight="Bold" Text="{Binding ElapsedSeconds}" />
+            <TextBlock Text="秒" />
+          </StackPanel>
+
+        </WrapPanel>
+        <WrapPanel>
+          <CheckBox
+              x:Name="AutoFlagToggle"
+              Margin="0,0,16,0"
+              Content="自动插旗"
+              Foreground="{DynamicResource MinesweeperPanelTextBrush}"
+              IsChecked="{Binding IsAutoFlagEnabled, Mode=TwoWay}"
+              ToolTip.Tip="已有旗帜按地雷参与计算；只自动插旗，安全格由你打开。" />
+          <TextBlock
+              x:Name="AutoFlagStatus"
+              VerticalAlignment="Center"
+              TextWrapping="Wrap"
+              Text="{Binding AutoFlagStatusText}" />
+        </WrapPanel>
         <TextBlock
-            Grid.Column="2"
-            HorizontalAlignment="Center"
-            FontSize="16"
-            FontWeight="SemiBold"
-            Text="{Binding StatusText}"
-            VerticalAlignment="Center" />
-
-        <Button
-            Grid.Column="3"
-            MinWidth="52"
-            Command="{Binding RestartCommand}"
-            Content="{Binding RestartSymbol}"
-            FontSize="20"
-            ToolTip.Tip="重新开始" />
-
-        <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-          <TextBlock Text="用时" />
-          <TextBlock FontWeight="Bold" Text="{Binding ElapsedSeconds}" />
-          <TextBlock Text="秒" />
-        </StackPanel>
-
-        <TextBlock
-            Grid.Column="5"
             Foreground="{DynamicResource MinesweeperMutedTextBrush}"
             Text="左键翻开 · 右键插旗 · 数字格左右键组合展开"
-            TextWrapping="Wrap"
-            VerticalAlignment="Center" />
-      </Grid>
+            TextWrapping="Wrap" />
+      </StackPanel>
     </Border>
 
     <ScrollViewer

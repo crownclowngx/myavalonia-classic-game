@@ -1,6 +1,7 @@
 # ClassicGamePlugin
 
-> 当前本地发布：插件 `1.2.0`，Core/UI SDK `3.4.0`，Build `3.4.2-richtown.1`（仓库固定候选包）。
+> 当前开发版本：插件 `1.3.0`，Core/UI SDK `3.4.1`，Avalonia `12.1.2`，Build `3.4.2-richtown.1`（保留小镇部署修复）。
+> 扫雷新增默认关闭的“自动插旗”：根据已打开数字和全部现有旗帜推理；旗帜均按地雷计算，安全格仍由玩家打开。
 > 图标映射、兼容边界与验证命令见 [专用说明](docs/plan-history/v6.1-plugin-icons.md)。
 
 这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋和三阶魔方 Document。真实交付物是
@@ -16,7 +17,8 @@ WorkflowStudio 的单轮完整本地封板见
 [G10 专项记录](docs/plan-history/workbench-command/g10-classic-game-local-sealing.md)。
 
 扫雷的规则、SOLID 职责划分、设计选择与测试矩阵见
-[扫雷 Document 设计与开发说明](docs/minesweeper.md)。
+[扫雷 Document 设计与开发说明](docs/minesweeper.md)。升级与验证记录见
+[1.3.0 扫雷自动插旗](docs/plan-history/minesweeper-auto-flag.md)。
 
 蜘蛛纸牌的三档规则、撤销与提示语义、零图片绘制、交互动画和测试矩阵见
 [蜘蛛纸牌 Document 设计与开发说明](docs/spider-solitaire.md)。
@@ -93,17 +95,17 @@ dotnet msbuild src/ClassicGamePlugin.Plugin/ClassicGamePlugin.Plugin.csproj `
 Standalone 只能验证游戏界面和插件自身对象图；插件 manifest、加载上下文、Document Scope、Dock、Tool 和
 生命周期必须使用真实 Host 做最终验收。
 
-## 统一跨仓门禁
+## 插件验证与 Host 联调
 
-富翁小镇 3D 的 G0–G5 开发阶段不调用本节入口，具体检查与隔离 Debug Host 联调边界见[专用文档](docs/rich-town.md)。
-
-本仓不再维护 G8/G10 PowerShell 封板入口。请在 `avalonia_dock_simple_test` 主仓根目录运行：
+在本仓运行独立验证，包含游戏规则、小镇和 UI 三个测试项目：
 
 ```powershell
-dotnet run --project tools/MyAvaloniaManagement.Gate -- verify --scope workbench
-dotnet run --project tools/MyAvaloniaManagement.Gate -- seal
+dotnet restore --locked-mode -p:SkipPluginDeploy=true
+dotnet build -c Debug --no-restore -warnaserror -p:SkipPluginDeploy=true
+dotnet test -c Debug --no-build --no-restore
 ```
 
-非默认目录可通过 `--classic-game C:\Path\To\myavalonia-classic-game` 指定。本仓可以带未提交修改，Gate 会
-复制 `git ls-files` 描述的实际内容并记录 SHA-256；正式 Host 发布资格仍只绑定干净的主仓提交。历史 G8/G10
-文档保留当时的验收事实，但其中脚本命令已经退役。
+主仓 Gate 的 `workbench` / `workflow` scope 与 `--classic-game` 参数已经退役，外部插件业务验证由本仓负责。
+Host 联调使用主仓显式启用的 `HostExternalPluginAcceptance` 测试变体，输入隔离暂存目录，验证真实 DLL 加载、
+共享依赖、视图创建和 Dock 生命周期。本次 1.3.0 的命令与证据见[升级记录](docs/plan-history/minesweeper-auto-flag.md)。
+历史 G8/G10 记录仍保留原有验收事实。富翁小镇阶段边界见[专用文档](docs/rich-town.md)。

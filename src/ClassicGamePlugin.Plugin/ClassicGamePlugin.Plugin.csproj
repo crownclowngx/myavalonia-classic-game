@@ -4,10 +4,10 @@
     <ManagedPlugin>true</ManagedPlugin>
     <ManagedPluginId>myavalonia.plugin.classic.game</ManagedPluginId>
     <ManagedPluginDirectoryName>ClassicGamePlugin</ManagedPluginDirectoryName>
-    <PluginVersion>1.2.0</PluginVersion>
+    <PluginVersion>1.3.0</PluginVersion>
     <ManagedPluginRuntimeIdentifier>win-x64</ManagedPluginRuntimeIdentifier>
     <ManagedPluginEntryType>ClassicGamePlugin.Plugin.ClassicGamePluginModule</ManagedPluginEntryType>
-    <ManagedPluginSdkMinInclusive>3.4.0</ManagedPluginSdkMinInclusive>
+    <ManagedPluginSdkMinInclusive>3.4.1</ManagedPluginSdkMinInclusive>
     <ManagedPluginSdkMaxExclusive>4.0.0</ManagedPluginSdkMaxExclusive>
   </PropertyGroup>
 
@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="ClassicGamePlugin.Tests" />
+    <InternalsVisibleTo Include="ClassicGamePlugin.UiTests" />
     <InternalsVisibleTo Include="ClassicGamePlugin.RichTown.Tests" />
     <!-- 开发窗口的显式 G3 检查复用内部会话，不对外扩展 SDK，也不复制玩法规则。 -->
     <InternalsVisibleTo Include="ClassicGamePlugin.Standalone" />
