@@ -1,7 +1,7 @@
 # ClassicGamePlugin
 
-> 当前开发版本：插件 `1.3.0`，Core/UI SDK `3.4.1`，Avalonia `12.1.2`，Build `3.4.2-richtown.1`（保留小镇部署修复）。
-> 扫雷新增默认关闭的“自动插旗”：根据已打开数字和全部现有旗帜推理；旗帜均按地雷计算，安全格仍由玩家打开。
+> 当前开发版本：插件 `1.4.0`，Core/UI SDK `3.4.1`，Avalonia `12.1.2`，Build `3.4.2-richtown.1`（保留小镇部署修复）。
+> 扫雷提供两个独立且默认关闭的选项：“自动插旗”和“插旗后继续探索”。后者按现有旗帜自动展开数字格邻域，再继续推理；错旗仍可能踩雷。
 > 图标映射、兼容边界与验证命令见 [专用说明](docs/plan-history/v6.1-plugin-icons.md)。
 
 这是一个提供经典小游戏的 Managed Plugin 解决方案，当前包含彼此独立的扫雷、蜘蛛纸牌、黑白棋、五子棋、围棋、中国象棋、2048、数独、推箱子、俄罗斯方块、空当接龙、消消乐、中国跳棋和三阶魔方 Document。真实交付物是
@@ -19,6 +19,7 @@ WorkflowStudio 的单轮完整本地封板见
 扫雷的规则、SOLID 职责划分、设计选择与测试矩阵见
 [扫雷 Document 设计与开发说明](docs/minesweeper.md)。升级与验证记录见
 [1.3.0 扫雷自动插旗](docs/plan-history/minesweeper-auto-flag.md)。
+独立探索选项及交替推理见 [1.4.0 插旗后继续探索](docs/plan-history/minesweeper-auto-explore.md)。
 
 蜘蛛纸牌的三档规则、撤销与提示语义、零图片绘制、交互动画和测试矩阵见
 [蜘蛛纸牌 Document 设计与开发说明](docs/spider-solitaire.md)。
@@ -107,5 +108,5 @@ dotnet test -c Debug --no-build --no-restore
 
 主仓 Gate 的 `workbench` / `workflow` scope 与 `--classic-game` 参数已经退役，外部插件业务验证由本仓负责。
 Host 联调使用主仓显式启用的 `HostExternalPluginAcceptance` 测试变体，输入隔离暂存目录，验证真实 DLL 加载、
-共享依赖、视图创建和 Dock 生命周期。本次 1.3.0 的命令与证据见[升级记录](docs/plan-history/minesweeper-auto-flag.md)。
+共享依赖、视图创建和 Dock 生命周期。扫雷辅助功能的最新验证见[1.4.0 升级记录](docs/plan-history/minesweeper-auto-explore.md)。
 历史 G8/G10 记录仍保留原有验收事实。富翁小镇阶段边界见[专用文档](docs/rich-town.md)。

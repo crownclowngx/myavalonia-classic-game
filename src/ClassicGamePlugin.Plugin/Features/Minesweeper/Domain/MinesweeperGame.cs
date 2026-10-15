@@ -1,5 +1,8 @@
 namespace ClassicGamePlugin.Features.Minesweeper.Domain;
 
+/// <summary>一次辅助操作在全部推理轮次中新插下的旗帜数与新翻开的安全格数。</summary>
+internal readonly record struct MinesweeperAutomationResult(int AddedFlags, int RevealedCells);
+
 /// <summary>
 /// 编排一局扫雷的全部领域规则。该类型不认识 Avalonia、Document、计时器或用户输入设备，
 /// 因而可以通过普通单元测试验证所有状态转换。
@@ -128,6 +131,45 @@ internal sealed class MinesweeperGame
         }
 
         return addedFlags;
+    }
+
+    /// <summary>交替执行插旗和经典数字格展开，直到没有进展或对局结束；两个选项独立生效。</summary>
+    internal MinesweeperAutomationResult RunAutomation(bool autoFlag, bool autoExplore)
+    {
+        var totalFlags = 0;
+        var totalRevealed = 0;
+        while (State == MinesweeperGameState.Running)
+        {
+            var addedFlags = autoFlag ? AutoFlagCertainMines() : 0;
+            var revealed = autoExplore ? AutoExploreCertainCells() : 0;
+            totalFlags += addedFlags;
+            totalRevealed += revealed;
+            if (addedFlags == 0 && revealed == 0)
+            {
+                break;
+            }
+        }
+
+        return new MinesweeperAutomationResult(totalFlags, totalRevealed);
+    }
+
+    private int AutoExploreCertainCells()
+    {
+        var revealedBefore = _revealedSafeCellCount;
+        // 本轮只点击已经翻开的数字；新打开的数字在下一轮参与推理，不递归触发辅助。
+        var centers = _cells.Where(cell => cell.State == MinesweeperCellState.Revealed).ToArray();
+        foreach (var center in centers)
+        {
+            if (State != MinesweeperGameState.Running)
+            {
+                break;
+            }
+
+            // 复用玩家左键数字格的规则，包含旗帜数检查、零区展开、错旗踩雷与胜负判断。
+            Chord(center);
+        }
+
+        return _revealedSafeCellCount - revealedBefore;
     }
 
     /// <summary>获取指定坐标的格子，并统一执行越界检查。</summary>

@@ -113,7 +113,14 @@
               Content="自动插旗"
               Foreground="{DynamicResource MinesweeperPanelTextBrush}"
               IsChecked="{Binding IsAutoFlagEnabled, Mode=TwoWay}"
-              ToolTip.Tip="已有旗帜按地雷参与计算；只自动插旗，安全格由你打开。" />
+              ToolTip.Tip="根据数字和现有旗帜自动标雷，可单独使用。" />
+          <CheckBox
+              x:Name="AutoExploreToggle"
+              Margin="0,0,16,0"
+              Content="插旗后继续探索"
+              Foreground="{DynamicResource MinesweeperPanelTextBrush}"
+              IsChecked="{Binding IsAutoExploreEnabled, Mode=TwoWay}"
+              ToolTip.Tip="旗帜数等于数字时自动展开其余邻格，再继续插旗推理；错旗可能踩雷。" />
           <TextBlock
               x:Name="AutoFlagStatus"
               VerticalAlignment="Center"

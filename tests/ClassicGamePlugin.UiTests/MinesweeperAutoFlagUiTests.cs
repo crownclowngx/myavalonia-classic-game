@@ -33,7 +33,9 @@ public sealed class MinesweeperAutoFlagUiTests
             window.Show();
             Dispatcher.UIThread.RunJobs();
             var toggle = Assert.IsType<CheckBox>(view.FindControl<CheckBox>("AutoFlagToggle"));
+            var exploreToggle = Assert.IsType<CheckBox>(view.FindControl<CheckBox>("AutoExploreToggle"));
             Assert.False(toggle.IsChecked);
+            Assert.False(exploreToggle.IsChecked);
             viewModel.RevealCell(viewModel.BoardCells.Single(cell => cell.Row == 8 && cell.Column == 8));
             toggle.IsChecked = true;
             Dispatcher.UIThread.RunJobs();
@@ -50,6 +52,9 @@ public sealed class MinesweeperAutoFlagUiTests
             var position = toggle.TranslatePoint(default, window);
             Assert.NotNull(position);
             Assert.InRange(position.Value.X, 0, window.Bounds.Width - toggle.Bounds.Width);
+            var explorePosition = exploreToggle.TranslatePoint(default, window);
+            Assert.NotNull(explorePosition);
+            Assert.InRange(explorePosition.Value.X, 0, window.Bounds.Width - exploreToggle.Bounds.Width);
 
             using var frame = window.CaptureRenderedFrame();
             Assert.NotNull(frame);
@@ -61,6 +66,41 @@ public sealed class MinesweeperAutoFlagUiTests
             Dispatcher.UIThread.RunJobs();
             Assert.False(toggle.IsChecked);
             Assert.Equal(1, viewModel.RemainingMineCount);
+            exploreToggle.IsChecked = true;
+            Dispatcher.UIThread.RunJobs();
+            Assert.True(viewModel.IsAutoExploreEnabled);
+            Assert.False(viewModel.IsAutoFlagEnabled);
+            viewModel.IsAutoExploreEnabled = false;
+            Dispatcher.UIThread.RunJobs();
+            Assert.False(exploreToggle.IsChecked);
+        }
+        finally
+        {
+            window.Close();
+            Dispatcher.UIThread.RunJobs();
+        }
+    }
+
+    [AvaloniaFact]
+    public void 独立探索复选框能在界面触发插旗展开再插旗的完整循环()
+    {
+        using var viewModel = new MinesweeperViewModel(new BarrierMines(), TimeProvider.System, false);
+        var view = new MinesweeperView { DataContext = viewModel };
+        var window = new Window { Width = 600, Height = 650, Content = view };
+        try
+        {
+            window.Show();
+            viewModel.IsAutoFlagEnabled = true;
+            viewModel.RevealCell(viewModel.BoardCells.Single(cell => cell.Row == 8 && cell.Column == 8));
+            viewModel.RevealCell(viewModel.BoardCells.Single(cell => cell.Row == 0 && cell.Column == 4));
+            view.FindControl<CheckBox>("AutoExploreToggle")!.IsChecked = true;
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.True(viewModel.IsAutoExploreEnabled);
+            Assert.Equal(MinesweeperGameState.Won, viewModel.GameState);
+            Assert.Equal(1, viewModel.LastAutoFlagCount);
+            Assert.Equal(7, viewModel.LastAutoExploreCount);
+            Assert.Equal("恭喜获胜", view.FindControl<TextBlock>("GameStatus")!.Text);
         }
         finally
         {

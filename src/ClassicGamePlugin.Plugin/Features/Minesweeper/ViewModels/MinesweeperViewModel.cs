@@ -31,7 +31,15 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AutoFlagStatusText))]
+    private bool _isAutoExploreEnabled;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AutoFlagStatusText))]
     private int _lastAutoFlagCount;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AutoFlagStatusText))]
+    private int _lastAutoExploreCount;
 
     /// <summary>使用真实随机策略和系统时间创建生产环境 ViewModel。</summary>
     public MinesweeperViewModel()
@@ -114,13 +122,14 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
     /// <summary>获取内部计时状态，供生命周期测试验证释放行为。</summary>
     internal bool IsTimerRunning => _gameTimer.IsRunning;
 
-    /// <summary>展示自动插旗的结果，并明确安全格仍由玩家打开。</summary>
-    public string AutoFlagStatusText => !IsAutoFlagEnabled
-        ? "仅自动插旗，安全格由你打开"
+    /// <summary>展示本次辅助操作的累计插旗和继续探索结果。</summary>
+    public string AutoFlagStatusText => !IsAutoFlagEnabled && !IsAutoExploreEnabled
+        ? "辅助默认关闭，按需勾选"
         : _game.State switch
         {
-            MinesweeperGameState.Ready => "翻开方格后自动标记确定的雷",
+            MinesweeperGameState.Ready => "翻开方格后按数字和旗帜推理",
             MinesweeperGameState.Won or MinesweeperGameState.Lost => "对局已结束",
+            _ when IsAutoExploreEnabled => $"本次自动插旗 {LastAutoFlagCount} 格 · 探索 {LastAutoExploreCount} 格",
             _ => LastAutoFlagCount > 0 ? $"本次自动插旗 {LastAutoFlagCount} 格" : "暂无可确定的雷",
         };
 
@@ -145,8 +154,7 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
             _displayRefreshTimer?.Start();
         }
 
-        StopTimerAfterTerminalState();
-        ApplyAutoFlags();
+        ApplyAutomation();
         RefreshProjection();
     }
 
@@ -157,6 +165,12 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
             !_game.ToggleFlag(cell.Row, cell.Column))
         {
             return;
+        }
+
+        if (IsAutoExploreEnabled && cell.CellState == MinesweeperCellState.Flagged)
+        {
+            ClearChordPreview();
+            ApplyAutomation();
         }
 
         RefreshProjection();
@@ -170,13 +184,28 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
         }
 
         ClearChordPreview();
-        ApplyAutoFlags();
+        ApplyAutomation();
         RefreshProjection();
     }
 
-    private void ApplyAutoFlags()
+    partial void OnIsAutoExploreEnabledChanged(bool value)
     {
-        LastAutoFlagCount = IsAutoFlagEnabled ? _game.AutoFlagCertainMines() : 0;
+        if (_disposed)
+        {
+            return;
+        }
+
+        ClearChordPreview();
+        ApplyAutomation();
+        RefreshProjection();
+    }
+
+    private void ApplyAutomation()
+    {
+        var result = _game.RunAutomation(IsAutoFlagEnabled, IsAutoExploreEnabled);
+        LastAutoFlagCount = result.AddedFlags;
+        LastAutoExploreCount = result.RevealedCells;
+        StopTimerAfterTerminalState();
     }
 
     /// <summary>
@@ -276,6 +305,7 @@ public sealed partial class MinesweeperViewModel : ObservableObject, IDisposable
         _gameTimer.Reset();
         ElapsedSeconds = 0;
         LastAutoFlagCount = 0;
+        LastAutoExploreCount = 0;
         _game.StartNewGame(difficulty);
         RebuildBoardProjection();
         RefreshSummaryProperties();
